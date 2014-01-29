@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
+import com.harjup_kdhyne.TravelApp.Notes.NoteDetailsFragment;
 
 public class MainActivity extends FragmentActivity {
     /**
@@ -22,7 +23,7 @@ public class MainActivity extends FragmentActivity {
 
         if (myFragment == null)
         {
-            myFragment = new NotesListFragment();
+            myFragment = new NoteDetailsFragment();
 
             fragmentManager.beginTransaction()
                     .add(R.id.notesActivityContainer, myFragment)
