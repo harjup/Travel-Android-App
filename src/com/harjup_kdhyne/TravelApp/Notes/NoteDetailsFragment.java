@@ -1,17 +1,18 @@
-package com.harjup_kdhyne.TravelApp;
+package com.harjup_kdhyne.TravelApp.Notes;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import com.harjup_kdhyne.TravelApp.R;
 
 /**
  * Created by Paul on 1/28/14.
  * Displays a list of notes for the user to examine.
  * The user can also create new notes.
  */
-public class NotesListFragment extends Fragment
+public class NoteDetailsFragment extends Fragment
 {
     @Override
     public void onCreate(Bundle savedInstanceState) {
