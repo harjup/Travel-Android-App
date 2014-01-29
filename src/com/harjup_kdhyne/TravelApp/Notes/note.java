@@ -14,6 +14,11 @@ public class Note
 
     private String imageId;     //TODO: Determine how to store picture(s), probably pointing to them somehow
 
+    public Note(String title, Date timeStamp)
+    {
+        this.title = title;
+        this.timeStamp = timeStamp;
+    }
 
     public String getTitle() {
         return title;
@@ -42,7 +47,7 @@ public class Note
     //TODO: Format note timestamp into a nice string
     public String getTimeStampAsString()
     {
-        return "";
+        return "4/20/0420";
     }
 
 }

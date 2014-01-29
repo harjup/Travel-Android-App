@@ -5,6 +5,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import com.harjup_kdhyne.TravelApp.Notes.NoteDetailsFragment;
+import com.harjup_kdhyne.TravelApp.Notes.NotesListFragment;
 
 public class MainActivity extends FragmentActivity {
     /**
@@ -20,10 +21,9 @@ public class MainActivity extends FragmentActivity {
 
         //For some reason I'm just grabbing the parent node of the activity page??
         Fragment myFragment = fragmentManager.findFragmentById(R.id.notesActivityContainer);
-
         if (myFragment == null)
         {
-            myFragment = new NoteDetailsFragment();
+            myFragment = new NotesListFragment();
 
             fragmentManager.beginTransaction()
                     .add(R.id.notesActivityContainer, myFragment)
