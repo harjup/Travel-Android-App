@@ -26,16 +26,15 @@ public class NotesListFragment extends ListFragment
     }};
 
 
-    private NoteAdapter noteAdapter;
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        noteAdapter = new NoteAdapter(getActivity(), R.layout.notes_list_item, noteArrayList);
+        NoteAdapter noteAdapter = new NoteAdapter(getActivity(), R.layout.notes_list_item, noteArrayList);
         setListAdapter(noteAdapter);
     }
 
+    //Do something when you click on a note
     @Override
     public void onListItemClick(ListView l, View v, int position, long id) {
         super.onListItemClick(l, v, position, id);
