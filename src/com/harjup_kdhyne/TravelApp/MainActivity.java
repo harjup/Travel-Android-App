@@ -18,22 +18,22 @@ public class MainActivity extends FragmentActivity {
         super.onCreate(savedInstanceState);
 
         //Set the activity content from a layout resource
-        setContentView(R.layout.finance_activity_container);
+        setContentView(R.layout.notes_activity_container);
 
-        //Create a fragment manager to manage fragments
+        //Create a fragment manager to find and create fragments
         FragmentManager fragmentManager = getSupportFragmentManager();
 
-        //For some reason I'm just grabbing the parent node of the activity page??
-        Fragment myFragment = fragmentManager.findFragmentById(R.id.notesActivityContainer);
-        if (myFragment == null)
+        //Check if any fragment exist in target parent node notesActivityContainer
+        Fragment myNotesFragment = fragmentManager.findFragmentById(R.id.notesActivityContainer);
+        if (myNotesFragment == null)
         {
-            //reassign a new fragment activity to fill the parent node
-            //myFragment = new NotesListFragment();
-            myFragment = new FinanceSummary();
+            //If not, then create a new instance of the fragment's activity and bind it to the
+            //specified parent node
 
-            //Add the fragment activity to the parent node(?) and commit changes
+            myNotesFragment = new NotesListFragment(); // new FinanceSummary();
+
             fragmentManager.beginTransaction()
-                    .add(R.id.financeActivityContainer, myFragment)
+                    .add(R.id.notesActivityContainer, myNotesFragment)
                     .commit();
 
         }

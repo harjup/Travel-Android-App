@@ -1,6 +1,9 @@
 package com.harjup_kdhyne.TravelApp.Notes;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.app.ListFragment;
 import android.view.View;
 import android.widget.ListView;
@@ -38,6 +41,24 @@ public class NotesListFragment extends ListFragment
     @Override
     public void onListItemClick(ListView l, View v, int position, long id) {
         super.onListItemClick(l, v, position, id);
+
+        //Hackish method of getting data into the detail view because i don't want to wrap my head
+        //around the correct method right now
+        Bundle myBundle = new Bundle();
+        myBundle.putString("_TITLE",noteArrayList.get(position).getTitle());
+        myBundle.putString("_CONTENT",noteArrayList.get(position).getContent());
+        myBundle.putString("_DATE", noteArrayList.get(position).getTimeStampAsString());
+ 
+        
+        NoteDetailsFragment myNoteDetails = new NoteDetailsFragment();
+        //myNoteDetails.setArguments(myBundle);
+
+
+        FragmentTransaction ft = getFragmentManager().beginTransaction();
+        ft.replace(R.id.notesActivityContainer, myNoteDetails);
+        ft.addToBackStack(null);
+        ft.commit();
+
     }
 
 

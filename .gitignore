@@ -26,7 +26,11 @@ proguard/
 *.iws
 .idea/workspace.xml
 .idea/tasks.xml
- 
+
+#We have conflicting locations for our android libraries
+.idea/libraries
+
+
 # Gradle directory
 .gradle
  
