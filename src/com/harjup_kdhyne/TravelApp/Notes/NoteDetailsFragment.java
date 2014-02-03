@@ -17,11 +17,17 @@ import com.harjup_kdhyne.TravelApp.R;
  */
 public class NoteDetailsFragment extends Fragment
 {
+    Note currentNote;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
     }
+
+    public void setNote(Note note){
+        currentNote = note;
+    }
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle bundle) {
@@ -37,8 +43,9 @@ public class NoteDetailsFragment extends Fragment
         // if not, assign some text!
         if (titleText != null)
         {
-            //titleText.setText(bundle.getString("_TITLE"));
-            titleText.setText("A TITLE");
+            //titleText.setText(bundle.getString("harjup_kdhyne_TITLE"));
+            titleText.setText(currentNote.getTitle());
+            //titleText.setText("A TITLE");
         }
         if (contentText != null)
         {

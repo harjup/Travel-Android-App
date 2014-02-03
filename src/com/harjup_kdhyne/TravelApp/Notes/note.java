@@ -8,11 +8,15 @@ import java.util.Date;
  */
 public class Note
 {
+    private long id;
     private String title;       //Title/short description the note contains
     private String content;     //Text content of the note
     private Date timeStamp;     //Time when the note was made
 
     private String imageId;     //TODO: Determine how to store picture(s), probably pointing to them somehow
+
+    public Note()
+    {}
 
     public Note(String title, Date timeStamp)
     {
@@ -50,4 +54,11 @@ public class Note
         return "4/20/0420";
     }
 
+    public long getId() {
+        return id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
+    }
 }
