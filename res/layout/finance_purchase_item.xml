@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<TableLayout xmlns:android="http://schemas.android.com/apk/res/android"
+             android:layout_width="match_parent"
+              android:layout_height="match_parent">
+
+    <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:onClick="onClick"
+            android:clickable="true">
+        <TextView
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                android:text="@string/purchase_name_label"
+                android:id="@+id/purchaseNameTextView"
+                android:paddingTop="5dp"
+                android:paddingBottom="5dp"/>
+
+        <TextView
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                android:text="@string/purchase_date_label"
+                android:id="@+id/purchaseDateTextView"
+                android:paddingTop="5dp"
+                android:paddingBottom="5dp"/>
+
+        <TextView
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                android:text="@string/purchase_price_label"
+                android:id="@+id/purchasePriceTextView"
+                android:paddingTop="5dp"
+                android:paddingBottom="5dp"/>
+
+    </TableRow>
+
+    <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+        <ScrollView
+                android:id="@+id/purchasesScrollView"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"/>
+    </TableRow>
+
+
+</TableLayout>

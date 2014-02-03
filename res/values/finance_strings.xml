@@ -2,6 +2,22 @@
 <resources>
 
     <string name="elapsed_travel_time_label">Elapsed Travel Time</string>
-    <string name="budget_spent_label">BudgetSpent</string>
+    <string name="budget_spent_label">Budget Spent</string>
+
+
+    <string name="travel_expenses_label">Travel Expenses</string>
+    <string name="purchase_name_label">Purchase</string>
+    <string name="purchase_date_label">Date</string>
+    <string name="purchase_price_label">Price</string>
+
+    <string name="purchase_name_hint">Purchase Name</string>
+    <string name="purchase_date_hint">Date</string>
+    <string name="purchase_price_hint">Price</string>
+    <string name="purchase_notes_hint">Additional Notes</string>
+    <string name="camera_button">Camera</string>
+    <string name="album_button">Album</string>
+    <string name="back_button">Back</string>
+    <string name="delete_button">Delete</string>
+
 
 </resources>

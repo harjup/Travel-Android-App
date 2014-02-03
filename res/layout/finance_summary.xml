@@ -12,7 +12,7 @@
 
         <TextView
                 android:id="@+id/elapsedTravelLabelTextView"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:text="@string/elapsed_travel_time_label"
                 android:layout_weight="1"
@@ -20,7 +20,7 @@
 
         <TextView
                 android:id="@+id/elapsedTravelDaysTextView"
-                android:layout_width="match_parent"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:text="@string/elapsed_travel_time_amount"
                 android:layout_weight="1"
@@ -42,7 +42,7 @@
 
         <TextView
                 android:id="@+id/budgetSpentLabelTextView"
-                android:layout_width="match_parent"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:text="@string/budget_spent_label"
@@ -50,7 +50,7 @@
 
         <TextView
                 android:id="@+id/budgetSpentAmountTextView"
-                android:layout_width="match_parent"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:text="@string/budget_spent_amount"
@@ -65,5 +65,59 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="@dimen/component_bottom_margin"/>
+
+    <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_gravity="center_horizontal|top">
+
+        <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/travel_expenses_label"
+                android:id="@+id/tripExpensesTextView"
+                android:textSize="18sp"
+                android:gravity="center"
+                android:layout_weight="1"
+                android:layout_marginBottom="@dimen/component_bottom_margin"
+                />
+
+    </TableRow>
+
+
+    <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+        <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="@string/purchase_name_label"
+                android:id="@+id/purchaseNameTextView"/>
+
+        <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="@string/purchase_date_label"
+                android:id="@+id/purchaseDateTextView"/>
+
+        <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="@string/purchase_price_label"
+                android:id="@+id/purchasePriceTextView"/>
+
+    </TableRow>
+
+    <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+        <ScrollView
+                android:id="@+id/purchasesScrollView"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"/>
+    </TableRow>
 
 </TableLayout>
