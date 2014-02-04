@@ -37,12 +37,18 @@ public class NotesDataSource
         dbHelper.close();
     }
 
-    public Note createNote(String title, String content, String timeStamp)
+    public Note createNote(Note note)
     {
         ContentValues values = new ContentValues();
+
+        values.put(MySQLiteHelper.COLUMN_TITLE, note.getTitle());
+        values.put(MySQLiteHelper.COLUMN_CONTENT, note.getContent());
+        values.put(MySQLiteHelper.COLUMN_TIMESTAMP, note.getTimeStampAsString());
+        /*
         values.put(MySQLiteHelper.COLUMN_TITLE, title);
         values.put(MySQLiteHelper.COLUMN_CONTENT, content);
         values.put(MySQLiteHelper.COLUMN_TIMESTAMP, timeStamp);
+        */
         long insertID = database.insert(MySQLiteHelper.TABLE_NOTES, null, values);
 
         Cursor cursor = database.query(MySQLiteHelper.TABLE_NOTES,
@@ -55,6 +61,22 @@ public class NotesDataSource
         cursor.close();
         return newNote;
     }
+
+    public void updateNote(Note note)
+    {
+        ContentValues values = new ContentValues();
+        values.put(MySQLiteHelper.COLUMN_TITLE, note.getTitle());
+        values.put(MySQLiteHelper.COLUMN_CONTENT, note.getContent());
+        values.put(MySQLiteHelper.COLUMN_TIMESTAMP, note.getTimeStampAsString());
+
+        database.update(MySQLiteHelper.TABLE_NOTES,
+                values,
+                MySQLiteHelper.COLUMN_ID + "=" + note.getId(),
+                null);
+
+    }
+
+
 
     public List<Note> getAllNotes() {
         List<Note> comments = new ArrayList<Note>();

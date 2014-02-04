@@ -1,5 +1,7 @@
 package com.harjup_kdhyne.TravelApp.Notes;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 /**
@@ -8,7 +10,7 @@ import java.util.Date;
  */
 public class Note
 {
-    private long id;
+    private long id = -1;
     private String title;       //Title/short description the note contains
     private String content;     //Text content of the note
     private Date timeStamp;     //Time when the note was made
@@ -16,12 +18,15 @@ public class Note
     private String imageId;     //TODO: Determine how to store picture(s), probably pointing to them somehow
 
     public Note()
-    {}
+    {
+        this.timeStamp = new Date();
+    }
 
-    public Note(String title, Date timeStamp)
+    public Note(String title, String content)
     {
         this.title = title;
-        this.timeStamp = timeStamp;
+        this.content = content;
+        this.timeStamp = new Date();
     }
 
     public String getTitle() {
@@ -51,7 +56,12 @@ public class Note
     //TODO: Format note timestamp into a nice string
     public String getTimeStampAsString()
     {
-        return "4/20/0420";
+
+        DateFormat dateFormat = new SimpleDateFormat("MM/dd/yyyy");
+        //formattedDate += timeStamp.getMonth().ToString();
+        String date = dateFormat.format(timeStamp);
+
+        return date;
     }
 
     public long getId() {

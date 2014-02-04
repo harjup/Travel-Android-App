@@ -3,4 +3,6 @@
     <string name="notes_title">Notes:</string>
     <string name="notes_list_item_content_hint">Content</string>
     <string name="note_date">date</string>
+    <string name="add_note_button">Add Note</string>
+    <string name="delete_note_button">Delete Note</string>
 </resources>
