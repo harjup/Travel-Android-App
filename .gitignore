@@ -29,7 +29,7 @@ proguard/
 
 #We have conflicting locations for our android libraries
 .idea/libraries
-
+.idea/libraries/android_support_v4.xml
 
 # Gradle directory
 .gradle
