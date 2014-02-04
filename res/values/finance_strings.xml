@@ -18,6 +18,8 @@
     <string name="album_button">Album</string>
     <string name="back_button">Back</string>
     <string name="delete_button">Delete</string>
+    <string name="new_purchase_button">New Purchase</string>
+    <string name="finance_summary_title">Financial Summary</string>
 
 
 </resources>

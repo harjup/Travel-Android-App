@@ -44,7 +44,7 @@ public class FinancePurchaseAdapter extends ArrayAdapter<FinancePurchase>
 
         purchaseNameTextView.setText(purchase.getPurchaseName());
         purchaseDateTextView.setText(purchase.getPurchaseTimeStampAsString());
-        purchaseNameTextView.setText(purchase.getPurchasePrice().toString());
+        purchasePriceTextView.setText(purchase.getPurchasePrice().toString());
 
         return convertView;
 

@@ -5,7 +5,7 @@ import java.util.Date;
 /**
  * Created by Kyle 2.1 on 1/29/14.
  */
-public class FinanceSettings
+public class FinanceTripSettings
 {
     private Date startDate;
     private Date endDate;

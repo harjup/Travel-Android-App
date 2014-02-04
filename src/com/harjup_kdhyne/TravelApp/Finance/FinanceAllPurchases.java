@@ -42,12 +42,77 @@ public class FinanceAllPurchases
         purchasesList = new ArrayList<FinancePurchase>();
 
         // TODO: Get rid of this before release
-
         FinancePurchase sandwich = new FinancePurchase();
         sandwich.setPurchaseName("Sandwich");
         //sandwich.setPurchaseTimeStamp();
         sandwich.setPurchasePrice(5.00);
         purchasesList.add(sandwich);
+
+        FinancePurchase Toast = new FinancePurchase();
+        Toast.setPurchaseName("Toast");
+        //sandwich.setPurchaseTimeStamp();
+        Toast.setPurchasePrice(2.50);
+        purchasesList.add(Toast);
+
+        FinancePurchase Butter = new FinancePurchase();
+        Butter.setPurchaseName("Butter");
+        //sandwich.setPurchaseTimeStamp();
+        Butter.setPurchasePrice(5.00);
+        purchasesList.add(Butter);
+
+        FinancePurchase Squash = new FinancePurchase();
+        Squash.setPurchaseName("Squash");
+        //sandwich.setPurchaseTimeStamp();
+        Squash.setPurchasePrice(2.50);
+        purchasesList.add(Squash);
+
+        FinancePurchase Pretzels = new FinancePurchase();
+        Pretzels.setPurchaseName("Pretzels");
+        //sandwich.setPurchaseTimeStamp();
+        Pretzels.setPurchasePrice(5.00);
+        purchasesList.add(Pretzels);
+
+        FinancePurchase Bagels = new FinancePurchase();
+        Bagels.setPurchaseName("Bagels");
+        //sandwich.setPurchaseTimeStamp();
+        Bagels.setPurchasePrice(2.50);
+        purchasesList.add(Bagels);
+
+        FinancePurchase Oil = new FinancePurchase();
+        Oil.setPurchaseName("Oil");
+        //sandwich.setPurchaseTimeStamp();
+        Oil.setPurchasePrice(5.00);
+        purchasesList.add(Oil);
+
+        FinancePurchase Gas = new FinancePurchase();
+        Gas.setPurchaseName("Gas");
+        //sandwich.setPurchaseTimeStamp();
+        Gas.setPurchasePrice(2.50);
+        purchasesList.add(Gas);
+
+        FinancePurchase Pretzels2 = new FinancePurchase();
+        Pretzels2.setPurchaseName("Pretzels2");
+        //sandwich.setPurchaseTimeStamp();
+        Pretzels2.setPurchasePrice(5.00);
+        purchasesList.add(Pretzels2);
+
+        FinancePurchase Bagels2 = new FinancePurchase();
+        Bagels2.setPurchaseName("Bagels2");
+        //sandwich.setPurchaseTimeStamp();
+        Bagels2.setPurchasePrice(2.50);
+        purchasesList.add(Bagels2);
+
+        FinancePurchase Oil2 = new FinancePurchase();
+        Oil2.setPurchaseName("Oil2");
+        //sandwich.setPurchaseTimeStamp();
+        Oil2.setPurchasePrice(5.00);
+        purchasesList.add(Oil2);
+
+        FinancePurchase Gas2 = new FinancePurchase();
+        Gas2.setPurchaseName("Gas2");
+        //sandwich.setPurchaseTimeStamp();
+        Gas2.setPurchasePrice(2.50);
+        purchasesList.add(Gas2);
 
     }
 

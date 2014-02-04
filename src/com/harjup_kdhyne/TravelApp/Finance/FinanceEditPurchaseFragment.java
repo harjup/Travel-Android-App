@@ -1,6 +1,6 @@
 package com.harjup_kdhyne.TravelApp.Finance;
 
-import android.app.Fragment;
+import android.support.v4.app.Fragment;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -17,6 +17,9 @@ import java.util.UUID;
  */
 public class FinanceEditPurchaseFragment extends Fragment
 {
+
+    private FinancePurchase currentPurchase;
+
     //Keys for ID and date
     public static final String PURCHASE_ID = "com.harjup_kdhyne.TravelApp.Finance.purchase_id";
     public static final String PURCHASE_DATE = "com.harjup_kdhyne.TravelApp.Finance.purchase_date";
@@ -24,16 +27,10 @@ public class FinanceEditPurchaseFragment extends Fragment
     //Used to track when we are performing an action on purchase date
     public static final int REQUEST_PURCHASE_DATE = 0;
 
-
-
-    private FinancePurchase purchase;
-
     private EditText purchaseNameEditText;
     private EditText purchaseDateEditText;
     private EditText purchasePriceEditText;
-
     private Spinner purchaseCurrencySpinner;
-
     private EditText purchaseNotesEditText;
 
     //Create a new EditPurchase fragment with the passed data
@@ -52,18 +49,23 @@ public class FinanceEditPurchaseFragment extends Fragment
         return editPurchaseFragment;
     }
 
+    public void setCurrentPurchase(FinancePurchase purchase){
+        currentPurchase = purchase;
+    }
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+    }
 
     //Show the fragment on the screen
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
     {
-        View theView = inflater.inflate(R.layout.finance_edit_purchase, container, false);
-
-
         //TODO: Instantiate all of the EditText boxes and textWatchers. Also the date picker dialog stuff
 
-
-        return theView;
+        //Inflate the view
+        return inflater.inflate(R.layout.finance_edit_purchase, container, false);
     }
 
 
