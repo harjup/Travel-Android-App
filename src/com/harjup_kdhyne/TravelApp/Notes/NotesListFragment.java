@@ -3,82 +3,120 @@ package com.harjup_kdhyne.TravelApp.Notes;
 import android.os.Bundle;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.app.ListFragment;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ListView;
 import com.harjup_kdhyne.TravelApp.R;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 /**
  * Created by Paul on 1/28/14.
- * This fragment contains a list of all the current notes for the user to peruse
+ * This fragment contains a list of all the current notes for the user to peruse.
+ * The user can also create and delete notes
  */
 public class NotesListFragment extends ListFragment
 {
-    private NotesDataSource dataSource;
+    private NotesDataSource notesDataSource;
     private List<Note> noteList;
-/*
-    private ArrayList<Note> noteArrayList = new ArrayList<Note>()
-    {{
-      add(new Note(
-              "Note 1", new Date()));
-      add(new Note(
-              "Note 2", new Date()));
-      add(new Note(
-              "Note 3", new Date()));
-    }};*/
-
+    private NoteAdapter noteAdapter;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+    }
 
-        dataSource = new NotesDataSource(getActivity());
+    //Open a connection to the notes database and use it to fill the noteList,
+    //then insert the noteList into the dataAdapter so the view can use it
+    private void fillNoteList()
+    {
+        notesDataSource = new NotesDataSource(getActivity());
 
-        try { dataSource.open();}
+        try { notesDataSource.open();}
         catch (SQLException e) { e.printStackTrace(); }
 
-        /* If there are currently no notes in the database, uncomment this and the arraylist to add some
-        for(Note note : noteArrayList)
-        {
-            dataSource.createNote(note.getTitle(), note.getContent(), note.getTimeStampAsString());
-        }*/
+        noteList = notesDataSource.getAllNotes();
 
-        noteList = dataSource.getAllNotes();
-
-        NoteAdapter noteAdapter = new NoteAdapter(getActivity(), R.layout.notes_list_item, (ArrayList<Note>) noteList);
+        noteAdapter = new NoteAdapter(getActivity(), R.layout.notes_list_item, (ArrayList<Note>) noteList);
         setListAdapter(noteAdapter);
     }
 
-    //Do something when you click on a note
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+
+        fillNoteList();
+
+        View myView = inflater.inflate(R.layout.note_list_layout, container, false);
+
+        Button addButton = (Button) myView.findViewById(R.id.notesAddNoteButton);
+        Button deleteButton = (Button) myView.findViewById(R.id.notesDeleteNoteButton);
+
+
+        addButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                //Create a new note, navigate to details page with specified note as argument
+                ViewNoteDetails(new Note());
+            }
+        });
+
+        deleteButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                //Delete the note at index 0 for right now,
+                //Update db/view
+                notesDataSource.deleteNote(noteList.get(0));
+                noteAdapter.remove(noteList.get(0));
+            }
+        });
+
+        return myView;
+        //return super.onCreateView(inflater, container, savedInstanceState);
+    }
+
+    //When the user navigates to a different fragment,
+    //close the noteList's database connection
+    @Override
+    public void onDestroyView() {
+
+        try { notesDataSource.close();}
+        catch (Exception e) { e.printStackTrace(); }
+
+        super.onDestroyView();
+    }
+
+    //View a note's details page when it is tapped
     @Override
     public void onListItemClick(ListView l, View v, int position, long id) {
         super.onListItemClick(l, v, position, id);
 
-        //Hackish method of getting data into the detail view because i don't want to wrap my head
-        //around the correct method right now
-        //Bundle myBundle = new Bundle();
-        //myBundle.putString("harjup_kdhyne_TITLE",noteArrayList.get(position).getTitle());
-        //myBundle.putString("_CONTENT",noteArrayList.get(position).getContent());
-        //myBundle.putString("_DATE", noteArrayList.get(position).getTimeStampAsString());
- 
-        
-        NoteDetailsFragment myNoteDetails = new NoteDetailsFragment();
-        //myNoteDetails.setArguments(myBundle);
-        //myNoteDetails.setNote(noteArrayList.get(position));
+        ViewNoteDetails(noteList.get(position));
 
+
+        /*
+        NoteDetailsFragment myNoteDetails = new NoteDetailsFragment();
         myNoteDetails.setNote(noteList.get(position));
 
+        FragmentTransaction ft = getFragmentManager().beginTransaction();
+        ft.replace(R.id.notesActivityContainer, myNoteDetails);
+        ft.addToBackStack(null);
+        ft.commit();*/
+    }
+
+
+    private void ViewNoteDetails(Note note){
+        NoteDetailsFragment myNoteDetails = new NoteDetailsFragment();
+
+        myNoteDetails.setNote(note);
 
         FragmentTransaction ft = getFragmentManager().beginTransaction();
         ft.replace(R.id.notesActivityContainer, myNoteDetails);
         ft.addToBackStack(null);
         ft.commit();
-
     }
-
 
 }
