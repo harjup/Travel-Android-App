@@ -30,9 +30,8 @@ public class FinanceSummaryFragment extends Fragment
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
     {
-        //TODO: Make this work without crashing
         ListFragment purchaseListFragment = new FinancePurchaseListFragment();
-        FragmentTransaction transaction = getChildFragmentManager().beginTransaction();
+        FragmentTransaction transaction = getFragmentManager().beginTransaction();
         transaction.add(getId(), purchaseListFragment);
         transaction.commit();
 

@@ -114,6 +114,8 @@ public class NotesListFragment extends ListFragment
         myNoteDetails.setNote(note);
 
         FragmentTransaction ft = getFragmentManager().beginTransaction();
+        //FragmentTransaction ft = getChildFragmentManager().beginTransaction();
+        //ft.replace(R.id.notesActivityContainer, myNoteDetails);
         ft.replace(R.id.notesActivityContainer, myNoteDetails);
         ft.addToBackStack(null);
         ft.commit();

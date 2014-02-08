@@ -142,6 +142,7 @@ public class NoteDetailsFragment extends Fragment
         ft.commit();
     }
 
+
     private TextWatcher getTextWatcher(final textBoxes textType){
 
     return new TextWatcher() {
