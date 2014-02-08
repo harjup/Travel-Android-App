@@ -60,15 +60,21 @@ public class FinancePurchaseListFragment extends ListFragment
 //        alert.setMessage(message);
 //        alert.show();
 
+        //TODO: For some reason if I try to get rid of the summary, nothing will display. Fix this
+
         FinanceEditPurchaseFragment editPurchaseFragment = new FinanceEditPurchaseFragment();
+        FinanceSummaryFragment summaryFragment = (FinanceSummaryFragment)getParentFragment();
+
         editPurchaseFragment.setCurrentPurchase(purchasesList.get(position));
 
         FragmentTransaction transaction = getFragmentManager().beginTransaction();
         //make the back button return to the finance summary screen
         //pass the tag to the backStack
         transaction.addToBackStack("Finance Summary");
-        //add this
+        //add the edit purchase page to the container
         transaction.replace(R.id.financeActivityContainer, editPurchaseFragment);
+        //remove the finance summary at the top
+        transaction.remove(summaryFragment);
         transaction.commit();
 
     }
