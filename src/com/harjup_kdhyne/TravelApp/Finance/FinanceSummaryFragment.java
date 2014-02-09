@@ -30,14 +30,17 @@ public class FinanceSummaryFragment extends Fragment
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
     {
-        ListFragment purchaseListFragment = new FinancePurchaseListFragment();
+        View myView = inflater.inflate(R.layout.finance_summary, container, false);
+
+        //Add a list of purchases to the list container under the financial summary
+        /*ListFragment purchaseListFragment = new FinancePurchaseListFragment();
         FragmentTransaction transaction = getFragmentManager().beginTransaction();
-        transaction.add(getId(), purchaseListFragment);
-        transaction.commit();
+        transaction.add(R.id.financeListContainer,purchaseListFragment);
+        transaction.commit();*/
 
         //Inflate the view and
         //Place it on the screen
-        return  inflater.inflate(R.layout.finance_summary, container, false);
+        return  myView;
     }
 
     /**

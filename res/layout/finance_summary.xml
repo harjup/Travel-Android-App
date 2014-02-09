@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <TableLayout xmlns:android="http://schemas.android.com/apk/res/android"
-             android:id="@+id/financeActivityContainer"
              android:orientation="vertical"
              android:layout_width="match_parent"
              android:layout_height="match_parent">
@@ -110,31 +109,5 @@
                     android:text="@string/purchase_price_label"/>
 
         </TableRow>
-
-    <!--</TableLayout>-->
-
-    <!--<TableLayout>
-        <TableRow
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_gravity="center_horizontal|top">
-
-            <Button
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:text="@string/new_purchase_button"
-                    android:layout_weight="1"/>
-
-            <Button
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:text="@string/delete_button"
-                    android:layout_weight="1"/>
-
-
-        </TableRow>
-
-    </TableLayout>-->
-
 
 </TableLayout>

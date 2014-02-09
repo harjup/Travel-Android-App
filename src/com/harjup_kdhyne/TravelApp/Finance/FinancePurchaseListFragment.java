@@ -44,8 +44,11 @@ public class FinancePurchaseListFragment extends ListFragment
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        return super.onCreateView(inflater, container, savedInstanceState);
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
+    {
+        View myView = inflater.inflate(R.layout.finance_list_layout,container, false);
+
+        return myView;
     }
 
     @Override
