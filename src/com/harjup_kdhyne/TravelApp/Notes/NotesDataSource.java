@@ -4,6 +4,7 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import com.harjup_kdhyne.TravelApp.MySQLiteHelper;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -11,17 +12,17 @@ import java.util.List;
 
 /**
  * Created by Paul on 2/2/14.
- * TODO: Write short summary of class
+ * Manages calls to the SQLite database for saved Notes
  */
 public class NotesDataSource
 {
     private SQLiteDatabase database;
     private MySQLiteHelper dbHelper;
     private String[] allColumns = {
-            MySQLiteHelper.COLUMN_ID,
-            MySQLiteHelper.COLUMN_TITLE,
-            MySQLiteHelper.COLUMN_CONTENT,
-            MySQLiteHelper.COLUMN_TIMESTAMP
+            MySQLiteHelper.NOTES_COLUMN_ID,
+            MySQLiteHelper.NOTES_COLUMN_TITLE,
+            MySQLiteHelper.NOTES_COLUMN_CONTENT,
+            MySQLiteHelper.NOTES_COLUMN_TIMESTAMP
     };
 
     public NotesDataSource(Context context){
@@ -41,19 +42,15 @@ public class NotesDataSource
     {
         ContentValues values = new ContentValues();
 
-        values.put(MySQLiteHelper.COLUMN_TITLE, note.getTitle());
-        values.put(MySQLiteHelper.COLUMN_CONTENT, note.getContent());
-        values.put(MySQLiteHelper.COLUMN_TIMESTAMP, note.getTimeStampAsString());
-        /*
-        values.put(MySQLiteHelper.COLUMN_TITLE, title);
-        values.put(MySQLiteHelper.COLUMN_CONTENT, content);
-        values.put(MySQLiteHelper.COLUMN_TIMESTAMP, timeStamp);
-        */
-        long insertID = database.insert(MySQLiteHelper.TABLE_NOTES, null, values);
+        values.put(MySQLiteHelper.NOTES_COLUMN_TITLE, note.getTitle());
+        values.put(MySQLiteHelper.NOTES_COLUMN_CONTENT, note.getContent());
+        values.put(MySQLiteHelper.NOTES_COLUMN_TIMESTAMP, note.getTimeStampAsString());
 
-        Cursor cursor = database.query(MySQLiteHelper.TABLE_NOTES,
+        long insertID = database.insert(MySQLiteHelper.NOTES_TABLE, null, values);
+
+        Cursor cursor = database.query(MySQLiteHelper.NOTES_TABLE,
                 allColumns,
-                MySQLiteHelper.COLUMN_ID + " = " + insertID,
+                MySQLiteHelper.NOTES_COLUMN_ID + " = " + insertID,
                 null, null, null, null);
 
         cursor.moveToFirst();
@@ -65,13 +62,13 @@ public class NotesDataSource
     public void updateNote(Note note)
     {
         ContentValues values = new ContentValues();
-        values.put(MySQLiteHelper.COLUMN_TITLE, note.getTitle());
-        values.put(MySQLiteHelper.COLUMN_CONTENT, note.getContent());
-        values.put(MySQLiteHelper.COLUMN_TIMESTAMP, note.getTimeStampAsString());
+        values.put(MySQLiteHelper.NOTES_COLUMN_TITLE, note.getTitle());
+        values.put(MySQLiteHelper.NOTES_COLUMN_CONTENT, note.getContent());
+        values.put(MySQLiteHelper.NOTES_COLUMN_TIMESTAMP, note.getTimeStampAsString());
 
-        database.update(MySQLiteHelper.TABLE_NOTES,
+        database.update(MySQLiteHelper.NOTES_TABLE,
                 values,
-                MySQLiteHelper.COLUMN_ID + "=" + note.getId(),
+                MySQLiteHelper.NOTES_COLUMN_ID + "=" + note.getId(),
                 null);
 
     }
@@ -81,7 +78,7 @@ public class NotesDataSource
     public List<Note> getAllNotes() {
         List<Note> comments = new ArrayList<Note>();
 
-        Cursor cursor = database.query(MySQLiteHelper.TABLE_NOTES,
+        Cursor cursor = database.query(MySQLiteHelper.NOTES_TABLE,
                 allColumns, null, null, null, null, null);
 
         cursor.moveToFirst();
@@ -98,7 +95,7 @@ public class NotesDataSource
     public void deleteNote(Note note){
         long id = note.getId();
         System.out.println("Note deleted with id: " + id);
-        database.delete(MySQLiteHelper.TABLE_NOTES, MySQLiteHelper.COLUMN_ID
+        database.delete(MySQLiteHelper.NOTES_TABLE, MySQLiteHelper.NOTES_COLUMN_ID
                 + " = " + id, null);
 
     }
@@ -108,7 +105,8 @@ public class NotesDataSource
         note.setId(cursor.getLong(0));
         note.setTitle(cursor.getString(1));
         note.setContent(cursor.getString(2));
-        //set date
+        note.setTimeStampFromString(cursor.getString(3));
+        //TODO: Set image url
         return note;
     }
 

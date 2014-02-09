@@ -72,27 +72,6 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
                             .setText(myAppSectionsPagerAdapter.getPageTitle(i))
                             .setTabListener(this));
         }
-
-
-
-        /*
-        //Create a fragment manager to find and create fragments
-        FragmentManager fragmentManager = getSupportFragmentManager();
-
-        //Check if any fragment exist in target parent node notesActivityContainer
-        Fragment myNotesFragment = fragmentManager.findFragmentById(R.id.notesActivityContainer);
-        if (myNotesFragment == null)
-        {
-            //If not, then create a new instance of the fragment's activity and bind it to the
-            //specified parent node
-
-            myNotesFragment = new NotesListFragment(); // new FinanceSummary();
-
-            fragmentManager.beginTransaction()
-                    .add(R.id.notesActivityContainer, myNotesFragment)
-                    .commit();
-
-        }*/
     }
 
     @Override

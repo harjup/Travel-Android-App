@@ -15,7 +15,8 @@ import com.harjup_kdhyne.TravelApp.R;
 
 /**
  * Created by Paul on 2/8/14.
- * TODO: Write short summary of class
+ * Exists as a container for all note-related fragments in the Notes tab.
+ * Initializes the starting fragment
  */
 public class NotesContainerFragment extends Fragment
 {

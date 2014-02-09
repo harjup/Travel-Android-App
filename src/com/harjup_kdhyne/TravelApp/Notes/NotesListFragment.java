@@ -60,7 +60,7 @@ public class NotesListFragment extends ListFragment
             @Override
             public void onClick(View view) {
                 //Create a new note, navigate to details page with specified note as argument
-                ViewNoteDetails(new Note());
+                viewNoteDetails(new Note());
             }
         });
 
@@ -75,7 +75,6 @@ public class NotesListFragment extends ListFragment
         });
 
         return myView;
-        //return super.onCreateView(inflater, container, savedInstanceState);
     }
 
     //When the user navigates to a different fragment,
@@ -94,28 +93,16 @@ public class NotesListFragment extends ListFragment
     public void onListItemClick(ListView l, View v, int position, long id) {
         super.onListItemClick(l, v, position, id);
 
-        ViewNoteDetails(noteList.get(position));
-
-
-        /*
-        NoteDetailsFragment myNoteDetails = new NoteDetailsFragment();
-        myNoteDetails.setNote(noteList.get(position));
-
-        FragmentTransaction ft = getFragmentManager().beginTransaction();
-        ft.replace(R.id.notesActivityContainer, myNoteDetails);
-        ft.addToBackStack(null);
-        ft.commit();*/
+        viewNoteDetails(noteList.get(position));
     }
 
 
-    private void ViewNoteDetails(Note note){
+    private void viewNoteDetails(Note note){
         NoteDetailsFragment myNoteDetails = new NoteDetailsFragment();
 
         myNoteDetails.setNote(note);
 
         FragmentTransaction ft = getFragmentManager().beginTransaction();
-        //FragmentTransaction ft = getChildFragmentManager().beginTransaction();
-        //ft.replace(R.id.notesActivityContainer, myNoteDetails);
         ft.replace(R.id.notesActivityContainer, myNoteDetails);
         ft.addToBackStack(null);
         ft.commit();

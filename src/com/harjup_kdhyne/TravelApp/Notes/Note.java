@@ -1,16 +1,18 @@
 package com.harjup_kdhyne.TravelApp.Notes;
 
+import java.security.Timestamp;
 import java.text.DateFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
 /**
  * Created by Paul on 1/28/14.
- * Contains the data
+ * Note object
  */
 public class Note
 {
-    private long id = -1;
+    private long id = -1;       //id for insertion in the database
     private String title;       //Title/short description the note contains
     private String content;     //Text content of the note
     private Date timeStamp;     //Time when the note was made
@@ -53,7 +55,6 @@ public class Note
         this.timeStamp = timeStamp;
     }
 
-    //TODO: Format note timestamp into a nice string
     public String getTimeStampAsString()
     {
 
@@ -63,6 +64,21 @@ public class Note
 
         return date;
     }
+
+    public void setTimeStampFromString(String time)
+    {
+
+        DateFormat dateFormat = new SimpleDateFormat("MM/dd/yyyy");
+        try {
+            this.timeStamp = dateFormat.parse(time);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        //Timestamp date = Timestamp.
+
+
+    }
+
 
     public long getId() {
         return id;
