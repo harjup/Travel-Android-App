@@ -14,7 +14,9 @@ import android.view.ViewGroup;
 import android.widget.ListView;
 import com.harjup_kdhyne.TravelApp.R;
 
+import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by Kyle 2.1 on 2/2/14.
@@ -22,31 +24,39 @@ import java.util.ArrayList;
 public class FinancePurchaseListFragment extends ListFragment
 {
     // Stores the list of Contacts
-
-    private ArrayList<FinancePurchase> purchasesList;
-
-    public FinancePurchaseListFragment() {
-    }
+    private FinancePurchasesDataSource purchasesDataSource;
+    private List<FinancePurchase> purchasesList;
+    private FinancePurchaseAdapter purchaseAdapter;
 
     @Override
     public void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
+    }
 
-        getActivity().setTitle(R.string.finance_summary_title);
+    //Open a connection to the purchasesDatabase and use it to fill the purchasesList,
+    //then insert the purchasesList into the purchaseAdapter so the view can use it
+    private void fillPurchasesList()
+    {
+        purchasesDataSource = new FinancePurchasesDataSource(getActivity());
 
-        //getActivity().setTitle("");
-        purchasesList = FinanceAllPurchases.get(getActivity()).getPurchasesList();
+        try { purchasesDataSource.open();}
+        catch (SQLException e) { e.printStackTrace(); }
 
-        FinancePurchaseAdapter purchaseAdapter = new FinancePurchaseAdapter(getActivity(), R.layout.finance_purchase_item, purchasesList);
+        purchasesList = purchasesDataSource.getAllPurchases();
 
+        purchaseAdapter = new FinancePurchaseAdapter(getActivity(), R.layout.finance_purchase_item, (ArrayList<FinancePurchase>) purchasesList);
         setListAdapter(purchaseAdapter);
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
     {
-        View myView = inflater.inflate(R.layout.finance_list_layout,container, false);
+        fillPurchasesList();
+
+        View myView = inflater.inflate(R.layout.finance_list_layout,container,false);
+
+        getActivity().setTitle(R.string.finance_summary_title);
 
         return myView;
     }
@@ -63,31 +73,31 @@ public class FinancePurchaseListFragment extends ListFragment
 //        alert.setMessage(message);
 //        alert.show();
 
-        //TODO: For some reason if I try to get rid of the summary, nothing will display. Fix this
-
-        FinanceEditPurchaseFragment editPurchaseFragment = new FinanceEditPurchaseFragment();
-        FinanceSummaryFragment summaryFragment = (FinanceSummaryFragment)getParentFragment();
-
-        editPurchaseFragment.setCurrentPurchase(purchasesList.get(position));
-
-        FragmentTransaction transaction = getFragmentManager().beginTransaction();
-        //make the back button return to the finance summary screen
-        //pass the tag to the backStack
-        transaction.addToBackStack("Finance Summary");
-        //add the edit purchase page to the container
-        transaction.replace(R.id.financeActivityContainer, editPurchaseFragment);
-        //remove the finance summary at the top
-        transaction.remove(summaryFragment);
-        transaction.commit();
+        viewPurchaseDetails(purchasesList.get(position));
 
     }
 
+    //When the user navigates to a different fragment,
+    //close the purchasesList database connection
     @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data)
-    {
-        super.onActivityResult(requestCode, resultCode, data);
+    public void onDestroyView() {
 
-        ((FinancePurchaseAdapter) getListAdapter()).notifyDataSetChanged();
+        try { purchasesDataSource.close();}
+        catch (Exception e) { e.printStackTrace(); }
+
+        super.onDestroyView();
+    }
+
+    public void viewPurchaseDetails (FinancePurchase currentPurchase)
+    {
+        FinanceEditPurchaseFragment editPurchaseFragment = new FinanceEditPurchaseFragment();
+
+        editPurchaseFragment.setCurrentPurchase(currentPurchase);
+
+        FragmentTransaction transaction = getFragmentManager().beginTransaction();
+        transaction.replace(R.id.financeActivityContainer, editPurchaseFragment);
+        transaction.addToBackStack(null);
+        transaction.commit();
     }
 
 }

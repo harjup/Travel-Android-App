@@ -25,6 +25,7 @@ public class FinancePurchaseAdapter extends ArrayAdapter<FinancePurchase>
 
     }
 
+    //TODO: This doesn't quite match up with what noteAdapter is doing. Might want to look into this
     @Override
     public View getView(int position, View convertView, ViewGroup parent)
     {

@@ -15,8 +15,15 @@ public class MySQLiteHelper extends SQLiteOpenHelper
     private static final int DATABASE_VERSION = 1;
 
     //Finances table constants
-    //...
-    //...
+    public static final String PURCHASES_TABLE = "purchases";
+    public static final String PURCHASES_COLUMN_ID = "_id";
+    public static final String PURCHASES_COLUMN_NAME = "name";
+    public static final String PURCHASES_COLUMN_DATE = "date";
+    public static final String PURCHASES_COLUMN_PRICE = "content";
+    public static final String PURCHASES_COLUMN_CURRENCY = "currency";
+    public static final String PURCHASES_COLUMN_EXCHANGE_RATE = "exchangeRate";
+    public static final String PURCHASES_COLUMN_NOTES = "notes";
+    public static final String PURCHASES_COLUMN_IMAGEURI = "imageUri";
 
     //Translation table constants
     //...
@@ -31,8 +38,17 @@ public class MySQLiteHelper extends SQLiteOpenHelper
     public static final String NOTES_COLUMN_IMAGEURI = "imageUri";
 
     //Finances table creation statement
-    //...
-    //...
+    private static final String PURCHASES_TABLE_CREATE = "create table "
+            + PURCHASES_TABLE
+            + "("
+            + PURCHASES_COLUMN_ID + " integer primary key autoincrement, "
+            + PURCHASES_COLUMN_NAME + " text not null,"
+            + PURCHASES_COLUMN_DATE + " text,"
+            + PURCHASES_COLUMN_PRICE + " real,"
+            + PURCHASES_COLUMN_CURRENCY + " text,"
+            + PURCHASES_COLUMN_EXCHANGE_RATE + " real,"
+            + PURCHASES_COLUMN_NOTES + " text"
+            + ");";
 
     //Translation table creation statement
     //...
@@ -58,7 +74,7 @@ public class MySQLiteHelper extends SQLiteOpenHelper
     //TODO: Create tables for other data
     @Override
     public void onCreate(SQLiteDatabase database) {
-        //database.execSQL(FINANCES_TABLE_CREATE);
+        database.execSQL(PURCHASES_TABLE_CREATE);
         //database.execSQL(TRANSLATION_TABLE_CREATE);
         database.execSQL(NOTES_TABLE_CREATE);
     }
@@ -66,7 +82,7 @@ public class MySQLiteHelper extends SQLiteOpenHelper
     //TODO: Run table drops for other data
     @Override
     public void onUpgrade(SQLiteDatabase database, int i, int i2) {
-        //database.execSQL("DROP TABLE IF EXISTS " + FINANCES_TABLE);
+        database.execSQL("DROP TABLE IF EXISTS " + PURCHASES_TABLE);
         //database.execSQL("DROP TABLE IF EXISTS " + TRANSLATION_TABLE);
         database.execSQL("DROP TABLE IF EXISTS " + NOTES_TABLE);
         onCreate(database);

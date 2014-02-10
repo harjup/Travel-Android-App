@@ -27,7 +27,7 @@
                 android:id="@+id/financeDeletePurchase"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/delete_purchase_button"/>
+                android:text="@string/delete_button"/>
     </TableRow>
 
 </TableLayout>

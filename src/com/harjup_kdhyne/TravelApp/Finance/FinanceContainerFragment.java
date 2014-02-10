@@ -20,10 +20,8 @@ public class FinanceContainerFragment extends Fragment
 
         View myView = inflater.inflate(R.layout.finance_activity_container, container, false);
 
-        //Fragment financeSummaryFragment = new FinanceSummaryFragment();
         ListFragment financePurchaseListFragment = new FinancePurchaseListFragment();
         FragmentTransaction transaction = getFragmentManager().beginTransaction();
-        //transaction.add(R.id.financeActivityContainer, financeSummaryFragment);
         transaction.replace(R.id.financeActivityContainer,financePurchaseListFragment);
         transaction.commit();
 

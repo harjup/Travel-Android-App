@@ -2,9 +2,7 @@ package com.harjup_kdhyne.TravelApp.Finance;
 
 import android.content.Context;
 
-import java.security.Timestamp;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.UUID;
 
 /**
@@ -142,7 +140,7 @@ public class FinanceAllPurchases
     {
         for(FinancePurchase purchase : purchasesList)
         {
-            if(purchase.getPurchaseID().equals(id))
+            if(purchase.getPurchaseUUID().equals(id))
             {
                 return purchase;
             }

@@ -8,25 +8,42 @@ import java.util.UUID;
  */
 public class FinancePurchase
 {
-    private UUID purchaseID;
-
+    private UUID purchaseUUID;
+    private long purchaseID = -1;           //id for insertion in the database
     private String purchaseName;            //Name/short description of purchase
     private Double purchasePrice;           //Price of purchase
-    private Date purchaseTimeStamp;         //Time the purchase was made
+    private Date purchaseDate;              //Time the purchase was made
     private String paidCurrency;            //Currency used to pay for purchase
     private Double purchaseExchangeRate;    //Exchange rate at time of purchase
-
+    private String purchaseNotes;           //Notes to describe purchase
     private String imageId;     //TODO: Determine how to store picture(s), probably pointing to them somehow
 
     public FinancePurchase()
     {
         //Create a new UUID for this purchase
         //Used to reference this purchase at any given point in time
-        purchaseID = UUID.randomUUID();
+        purchaseUUID = UUID.randomUUID();
 
         //Define a default date
-        purchaseTimeStamp = new Date();
+        purchaseDate = new Date();
+    }
 
+
+
+    public UUID getPurchaseUUID() {
+        return purchaseUUID;
+    }
+
+    public void setPurchaseUUID(UUID purchaseUUID) {
+        this.purchaseUUID = purchaseUUID;
+    }
+
+    public long getPurchaseID() {
+        return purchaseID;
+    }
+
+    public void setPurchaseID(long purchaseID) {
+        this.purchaseID = purchaseID;
     }
 
     public String getPurchaseName() {
@@ -45,12 +62,12 @@ public class FinancePurchase
         this.purchasePrice = purchasePrice;
     }
 
-    public Date getPurchaseTimeStamp() {
-        return purchaseTimeStamp;
+    public Date getPurchaseDate() {
+        return purchaseDate;
     }
 
-    public void setPurchaseTimeStamp(Date purchaseTimeStamp) {
-        this.purchaseTimeStamp = purchaseTimeStamp;
+    public void setPurchaseDate(Date purchaseDate) {
+        this.purchaseDate = purchaseDate;
     }
 
     public String getPaidCurrency() {
@@ -69,12 +86,12 @@ public class FinancePurchase
         this.purchaseExchangeRate = purchaseExchangeRate;
     }
 
-    public UUID getPurchaseID() {
-        return purchaseID;
+    public String getPurchaseNotes() {
+        return purchaseNotes;
     }
 
-    public void setPurchaseID(UUID purchaseID) {
-        this.purchaseID = purchaseID;
+    public void setPurchaseNotes(String purchaseNotes) {
+        this.purchaseNotes = purchaseNotes;
     }
 
     public String getImageId() {
