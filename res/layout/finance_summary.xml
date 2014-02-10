@@ -108,6 +108,8 @@
                     android:layout_weight="1"
                     android:text="@string/purchase_price_label"/>
 
+
+
         </TableRow>
 
 </TableLayout>

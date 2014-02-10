@@ -3,13 +3,8 @@ package com.harjup_kdhyne.TravelApp;
 import android.app.ActionBar;
 import android.app.FragmentTransaction;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
-import android.support.v4.app.FragmentManager;
 import android.support.v4.view.ViewPager;
-import com.harjup_kdhyne.TravelApp.Finance.FinanceSummaryFragment;
-import com.harjup_kdhyne.TravelApp.Notes.NoteDetailsFragment;
-import com.harjup_kdhyne.TravelApp.Notes.NotesListFragment;
 
 public class MainActivity extends FragmentActivity implements ActionBar.TabListener {
 
