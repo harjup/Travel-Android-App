@@ -104,6 +104,19 @@ public class FinanceEditPurchaseFragment extends Fragment
             purchasePriceEditText = (EditText) myView.findViewById(R.id.purchasePriceEditText);
             purchaseNotesEditText = (EditText) myView.findViewById(R.id.purchaseNotesEditText);
 
+            //Fill TextBoxes
+            if(purchaseNameEditText != null)
+                purchaseNameEditText.setText(currentPurchase.getPurchaseName());
+
+            if(purchaseDateEditText != null)
+                purchaseDateEditText.setText(currentPurchase.getPurchaseDateAsString());
+
+            if(purchasePriceEditText != null)
+                //purchasePriceEditText.setText(currentPurchase.getPurchasePrice().toString());
+
+            if(purchaseNotesEditText != null)
+                purchaseNotesEditText.setText(currentPurchase.getPurchaseNotes());
+
             //Buttons
             backButton = (Button) myView.findViewById(R.id.backButton);
             clearButton = (Button) myView.findViewById(R.id.clearButton);
@@ -219,6 +232,17 @@ public class FinanceEditPurchaseFragment extends Fragment
             public void onClick(View v) {
                 //TODO: save the purchase details
 
+                //Check to see if the ID hasn't been set yet (isn't in the list)
+                //Else update the changes
+                if (currentPurchase.getPurchaseID() == -1)
+                {
+                    purchasesDataSource.createPurchase(currentPurchase);
+                }
+                else
+                {
+                    purchasesDataSource.updatePurchase(currentPurchase);
+                }
+
                 //return to list view
                 returnToPurchasesList();
             }
@@ -250,10 +274,14 @@ public class FinanceEditPurchaseFragment extends Fragment
     //Return to the purchases list
     public void returnToPurchasesList()
     {
+        FinanceSummaryFragment summaryFragment = new FinanceSummaryFragment();
         FinancePurchaseListFragment purchaseListFragment = new FinancePurchaseListFragment();
 
         FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
-        fragmentTransaction.replace(R.layout.finance_activity_container,purchaseListFragment);
+        fragmentTransaction.remove(this);
+        fragmentTransaction.add(R.id.financeSummaryContainer, summaryFragment);
+        fragmentTransaction.add(R.id.financePurchaseListContainer, purchaseListFragment);
+        fragmentTransaction.addToBackStack(null);
         fragmentTransaction.commit();
     }
 
