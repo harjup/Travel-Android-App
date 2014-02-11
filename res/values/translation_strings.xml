@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="tr_from">From:</string>
+    <string name="tr_to">To:</string>
+    <string name="tr_add_to_phrasebook">Add to Phrasebook</string>
+    <string name="Phrasebook">Phrasebook</string>
+</resources>

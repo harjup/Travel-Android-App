@@ -41,7 +41,7 @@ public class NotesListFragment extends ListFragment
 
         noteList = notesDataSource.getAllNotes();
 
-        noteAdapter = new NoteAdapter(getActivity(), R.layout.notes_list_item, (ArrayList<Note>) noteList);
+        noteAdapter = new NoteAdapter(getActivity(), R.layout.note_list_item, (ArrayList<Note>) noteList);
         setListAdapter(noteAdapter);
     }
 
@@ -50,7 +50,7 @@ public class NotesListFragment extends ListFragment
 
         fillNoteList();
 
-        View myView = inflater.inflate(R.layout.note_list_layout, container, false);
+        View myView = inflater.inflate(R.layout.note_list, container, false);
 
         Button addButton = (Button) myView.findViewById(R.id.notesAddNoteButton);
         Button deleteButton = (Button) myView.findViewById(R.id.notesDeleteNoteButton);

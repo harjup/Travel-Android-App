@@ -9,7 +9,6 @@ import android.widget.TextView;
 import com.harjup_kdhyne.TravelApp.R;
 
 import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Created by Paul on 1/28/14.
@@ -37,7 +36,7 @@ public class NoteAdapter extends ArrayAdapter<Note>
         if (v == null)
         {
             LayoutInflater inflater = (LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            v = inflater.inflate(R.layout.notes_list_item, null);
+            v = inflater.inflate(R.layout.note_list_item, null);
         }
 
         /*

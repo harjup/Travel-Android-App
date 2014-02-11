@@ -26,6 +26,8 @@ public class MySQLiteHelper extends SQLiteOpenHelper
     public static final String PURCHASES_COLUMN_IMAGEURI = "imageUri";
 
     //Translation table constants
+    public static final String TRANSLATION_TABLE = "purchases";
+    public static final String TRANSLATION_COLUMN_ID = "_id";
     //...
     //...
 
