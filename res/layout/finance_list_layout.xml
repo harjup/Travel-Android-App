@@ -11,20 +11,21 @@
         <ListView
                 android:id="@id/android:list"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"/>
+                android:layout_height="wrap_content"
+                android:layout_weight="1"/>
     </TableRow>
 
     <TableRow
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
         <Button
-                android:id="@+id/financeAddPurchase"
+                android:id="@+id/addPurchaseButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/new_purchase_button"/>
+                android:text="@string/add_purchase_button"/>
 
         <Button
-                android:id="@+id/financeDeletePurchase"
+                android:id="@+id/deletePurchaseButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/delete_button"/>

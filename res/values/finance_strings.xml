@@ -20,7 +20,7 @@
     <string name="delete_button">Delete</string>
     <string name="clear_button">Clear</string>
     <string name="save_button">Save</string>
-    <string name="new_purchase_button">New Purchase</string>
+    <string name="add_purchase_button">New Purchase</string>
     <string name="finance_summary_title">Financial Summary</string>
 
 

@@ -2,37 +2,25 @@
 
 <TableRow xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:focusable="false">
-
+        android:layout_height="match_parent">
     <TextView
-            android:layout_width="0dp"
-            android:layout_weight="1"
-            android:layout_height="wrap_content"
-            android:text="@string/purchase_name_label"
             android:id="@+id/purchaseNameTextView"
-            android:paddingTop="5dp"
-            android:paddingBottom="5dp"
-            android:focusable="false"/>
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/purchase_name_label"/>
 
     <TextView
-            android:layout_width="0dp"
-            android:layout_weight="1"
-            android:layout_height="wrap_content"
-            android:text="@string/purchase_date_label"
             android:id="@+id/purchaseDateTextView"
-            android:paddingTop="5dp"
-            android:paddingBottom="5dp"
-            android:focusable="false"/>
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/purchase_date_label"/>
 
     <TextView
-            android:layout_width="0dp"
-            android:layout_weight="1"
-            android:layout_height="wrap_content"
-            android:text="@string/purchase_price_label"
             android:id="@+id/purchasePriceTextView"
-            android:paddingTop="5dp"
-            android:paddingBottom="5dp"
-            android:focusable="false"/>
-
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/purchase_price_label"/>
 </TableRow>

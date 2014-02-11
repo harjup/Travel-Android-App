@@ -47,7 +47,7 @@ public class FinancePurchasesDataSource
         ContentValues values = new ContentValues();
 
         values.put(MySQLiteHelper.PURCHASES_COLUMN_NAME, purchase.getPurchaseName());
-        values.put(MySQLiteHelper.PURCHASES_COLUMN_DATE, purchase.getPurchaseTimeStampAsString());
+        values.put(MySQLiteHelper.PURCHASES_COLUMN_DATE, purchase.getPurchaseDateAsString());
         values.put(MySQLiteHelper.PURCHASES_COLUMN_PRICE, purchase.getPurchasePrice());
         values.put(MySQLiteHelper.PURCHASES_COLUMN_CURRENCY, purchase.getPaidCurrency());
         values.put(MySQLiteHelper.PURCHASES_COLUMN_EXCHANGE_RATE, purchase.getPurchaseExchangeRate());
@@ -71,7 +71,7 @@ public class FinancePurchasesDataSource
         ContentValues values = new ContentValues();
 
         values.put(MySQLiteHelper.PURCHASES_COLUMN_NAME, purchase.getPurchaseName());
-        values.put(MySQLiteHelper.PURCHASES_COLUMN_DATE, purchase.getPurchaseTimeStampAsString());
+        values.put(MySQLiteHelper.PURCHASES_COLUMN_DATE, purchase.getPurchaseDateAsString());
         values.put(MySQLiteHelper.PURCHASES_COLUMN_PRICE, purchase.getPurchasePrice());
         values.put(MySQLiteHelper.PURCHASES_COLUMN_CURRENCY, purchase.getPaidCurrency());
         values.put(MySQLiteHelper.PURCHASES_COLUMN_EXCHANGE_RATE, purchase.getPurchaseExchangeRate());

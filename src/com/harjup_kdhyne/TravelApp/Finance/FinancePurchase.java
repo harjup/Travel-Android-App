@@ -104,7 +104,7 @@ public class FinancePurchase
 
 
     //TODO: Format purchaseTimestamp into a nice string
-    public String getPurchaseTimeStampAsString()
+    public String getPurchaseDateAsString()
     {
         return "1/1/2014";
     }

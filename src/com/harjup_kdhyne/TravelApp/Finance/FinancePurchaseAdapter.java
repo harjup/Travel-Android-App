@@ -9,7 +9,6 @@ import android.widget.TextView;
 import com.harjup_kdhyne.TravelApp.R;
 
 import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Created by Kyle 2.1 on 2/2/14.
@@ -17,6 +16,10 @@ import java.util.List;
 public class FinancePurchaseAdapter extends ArrayAdapter<FinancePurchase>
 {
     private ArrayList<FinancePurchase> purchasesList;
+
+    private TextView purchaseNameTextView;
+    private TextView purchaseDateTextView;
+    private TextView purchasePriceTextView;
 
     public FinancePurchaseAdapter(Context context, int resource, ArrayList<FinancePurchase> objects)
     {
@@ -39,13 +42,21 @@ public class FinancePurchaseAdapter extends ArrayAdapter<FinancePurchase>
         FinancePurchase purchase = getItem(position);
 
         //Put the item's data into the correct components
-        TextView purchaseNameTextView = (TextView)convertView.findViewById(R.id.purchaseNameTextView);
-        TextView purchaseDateTextView = (TextView)convertView.findViewById(R.id.purchaseDateTextView);
-        TextView purchasePriceTextView = (TextView)convertView.findViewById(R.id.purchasePriceTextView);
+        if(convertView!= null)
+        {
+            purchaseNameTextView = (TextView)convertView.findViewById(R.id.purchaseNameTextView);
+            purchaseDateTextView = (TextView)convertView.findViewById(R.id.purchaseDateTextView);
+            purchasePriceTextView = (TextView)convertView.findViewById(R.id.purchasePriceTextView);
 
-        purchaseNameTextView.setText(purchase.getPurchaseName());
-        purchaseDateTextView.setText(purchase.getPurchaseTimeStampAsString());
-        purchasePriceTextView.setText(purchase.getPurchasePrice().toString());
+            if (purchaseNameTextView != null)
+                purchaseNameTextView.setText(purchase.getPurchaseName());
+
+            if (purchaseDateTextView != null)
+                purchaseDateTextView.setText(purchase.getPurchaseDateAsString());
+
+            if (purchasePriceTextView != null)
+                purchasePriceTextView.setText(purchase.getPurchasePrice().toString());
+        }
 
         return convertView;
 
