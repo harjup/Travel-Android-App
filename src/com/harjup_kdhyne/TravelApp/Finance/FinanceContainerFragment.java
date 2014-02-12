@@ -7,7 +7,6 @@ import android.support.v4.app.ListFragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import com.harjup_kdhyne.TravelApp.Notes.NotesListFragment;
 import com.harjup_kdhyne.TravelApp.R;
 
 /**
@@ -20,13 +19,13 @@ public class FinanceContainerFragment extends Fragment
 
         View myView = inflater.inflate(R.layout.finance_activity_container, container, false);
     /*
-        ListFragment financePurchaseListFragment = new FinancePurchaseListFragment();
+        ListFragment financePurchaseListFragment = new PurchaseListFragment();
         FragmentTransaction transaction = getFragmentManager().beginTransaction();
         transaction.replace(R.id.financeActivityContainer,financePurchaseListFragment);
         transaction.commit();
     */
-        Fragment financeSummaryFragment = new FinanceSummaryFragment();
-        ListFragment financePurchaseListFragment = new FinancePurchaseListFragment();
+        Fragment financeSummaryFragment = new SummaryFragment();
+        ListFragment financePurchaseListFragment = new PurchaseListFragment();
 
         FragmentTransaction transaction = getFragmentManager().beginTransaction();
         transaction.replace(R.id.financeSummaryContainer,financeSummaryFragment);

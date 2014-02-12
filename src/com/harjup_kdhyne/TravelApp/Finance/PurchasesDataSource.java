@@ -13,7 +13,7 @@ import java.util.List;
 /**
  * Created by Kyle 2.1 on 2/9/14.
  */
-public class FinancePurchasesDataSource
+public class PurchasesDataSource
 {
     private SQLiteDatabase database;
     private MySQLiteHelper dbHelper;
@@ -27,7 +27,7 @@ public class FinancePurchasesDataSource
             MySQLiteHelper.PURCHASES_COLUMN_NOTES
     };
 
-    public FinancePurchasesDataSource(Context context)
+    public PurchasesDataSource(Context context)
     {
         dbHelper = new MySQLiteHelper(context);
     }
@@ -42,7 +42,7 @@ public class FinancePurchasesDataSource
         dbHelper.close();
     }
 
-    public FinancePurchase createPurchase(FinancePurchase purchase)
+    public Purchase createPurchase(Purchase purchase)
     {
         ContentValues values = new ContentValues();
 
@@ -61,12 +61,12 @@ public class FinancePurchasesDataSource
                 null, null, null, null);
 
         cursor.moveToFirst();
-        FinancePurchase newPurchase = cursorToPurchase(cursor);
+        Purchase newPurchase = cursorToPurchase(cursor);
         cursor.close();
         return newPurchase;
     }
 
-    public void updatePurchase(FinancePurchase purchase)
+    public void updatePurchase(Purchase purchase)
     {
         ContentValues values = new ContentValues();
 
@@ -84,15 +84,15 @@ public class FinancePurchasesDataSource
 
     }
 
-    public List<FinancePurchase> getAllPurchases() {
-        List<FinancePurchase> purchases = new ArrayList<FinancePurchase>();
+    public List<Purchase> getAllPurchases() {
+        List<Purchase> purchases = new ArrayList<Purchase>();
 
         Cursor cursor = database.query(MySQLiteHelper.PURCHASES_TABLE,
                 allColumns, null, null, null, null, null);
 
         cursor.moveToFirst();
         while (!cursor.isAfterLast()) {
-            FinancePurchase purchase = cursorToPurchase(cursor);
+            Purchase purchase = cursorToPurchase(cursor);
             purchases.add(purchase);
             cursor.moveToNext();
         }
@@ -101,7 +101,7 @@ public class FinancePurchasesDataSource
         return purchases;
     }
 
-    public void deletePurchase(FinancePurchase purchase){
+    public void deletePurchase(Purchase purchase){
         long id = purchase.getPurchaseID();
         System.out.println("Purchase deleted with id: " + id);
         database.delete(MySQLiteHelper.PURCHASES_TABLE, MySQLiteHelper.PURCHASES_COLUMN_ID
@@ -109,8 +109,8 @@ public class FinancePurchasesDataSource
 
     }
 
-    private FinancePurchase cursorToPurchase(Cursor cursor) {
-        FinancePurchase purchase = new FinancePurchase();
+    private Purchase cursorToPurchase(Cursor cursor) {
+        Purchase purchase = new Purchase();
         purchase.setPurchaseID(cursor.getLong(0));
         purchase.setPurchaseName(cursor.getString(1));
         //purchase.setPurchaseDate(cursor.getString(2));

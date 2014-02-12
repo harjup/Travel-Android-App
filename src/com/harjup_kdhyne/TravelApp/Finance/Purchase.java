@@ -6,7 +6,7 @@ import java.util.UUID;
 /**
  * Created by Kyle 2.1 on 2/2/14.
  */
-public class FinancePurchase
+public class Purchase
 {
     private UUID purchaseUUID;
     private long purchaseID = -1;           //id for insertion in the database
@@ -18,7 +18,7 @@ public class FinancePurchase
     private String purchaseNotes;           //Notes to describe purchase
     private String imageId;     //TODO: Determine how to store picture(s), probably pointing to them somehow
 
-    public FinancePurchase()
+    public Purchase()
     {
         //Create a new UUID for this purchase
         //Used to reference this purchase at any given point in time

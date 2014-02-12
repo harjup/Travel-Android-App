@@ -1,6 +1,5 @@
 package com.harjup_kdhyne.TravelApp.Finance;
 
-import android.app.AlertDialog;
 import android.graphics.Color;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
@@ -26,12 +25,12 @@ import java.util.List;
  * Clicking "Delete" will cause the next tapped item to be deleted from the list and the database
  * Clicking "Delete" again will exit delete mode.
  */
-public class FinancePurchaseListFragment extends ListFragment
+public class PurchaseListFragment extends ListFragment
 {
     // Stores the list of Contacts
-    private FinancePurchasesDataSource purchasesDataSource;
-    private List<FinancePurchase> purchasesList;
-    private FinancePurchaseAdapter purchaseAdapter;
+    private PurchasesDataSource purchasesDataSource;
+    private List<Purchase> purchasesList;
+    private PurchaseAdapter purchaseAdapter;
 
     //Buttons
     private Button addPurchaseButton;
@@ -50,14 +49,14 @@ public class FinancePurchaseListFragment extends ListFragment
     //then insert the purchasesList into the purchaseAdapter so the view can use it
     private void fillPurchasesList()
     {
-        purchasesDataSource = new FinancePurchasesDataSource(getActivity());
+        purchasesDataSource = new PurchasesDataSource(getActivity());
 
         try { purchasesDataSource.open();}
         catch (SQLException e) { e.printStackTrace(); }
 
         purchasesList = purchasesDataSource.getAllPurchases();
 
-        purchaseAdapter = new FinancePurchaseAdapter(getActivity(), R.layout.finance_purchase_item, (ArrayList<FinancePurchase>) purchasesList);
+        purchaseAdapter = new PurchaseAdapter(getActivity(), R.layout.finance_purchase_item, (ArrayList<Purchase>) purchasesList);
         setListAdapter(purchaseAdapter);
     }
 
@@ -68,7 +67,7 @@ public class FinancePurchaseListFragment extends ListFragment
 
         fillPurchasesList();
 
-        View myView = inflater.inflate(R.layout.finance_list_layout,container,false);
+        View myView = inflater.inflate(R.layout.finance_purchase_list,container,false);
 
         if(myView != null)
         {
@@ -83,7 +82,7 @@ public class FinancePurchaseListFragment extends ListFragment
             public void onClick(View v)
             {
                 //Go to the purchase details page and create a new purchase
-                viewPurchaseDetails(new FinancePurchase());
+                viewPurchaseDetails(new Purchase());
             }
         });
 
@@ -150,9 +149,9 @@ public class FinancePurchaseListFragment extends ListFragment
         super.onDestroyView();
     }
 
-    public void viewPurchaseDetails (FinancePurchase currentPurchase)
+    public void viewPurchaseDetails (Purchase currentPurchase)
     {
-        FinanceEditPurchaseFragment editPurchaseFragment = new FinanceEditPurchaseFragment();
+        PurchaseEditFragment editPurchaseFragment = new PurchaseEditFragment();
         Fragment summaryFragment = getFragmentManager().findFragmentById(R.id.financeSummaryContainer);
 
         editPurchaseFragment.setCurrentPurchase(currentPurchase);

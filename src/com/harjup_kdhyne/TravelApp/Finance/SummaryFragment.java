@@ -16,7 +16,7 @@ import java.util.Date;
 /**
  * Created by Kyle 2.1 on 1/29/14.
  */
-public class FinanceSummaryFragment extends Fragment
+public class SummaryFragment extends Fragment
 {
 
     @Override
@@ -33,7 +33,7 @@ public class FinanceSummaryFragment extends Fragment
         View myView = inflater.inflate(R.layout.finance_summary, container, false);
 
         //Add a list of purchases to the list container under the financial summary
-        /*ListFragment purchaseListFragment = new FinancePurchaseListFragment();
+        /*ListFragment purchaseListFragment = new PurchaseListFragment();
         FragmentTransaction transaction = getFragmentManager().beginTransaction();
         transaction.add(R.id.financeListContainer,purchaseListFragment);
         transaction.commit();*/

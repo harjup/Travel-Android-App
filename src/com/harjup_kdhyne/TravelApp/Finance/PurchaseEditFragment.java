@@ -22,10 +22,10 @@ import java.util.UUID;
 /**
  * Created by Kyle 2.1 on 2/2/14.
  */
-public class FinanceEditPurchaseFragment extends Fragment
+public class PurchaseEditFragment extends Fragment
 {
-    private FinancePurchasesDataSource purchasesDataSource;
-    private FinancePurchase currentPurchase;
+    private PurchasesDataSource purchasesDataSource;
+    private Purchase currentPurchase;
 
     //Keys for ID and date
     public static final String PURCHASE_ID = "com.harjup_kdhyne.TravelApp.Finance.purchase_id";
@@ -49,14 +49,14 @@ public class FinanceEditPurchaseFragment extends Fragment
     private Spinner purchaseCurrencySpinner;
 
     //Create a new EditPurchase fragment with the passed data
-    public static FinanceEditPurchaseFragment newEditPurchaseFragment(UUID purchaseID)
+    public static PurchaseEditFragment newEditPurchaseFragment(UUID purchaseID)
     {
         //Create a bundle to pass info to new activities
         Bundle passedData = new Bundle();
 
         //Put the purchaseID in the bundle and return the purchaseFragment
         passedData.putSerializable(PURCHASE_ID, purchaseID);
-        FinanceEditPurchaseFragment editPurchaseFragment = new FinanceEditPurchaseFragment();
+        PurchaseEditFragment editPurchaseFragment = new PurchaseEditFragment();
         editPurchaseFragment.setArguments(passedData);
         return editPurchaseFragment;
     }
@@ -67,13 +67,13 @@ public class FinanceEditPurchaseFragment extends Fragment
         super.onCreate(savedInstanceState);
     }
 
-    public void setCurrentPurchase(FinancePurchase purchase){
+    public void setCurrentPurchase(Purchase purchase){
         currentPurchase = purchase;
     }
 
     void openDbConnection()
     {
-        purchasesDataSource = new FinancePurchasesDataSource(getActivity());
+        purchasesDataSource = new PurchasesDataSource(getActivity());
 
         try
         {
@@ -90,7 +90,7 @@ public class FinanceEditPurchaseFragment extends Fragment
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
     {
         //TODO: Instantiate the date picker dialog somewhere
-        View myView = inflater.inflate(R.layout.finance_edit_purchase, container, false);
+        View myView = inflater.inflate(R.layout.finance_purchase_edit, container, false);
 
         //Open a connection to the database where purchase info is stored
         openDbConnection();
@@ -274,8 +274,8 @@ public class FinanceEditPurchaseFragment extends Fragment
     //Return to the purchases list
     public void returnToPurchasesList()
     {
-        FinanceSummaryFragment summaryFragment = new FinanceSummaryFragment();
-        FinancePurchaseListFragment purchaseListFragment = new FinancePurchaseListFragment();
+        SummaryFragment summaryFragment = new SummaryFragment();
+        PurchaseListFragment purchaseListFragment = new PurchaseListFragment();
 
         FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
         fragmentTransaction.remove(this);

@@ -13,15 +13,15 @@ import java.util.ArrayList;
 /**
  * Created by Kyle 2.1 on 2/2/14.
  */
-public class FinancePurchaseAdapter extends ArrayAdapter<FinancePurchase>
+public class PurchaseAdapter extends ArrayAdapter<Purchase>
 {
-    private ArrayList<FinancePurchase> purchasesList;
+    private ArrayList<Purchase> purchasesList;
 
     private TextView purchaseNameTextView;
     private TextView purchaseDateTextView;
     private TextView purchasePriceTextView;
 
-    public FinancePurchaseAdapter(Context context, int resource, ArrayList<FinancePurchase> objects)
+    public PurchaseAdapter(Context context, int resource, ArrayList<Purchase> objects)
     {
         super(context, android.R.layout.simple_list_item_1, objects);
         purchasesList = objects;
@@ -39,7 +39,7 @@ public class FinancePurchaseAdapter extends ArrayAdapter<FinancePurchase>
         }
 
         //Find the purchase at the given position
-        FinancePurchase purchase = getItem(position);
+        Purchase purchase = getItem(position);
 
         //Put the item's data into the correct components
         if(convertView!= null)
