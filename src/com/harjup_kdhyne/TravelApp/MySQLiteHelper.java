@@ -19,7 +19,7 @@ public class MySQLiteHelper extends SQLiteOpenHelper
     public static final String PURCHASES_COLUMN_ID = "_id";
     public static final String PURCHASES_COLUMN_NAME = "name";
     public static final String PURCHASES_COLUMN_DATE = "date";
-    public static final String PURCHASES_COLUMN_PRICE = "content";
+    public static final String PURCHASES_COLUMN_PRICE = "price";
     public static final String PURCHASES_COLUMN_CURRENCY = "currency";
     public static final String PURCHASES_COLUMN_EXCHANGE_RATE = "exchangeRate";
     public static final String PURCHASES_COLUMN_NOTES = "notes";
@@ -46,7 +46,7 @@ public class MySQLiteHelper extends SQLiteOpenHelper
             + PURCHASES_COLUMN_ID + " integer primary key autoincrement, "
             + PURCHASES_COLUMN_NAME + " text not null,"
             + PURCHASES_COLUMN_DATE + " text,"
-            + PURCHASES_COLUMN_PRICE + " real,"
+            + PURCHASES_COLUMN_PRICE + " text,"
             + PURCHASES_COLUMN_CURRENCY + " text,"
             + PURCHASES_COLUMN_EXCHANGE_RATE + " real,"
             + PURCHASES_COLUMN_NOTES + " text"

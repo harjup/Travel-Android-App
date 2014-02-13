@@ -83,7 +83,8 @@
                         android:layout_marginBottom="@dimen/component_bottom_margin"
                         android:hint="@string/purchase_price_hint"
                         android:layout_weight="2"
-                        android:paddingTop="20dp" android:inputType="numberDecimal"/>
+                        android:paddingTop="20dp"
+                        android:inputType="number"/>
 
             </TableRow>
 

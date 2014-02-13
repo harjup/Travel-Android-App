@@ -1,5 +1,7 @@
 package com.harjup_kdhyne.TravelApp.Finance;
 
+import android.app.Activity;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.app.Fragment;
 import android.content.Intent;
@@ -16,8 +18,11 @@ import android.widget.Spinner;
 import com.harjup_kdhyne.TravelApp.R;
 
 import java.sql.SQLException;
+import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.UUID;
+
+import static android.view.View.OnClickListener;
 
 /**
  * Created by Kyle 2.1 on 2/2/14.
@@ -108,11 +113,12 @@ public class PurchaseEditFragment extends Fragment
             if(purchaseNameEditText != null)
                 purchaseNameEditText.setText(currentPurchase.getPurchaseName());
 
+            //TODO this line could probably be better
             if(purchaseDateEditText != null)
-                purchaseDateEditText.setText(currentPurchase.getPurchaseDateAsString());
+                purchaseDateEditText.setText(currentPurchase.getDateString());
 
             if(purchasePriceEditText != null)
-                //purchasePriceEditText.setText(currentPurchase.getPurchasePrice().toString());
+                purchasePriceEditText.setText(currentPurchase.getPurchasePrice().toString());
 
             if(purchaseNotesEditText != null)
                 purchaseNotesEditText.setText(currentPurchase.getPurchaseNotes());
@@ -135,19 +141,15 @@ public class PurchaseEditFragment extends Fragment
             @Override
             public void onTextChanged(CharSequence arg0, int arg1, int arg2, int arg3)
             {
-                Log.e("TEXT WAS CHANGED", arg0.toString());
+                Log.d("TEXT WAS CHANGED", arg0.toString());
 
                 if (purchaseNameEditText.hasFocus())
                 {
                     currentPurchase.setPurchaseName(arg0.toString());
                 }
-                else if (purchaseDateEditText.hasFocus())
-                {
-                    currentPurchase.setPurchaseDate(new GregorianCalendar(2014, 2, 9).getTime());
-                }
                 else if (purchasePriceEditText.hasFocus())
                 {
-                    currentPurchase.setPurchasePrice(Double.parseDouble(arg0.toString()));
+                    currentPurchase.setPurchasePrice(arg0.toString());
                 }
                 else if (purchaseNotesEditText.hasFocus())
                 {
@@ -170,14 +172,30 @@ public class PurchaseEditFragment extends Fragment
 
         //Add the textWatcher to all the textBoxes
         purchaseNameEditText.addTextChangedListener(editTextWatcher);
-        purchaseDateEditText.addTextChangedListener(editTextWatcher);
         purchasePriceEditText.addTextChangedListener(editTextWatcher);
         purchaseNotesEditText.addTextChangedListener(editTextWatcher);
+
+        //Setup OnClickListener for the date textBox and prompt a date picker
+        purchaseDateEditText.setOnClickListener(new OnClickListener()
+        {
+            @Override
+            public void onClick(View v)
+            {
+                FragmentManager fragManager = getFragmentManager();
+
+                DatePickerDialogFragment dateDialog = DatePickerDialogFragment.newInstance(currentPurchase.getPurchaseDate());
+
+                dateDialog.setTargetFragment(PurchaseEditFragment.this, REQUEST_PURCHASE_DATE);
+
+                dateDialog.show(fragManager, PURCHASE_DATE);
+
+            }
+        });
 
 
         //TODO: look for ways to simplify these listeners like the textBox listeners above
 
-        backButton.setOnClickListener(new View.OnClickListener()
+        backButton.setOnClickListener(new OnClickListener()
         {
             @Override
             public void onClick(View v)
@@ -186,7 +204,7 @@ public class PurchaseEditFragment extends Fragment
             }
         });
 
-        clearButton.setOnClickListener(new View.OnClickListener()
+        clearButton.setOnClickListener(new OnClickListener()
         {
             @Override
             public void onClick(View v)
@@ -195,7 +213,7 @@ public class PurchaseEditFragment extends Fragment
             }
         });
 
-        deleteButton.setOnClickListener(new View.OnClickListener()
+        deleteButton.setOnClickListener(new OnClickListener()
         {
             @Override
             public void onClick(View v)
@@ -207,7 +225,7 @@ public class PurchaseEditFragment extends Fragment
             }
         });
 
-        cameraButton.setOnClickListener(new View.OnClickListener()
+        cameraButton.setOnClickListener(new OnClickListener()
         {
             @Override
             public void onClick(View v)
@@ -217,7 +235,7 @@ public class PurchaseEditFragment extends Fragment
             }
         });
 
-        albumButton.setOnClickListener(new View.OnClickListener()
+        albumButton.setOnClickListener(new OnClickListener()
         {
             @Override
             public void onClick(View v)
@@ -227,7 +245,7 @@ public class PurchaseEditFragment extends Fragment
             }
         });
 
-        saveButton.setOnClickListener(new View.OnClickListener() {
+        saveButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
                 //TODO: save the purchase details
@@ -290,6 +308,22 @@ public class PurchaseEditFragment extends Fragment
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data)
     {
-        super.onActivityResult(requestCode, resultCode, data);
+        // If this wasn't called by the date dialog exit
+
+        if(resultCode != Activity.RESULT_OK) return;
+
+        // If it was get the date and save it to the Contact and
+        // update the date EditText box
+
+        if(requestCode == REQUEST_PURCHASE_DATE){
+
+            Date date = (Date) data
+                    .getSerializableExtra(DatePickerDialogFragment.DATE);
+
+            currentPurchase.setPurchaseDate(date);
+
+            purchaseDateEditText.setText(currentPurchase.getDateString());
+
+        }
     }
 }

@@ -18,22 +18,15 @@
                     android:layout_weight="1"
                     android:layout_marginBottom="@dimen/component_bottom_margin"/>
 
-            <TextView
-                    android:id="@+id/elapsedTravelDaysTextView"
+            <ProgressBar
+                    android:id="@+id/travelTimeProgressBar"
+                    style="?android:attr/progressBarStyleHorizontal"
+                    android:layout_weight="1"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:text="@string/elapsed_travel_time_amount"
-                    android:layout_weight="1"
                     android:layout_marginBottom="@dimen/component_bottom_margin"/>
 
         </TableRow>
-
-        <ProgressBar
-                android:id="@+id/travelTimeProgressBar"
-                style="?android:attr/progressBarStyleHorizontal"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="@dimen/component_bottom_margin"/>
 
         <TableRow
                 android:layout_width="match_parent"
@@ -47,23 +40,18 @@
                     android:text="@string/budget_spent_label"
                     android:layout_marginBottom="@dimen/component_bottom_margin"/>
 
-            <TextView
-                    android:id="@+id/budgetSpentAmountTextView"
+            <ProgressBar
+                    android:id="@+id/budgetSpentProgressBar"
+                    style="?android:attr/progressBarStyleHorizontal"
+                    android:layout_weight="1"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="@string/budget_spent_amount"
                     android:layout_marginBottom="@dimen/component_bottom_margin"/>
 
         </TableRow>
 
 
-        <ProgressBar
-                android:id="@+id/budgetSpentProgressBar"
-                style="?android:attr/progressBarStyleHorizontal"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="@dimen/component_bottom_margin"/>
+
 
         <TableRow
                 android:layout_width="match_parent"
@@ -75,7 +63,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/travel_expenses_label"
-                    android:textSize="18sp"
+                    android:textSize="14sp"
                     android:gravity="center"
                     android:layout_weight="1"
                     android:layout_marginBottom="@dimen/component_bottom_margin"

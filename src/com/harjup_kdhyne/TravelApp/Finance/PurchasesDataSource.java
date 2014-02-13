@@ -47,7 +47,7 @@ public class PurchasesDataSource
         ContentValues values = new ContentValues();
 
         values.put(MySQLiteHelper.PURCHASES_COLUMN_NAME, purchase.getPurchaseName());
-        values.put(MySQLiteHelper.PURCHASES_COLUMN_DATE, purchase.getPurchaseDateAsString());
+        values.put(MySQLiteHelper.PURCHASES_COLUMN_DATE, purchase.getDateString());
         values.put(MySQLiteHelper.PURCHASES_COLUMN_PRICE, purchase.getPurchasePrice());
         values.put(MySQLiteHelper.PURCHASES_COLUMN_CURRENCY, purchase.getPaidCurrency());
         values.put(MySQLiteHelper.PURCHASES_COLUMN_EXCHANGE_RATE, purchase.getPurchaseExchangeRate());
@@ -71,7 +71,7 @@ public class PurchasesDataSource
         ContentValues values = new ContentValues();
 
         values.put(MySQLiteHelper.PURCHASES_COLUMN_NAME, purchase.getPurchaseName());
-        values.put(MySQLiteHelper.PURCHASES_COLUMN_DATE, purchase.getPurchaseDateAsString());
+        values.put(MySQLiteHelper.PURCHASES_COLUMN_DATE, purchase.getDateString());
         values.put(MySQLiteHelper.PURCHASES_COLUMN_PRICE, purchase.getPurchasePrice());
         values.put(MySQLiteHelper.PURCHASES_COLUMN_CURRENCY, purchase.getPaidCurrency());
         values.put(MySQLiteHelper.PURCHASES_COLUMN_EXCHANGE_RATE, purchase.getPurchaseExchangeRate());
@@ -113,10 +113,11 @@ public class PurchasesDataSource
         Purchase purchase = new Purchase();
         purchase.setPurchaseID(cursor.getLong(0));
         purchase.setPurchaseName(cursor.getString(1));
-        //purchase.setPurchaseDate(cursor.getString(2));
-        purchase.setPurchasePrice(cursor.getDouble(3));
-        purchase.setPurchaseExchangeRate(cursor.getDouble(4));
-        purchase.setPurchaseNotes(cursor.getString(5));
+        purchase.setDateFromString(cursor.getString(2));
+        purchase.setPurchasePrice(cursor.getString(3));
+        purchase.setPaidCurrency(cursor.getString(4));
+        purchase.setPurchaseExchangeRate(cursor.getDouble(5));
+        purchase.setPurchaseNotes(cursor.getString(6));
         //TODO: Set image url
         return purchase;
     }

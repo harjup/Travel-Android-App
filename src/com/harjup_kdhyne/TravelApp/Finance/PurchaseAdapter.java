@@ -52,10 +52,10 @@ public class PurchaseAdapter extends ArrayAdapter<Purchase>
                 purchaseNameTextView.setText(purchase.getPurchaseName());
 
             if (purchaseDateTextView != null)
-                purchaseDateTextView.setText(purchase.getPurchaseDateAsString());
+                purchaseDateTextView.setText(purchase.getDateString());
 
             if (purchasePriceTextView != null)
-                purchasePriceTextView.setText(purchase.getPurchasePrice().toString());
+                purchasePriceTextView.setText(purchase.getPurchasePrice());
         }
 
         return convertView;

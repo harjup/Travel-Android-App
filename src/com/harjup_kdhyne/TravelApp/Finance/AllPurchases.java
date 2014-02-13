@@ -43,74 +43,7 @@ public class AllPurchases
         Purchase sandwich = new Purchase();
         sandwich.setPurchaseName("Sandwich");
         //sandwich.setPurchaseTimeStamp();
-        sandwich.setPurchasePrice(5.00);
-        purchasesList.add(sandwich);
-
-        Purchase Toast = new Purchase();
-        Toast.setPurchaseName("Toast");
-        //sandwich.setPurchaseTimeStamp();
-        Toast.setPurchasePrice(2.50);
-        purchasesList.add(Toast);
-
-        Purchase Butter = new Purchase();
-        Butter.setPurchaseName("Butter");
-        //sandwich.setPurchaseTimeStamp();
-        Butter.setPurchasePrice(5.00);
-        purchasesList.add(Butter);
-
-        Purchase Squash = new Purchase();
-        Squash.setPurchaseName("Squash");
-        //sandwich.setPurchaseTimeStamp();
-        Squash.setPurchasePrice(2.50);
-        purchasesList.add(Squash);
-
-        Purchase Pretzels = new Purchase();
-        Pretzels.setPurchaseName("Pretzels");
-        //sandwich.setPurchaseTimeStamp();
-        Pretzels.setPurchasePrice(5.00);
-        purchasesList.add(Pretzels);
-
-        Purchase Bagels = new Purchase();
-        Bagels.setPurchaseName("Bagels");
-        //sandwich.setPurchaseTimeStamp();
-        Bagels.setPurchasePrice(2.50);
-        purchasesList.add(Bagels);
-
-        Purchase Oil = new Purchase();
-        Oil.setPurchaseName("Oil");
-        //sandwich.setPurchaseTimeStamp();
-        Oil.setPurchasePrice(5.00);
-        purchasesList.add(Oil);
-
-        Purchase Gas = new Purchase();
-        Gas.setPurchaseName("Gas");
-        //sandwich.setPurchaseTimeStamp();
-        Gas.setPurchasePrice(2.50);
-        purchasesList.add(Gas);
-
-        Purchase Pretzels2 = new Purchase();
-        Pretzels2.setPurchaseName("Pretzels2");
-        //sandwich.setPurchaseTimeStamp();
-        Pretzels2.setPurchasePrice(5.00);
-        purchasesList.add(Pretzels2);
-
-        Purchase Bagels2 = new Purchase();
-        Bagels2.setPurchaseName("Bagels2");
-        //sandwich.setPurchaseTimeStamp();
-        Bagels2.setPurchasePrice(2.50);
-        purchasesList.add(Bagels2);
-
-        Purchase Oil2 = new Purchase();
-        Oil2.setPurchaseName("Oil2");
-        //sandwich.setPurchaseTimeStamp();
-        Oil2.setPurchasePrice(5.00);
-        purchasesList.add(Oil2);
-
-        Purchase Gas2 = new Purchase();
-        Gas2.setPurchaseName("Gas2");
-        //sandwich.setPurchaseTimeStamp();
-        Gas2.setPurchasePrice(2.50);
-        purchasesList.add(Gas2);
+        sandwich.setPurchasePrice("5.00");
 
     }
 
