@@ -12,7 +12,7 @@ public class MySQLiteHelper extends SQLiteOpenHelper
 {
     //Database constants
     private static final String DATABASE_NAME = "TravelApp.db";
-    private static final int DATABASE_VERSION = 1;
+    private static final int DATABASE_VERSION = 3;
 
     //Finances table constants
     public static final String PURCHASES_TABLE = "purchases";
@@ -26,10 +26,23 @@ public class MySQLiteHelper extends SQLiteOpenHelper
     public static final String PURCHASES_COLUMN_IMAGEURI = "imageUri";
 
     //Translation table constants
-    public static final String TRANSLATION_TABLE = "purchases";
-    public static final String TRANSLATION_COLUMN_ID = "_id";
-    //...
-    //...
+    public static final String TRANSLATIONS_TABLE = "translations";
+    public static final String TRANSLATIONS_COLUMN_ID = "_id";
+    public static final String TRANSLATIONS_COLUMN_PHRASES = "phrases";
+    public static final String TRANSLATIONS_COLUMN_CATEGORIES = "categories";
+    public static final String TRANSLATIONS_COLUMN_IMAGEURI = "imageUri";
+
+    //Translation Phrase table constants
+    public static final String PHRASE_TABLE = "phrases";
+    public static final String PHRASE_COLUMN_ID = "_id";
+    public static final String PHRASE_COLUMN_LANGUAGE = "language";
+    public static final String PHRASE_COLUMN_CONTENT = "content";
+
+    //Translation Category table constants
+    public static final String CATEGORY_TABLE = "categories";
+    public static final String CATEGORY_COLUMN_ID = "_id";
+    public static final String CATEGORY_COLUMN_NAME = "name";
+
 
     //Notes table constants
     public static final String NOTES_TABLE = "notes";
@@ -53,18 +66,42 @@ public class MySQLiteHelper extends SQLiteOpenHelper
             + ");";
 
     //Translation table creation statement
-    //...
-    //...
+    private static final String TRANSLATIONS_TABLE_CREATE = "create table "
+            + TRANSLATIONS_TABLE
+            + "("
+            + TRANSLATIONS_COLUMN_ID + " integer primary key autoincrement, "
+            + TRANSLATIONS_COLUMN_PHRASES + " text,"    //A comma separated list of IDs for phrases it contains. Fairly hackish but whatever
+            + TRANSLATIONS_COLUMN_CATEGORIES + " text," //A comma separated list of IDs for categories it contains
+            + TRANSLATIONS_COLUMN_IMAGEURI + " text"
+            + ");";
+
+    //Translation phrase table creation statement
+    private static final String PHRASE_TABLE_CREATE = "create table "
+            + PHRASE_TABLE
+            + "("
+            + PHRASE_COLUMN_ID + " integer primary key autoincrement, "
+            + PHRASE_COLUMN_LANGUAGE + " text not null,"
+            + PHRASE_COLUMN_CONTENT + " text not null"
+            + ");";
+    //Translation category table creation statement
+    private static final String CATEGORY_TABLE_CREATE = "create table "
+            + CATEGORY_TABLE
+            + "("
+            + CATEGORY_COLUMN_ID + " integer primary key autoincrement, "
+            + CATEGORY_COLUMN_NAME + " text not null"
+            + ");";
+
+
 
     // Notes table creation statement
-    //TODO: Have a creation statement that includes image uri
     private static final String NOTES_TABLE_CREATE = "create table "
             + NOTES_TABLE
             + "("
             + NOTES_COLUMN_ID + " integer primary key autoincrement, "
             + NOTES_COLUMN_TITLE + " text not null,"
             + NOTES_COLUMN_CONTENT + " text,"
-            + NOTES_COLUMN_TIMESTAMP + " text"
+            + NOTES_COLUMN_TIMESTAMP + " text,"
+            + NOTES_COLUMN_IMAGEURI + "text"
             + ");";
 
     //
@@ -77,7 +114,9 @@ public class MySQLiteHelper extends SQLiteOpenHelper
     @Override
     public void onCreate(SQLiteDatabase database) {
         database.execSQL(PURCHASES_TABLE_CREATE);
-        //database.execSQL(TRANSLATION_TABLE_CREATE);
+        database.execSQL(TRANSLATIONS_TABLE_CREATE);
+        database.execSQL(PHRASE_TABLE_CREATE);
+        database.execSQL(CATEGORY_TABLE_CREATE);
         database.execSQL(NOTES_TABLE_CREATE);
     }
 
@@ -85,7 +124,9 @@ public class MySQLiteHelper extends SQLiteOpenHelper
     @Override
     public void onUpgrade(SQLiteDatabase database, int i, int i2) {
         database.execSQL("DROP TABLE IF EXISTS " + PURCHASES_TABLE);
-        //database.execSQL("DROP TABLE IF EXISTS " + TRANSLATION_TABLE);
+        database.execSQL("DROP TABLE IF EXISTS " + TRANSLATIONS_TABLE);
+        database.execSQL("DROP TABLE IF EXISTS " + PHRASE_TABLE);
+        database.execSQL("DROP TABLE IF EXISTS " + CATEGORY_TABLE);
         database.execSQL("DROP TABLE IF EXISTS " + NOTES_TABLE);
         onCreate(database);
     }

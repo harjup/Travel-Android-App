@@ -11,33 +11,50 @@
             android:text="@string/tr_from"
             android:id="@+id/textView"/>
     <EditText
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/editText"/>
+            android:id="@+id/tranlationInputEditText"
+            android:layout_weight="1"
+            android:background="#a69151"/>
 
     <TextView
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/tr_to"
             android:id="@+id/textView2"/>
     <TextView
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="placeholder text"
-            android:id="@+id/textView3"/>
-    <Button
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/tr_add_to_phrasebook"
-            android:id="@+id/button"/>
-    <Button
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/Phrasebook"
-            android:id="@+id/button2"/>
-    <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="JUST TALK SLOWER AND LOUDER"
-            android:id="@+id/textView4" android:textSize="@android:dimen/notification_large_icon_width"/>
+            android:id="@+id/translationOutputTextView"
+            android:layout_weight="1"
+            android:background="#91813f"/>
+    <TableLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content">
+        <TableRow
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent">
+            <Button
+                    style="?android:attr/buttonStyleSmall"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Translate"
+                    android:id="@+id/translateButton"/>
+        </TableRow>
+        <TableRow
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent">
+            <Button
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/tr_add_to_phrasebook"
+                    android:id="@+id/button"/>
+            <Button
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/Phrasebook"
+                    android:id="@+id/phraseBookButton"/>
+        </TableRow>
+    </TableLayout>
 </LinearLayout>

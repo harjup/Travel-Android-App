@@ -16,6 +16,7 @@
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="library" name="android-support-v4" level="project" />
+    <orderEntry type="library" name="microsoft-translator-java-api-0.6.2-jar-with-dependencies" level="project" />
   </component>
 </module>
 
