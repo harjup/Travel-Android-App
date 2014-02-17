@@ -4,6 +4,7 @@ import android.support.v4.app.Fragment;
 import android.os.Bundle;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.app.ListFragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -32,12 +33,23 @@ public class SummaryFragment extends Fragment
     {
         View myView = inflater.inflate(R.layout.finance_summary, container, false);
 
-        //Add a list of purchases to the list container under the financial summary
-        /*ListFragment purchaseListFragment = new PurchaseListFragment();
-        FragmentTransaction transaction = getFragmentManager().beginTransaction();
-        transaction.add(R.id.financeListContainer,purchaseListFragment);
-        transaction.commit();*/
+        if (myView != null)
+        {
+            myView.setOnClickListener(new View.OnClickListener()
+            {
+                @Override
+                public void onClick(View v)
+                {
+                    //Replace the Summary with the trip settings edit fragment
+                    Fragment settingsFragment = new TripSettingsEditFragment();
 
+                    FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
+                    fragmentTransaction.replace(R.id.financeSummaryContainer, settingsFragment);
+                    fragmentTransaction.addToBackStack(null);
+                    fragmentTransaction.commit();
+                }
+            });
+        }
         //Inflate the view and
         //Place it on the screen
         return  myView;

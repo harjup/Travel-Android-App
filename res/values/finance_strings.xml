@@ -22,6 +22,12 @@
     <string name="save_button">Save</string>
     <string name="add_purchase_button">New Purchase</string>
     <string name="finance_summary_title">Financial Summary</string>
+    <string name="max_budget_hint">Max Budget</string>
+    <string name="travel_dates">Travel Dates</string>
+    <string name="start_date_hint">Start Date</string>
+    <string name="end_date_hint">End Date</string>
+    <string name="from_text">From:</string>
+    <string name="to_text">To:</string>
 
 
 </resources>

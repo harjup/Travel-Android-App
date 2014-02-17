@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<TableLayout xmlns:android="http://schemas.android.com/apk/res/android"
+             android:layout_width="match_parent"
+              android:layout_height="match_parent">
+
+    <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+        <TextView
+                android:id="@+id/travelDatesTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/travel_dates"
+                android:textSize="18sp"/>
+
+    </TableRow>
+
+    <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+        <TextView
+                android:id="@+id/fromTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/from_text"/>
+
+        <EditText
+                android:id="@+id/startDateEditText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/component_bottom_margin"
+                android:layout_weight="1"
+                android:hint="@string/start_date_hint"
+                android:inputType="datetime"/>
+
+        <TextView
+                android:id="@+id/toTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/to_text"/>
+
+        <EditText
+                android:id="@+id/endDateEditText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/component_bottom_margin"
+                android:layout_weight="1"
+                android:hint="@string/end_date_hint"
+                android:inputType="datetime"/>
+    </TableRow>
+
+    <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+        <Spinner
+                android:id="@+id/defaultCurrencySpinner"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"/>
+
+        <EditText
+                android:id="@+id/purchasePriceEditText"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/component_bottom_margin"
+                android:hint="@string/max_budget_hint"
+                android:layout_weight="2"
+                android:paddingTop="20dp"
+                android:gravity="end"
+                android:inputType="numberDecimal"/>
+
+    </TableRow>
+
+    <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+        <Button
+                android:layout_height="wrap_content"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:text="@string/back_button"/>
+
+        <Button
+            android:layout_height="wrap_content"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:text="@string/save_button"/>
+
+    </TableRow>
+
+</TableLayout>

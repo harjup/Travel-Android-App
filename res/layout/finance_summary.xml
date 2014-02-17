@@ -16,6 +16,7 @@
                     android:layout_height="wrap_content"
                     android:text="@string/elapsed_travel_time_label"
                     android:layout_weight="1"
+                    android:textSize="18sp"
                     android:layout_marginBottom="@dimen/component_bottom_margin"/>
 
             <ProgressBar
@@ -24,7 +25,10 @@
                     android:layout_weight="1"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginBottom="@dimen/component_bottom_margin"/>
+                    android:layout_marginBottom="@dimen/component_bottom_margin"
+                    android:paddingRight="10dp"
+                    android:paddingBottom="5dp"
+                    android:paddingTop="5dp"/>
 
         </TableRow>
 
@@ -37,6 +41,7 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
+                    android:textSize="18sp"
                     android:text="@string/budget_spent_label"
                     android:layout_marginBottom="@dimen/component_bottom_margin"/>
 
@@ -46,55 +51,11 @@
                     android:layout_weight="1"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginBottom="@dimen/component_bottom_margin"/>
-
-        </TableRow>
-
-
-
-
-        <TableRow
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_gravity="center_horizontal|top">
-
-            <TextView
-                    android:id="@+id/tripExpensesTextView"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/travel_expenses_label"
-                    android:textSize="14sp"
-                    android:gravity="center"
-                    android:layout_weight="1"
                     android:layout_marginBottom="@dimen/component_bottom_margin"
-                    />
+                    android:paddingRight="10dp"
+                    android:paddingBottom="5dp"
+                    android:paddingTop="5dp"/>
 
-        </TableRow>
-
-
-        <TableRow
-                android:layout_width="match_parent"
-                android:layout_height="match_parent">
-            <TextView
-                    android:id="@+id/purchaseNameTextView"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="@string/purchase_name_label"/>
-
-            <TextView
-                    android:id="@+id/purchaseDateTextView"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="@string/purchase_date_label"/>
-
-            <TextView
-                    android:id="@+id/purchasePriceTextView"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="@string/purchase_price_label"/>
         </TableRow>
 
 </TableLayout>

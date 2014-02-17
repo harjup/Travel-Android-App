@@ -39,6 +39,14 @@ public class PurchaseListFragment extends ListFragment
     //Operations
     private boolean deleteMode = false;
 
+    public PurchasesDataSource getPurchasesDataSource() {
+        return purchasesDataSource;
+    }
+
+    public PurchaseAdapter getPurchaseAdapter() {
+        return purchaseAdapter;
+    }
+
     @Override
     public void onCreate(Bundle savedInstanceState)
     {
@@ -92,14 +100,14 @@ public class PurchaseListFragment extends ListFragment
             public void onClick(View v)
             {
                 //TODO: Implement 'Delete Mode' to delete any note that the user taps on (toggleable)
-                if(!deleteMode)
-                {
-                    deleteMode = true;
-                    deletePurchaseButton.setBackgroundColor(Color.parseColor("#0A0A0A"));
-                }
-                else if(deleteMode)
+                if(deleteMode)
                 {
                     deleteMode = false;
+                    deletePurchaseButton.setBackgroundColor(Color.parseColor("#0A0A0A"));
+                }
+                else
+                {
+                    deleteMode = true;
                     deletePurchaseButton.setBackgroundColor(Color.parseColor("#0F0F0F"));
                 }
             }
@@ -112,13 +120,6 @@ public class PurchaseListFragment extends ListFragment
     public void onListItemClick(ListView l, View v, int position, long id)
     {
         super.onListItemClick(l, v, position, id);
-
-        Log.e("Clicked", "Clicked on something");
-
-        /*AlertDialog alert = new AlertDialog.Builder(this.getActivity().getApplicationContext()).create();
-        String message = "row clicked!";
-        alert.setMessage(message);
-        alert.show();*/
 
         //Delete object if deleteMode is enabled, otherwise show purchase details
         if(deleteMode)
