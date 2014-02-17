@@ -44,6 +44,7 @@ public class AllPurchases
         sandwich.setPurchaseName("Sandwich");
         //sandwich.setPurchaseTimeStamp();
         sandwich.setPurchasePrice("5.00");
+        purchasesList.add(sandwich);
 
     }
 

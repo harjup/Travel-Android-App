@@ -12,20 +12,25 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
 import com.harjup_kdhyne.TravelApp.R;
 
+import java.text.Format;
+import java.text.NumberFormat;
+import java.util.Formatter;
+
 import java.sql.SQLException;
 import java.util.Date;
-import java.util.GregorianCalendar;
-import java.util.UUID;
+import java.util.Locale;
 
 import static android.view.View.OnClickListener;
 
 /**
  * Created by Kyle 2.1 on 2/2/14.
+ * Manages the fragment for editing purchase information
  */
 public class PurchaseEditFragment extends Fragment
 {
@@ -46,25 +51,11 @@ public class PurchaseEditFragment extends Fragment
 
     private Button backButton;
     private Button clearButton;
-    private Button deleteButton;
     private Button saveButton;
     private Button cameraButton;    //TODO: These buttons are for working with the camera and existing pictures on the device
     private Button albumButton;    //TODO: come back to these when we know how to deal with them
 
     private Spinner purchaseCurrencySpinner;
-
-    //Create a new EditPurchase fragment with the passed data
-    public static PurchaseEditFragment newEditPurchaseFragment(UUID purchaseID)
-    {
-        //Create a bundle to pass info to new activities
-        Bundle passedData = new Bundle();
-
-        //Put the purchaseID in the bundle and return the purchaseFragment
-        passedData.putSerializable(PURCHASE_ID, purchaseID);
-        PurchaseEditFragment editPurchaseFragment = new PurchaseEditFragment();
-        editPurchaseFragment.setArguments(passedData);
-        return editPurchaseFragment;
-    }
 
     @Override
     public void onCreate(Bundle savedInstanceState)
@@ -94,7 +85,6 @@ public class PurchaseEditFragment extends Fragment
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
     {
-        //TODO: Instantiate the date picker dialog somewhere
         View myView = inflater.inflate(R.layout.finance_purchase_edit, container, false);
 
         //Open a connection to the database where purchase info is stored
@@ -113,12 +103,11 @@ public class PurchaseEditFragment extends Fragment
             if(purchaseNameEditText != null)
                 purchaseNameEditText.setText(currentPurchase.getPurchaseName());
 
-            //TODO this line could probably be better
             if(purchaseDateEditText != null)
                 purchaseDateEditText.setText(currentPurchase.getDateString());
 
             if(purchasePriceEditText != null)
-                purchasePriceEditText.setText(currentPurchase.getPurchasePrice().toString());
+                purchasePriceEditText.setText(currentPurchase.getPurchasePrice());
 
             if(purchaseNotesEditText != null)
                 purchaseNotesEditText.setText(currentPurchase.getPurchaseNotes());
@@ -126,18 +115,21 @@ public class PurchaseEditFragment extends Fragment
             //Buttons
             backButton = (Button) myView.findViewById(R.id.backButton);
             clearButton = (Button) myView.findViewById(R.id.clearButton);
-            deleteButton = (Button) myView.findViewById(R.id.deleteButton);
             cameraButton = (Button) myView.findViewById(R.id.cameraButton);
             albumButton = (Button) myView.findViewById(R.id.albumButton);
             saveButton = (Button) myView.findViewById(R.id.saveButton);
 
             //Spinner for currency used to purchase the item
             purchaseCurrencySpinner = (Spinner) myView.findViewById(R.id.purchaseCurrencySpinner);
+
         }
 
         //TextWatcher used by all of the textBoxes
         TextWatcher editTextWatcher = new TextWatcher()
         {
+            NumberFormat currencyFormat = NumberFormat.getCurrencyInstance();
+            private String current = "";
+
             @Override
             public void onTextChanged(CharSequence arg0, int arg1, int arg2, int arg3)
             {
@@ -149,7 +141,63 @@ public class PurchaseEditFragment extends Fragment
                 }
                 else if (purchasePriceEditText.hasFocus())
                 {
-                    currentPurchase.setPurchasePrice(arg0.toString());
+                    //TODO: There's some funky stuff going on with the price entry. Fix it!
+                    if (!arg0.toString().equals(current))
+                    {
+                        purchasePriceEditText.removeTextChangedListener(this);
+                        double price;
+                        int selection = purchasePriceEditText.getSelectionStart();
+
+                        // Strip away the currency symbol
+                        String replaceable = String.format("[%s,\\s]", NumberFormat.getCurrencyInstance().getCurrency().getSymbol());
+                        String cleanString = arg0.toString().replaceAll(replaceable, "");
+
+                        // Parse the string as a double
+                        try
+                        {
+                            price = Double.parseDouble(cleanString);
+                        }
+                        catch (NumberFormatException e)
+                        {
+                            price = 0;
+                        }
+
+                        // If we don't see a decimal, then the user must have deleted it.
+                        // In that case, the number must be divided by 100, otherwise 1
+                        int shrink = 1;
+                        if (!arg0.toString().contains("."))
+                        {
+                            shrink = 100;
+                        }
+
+                        // Reformat the number
+                        String formatted = currencyFormat.format(price/shrink);
+
+                        current = formatted;
+                        purchasePriceEditText.setText(formatted);
+                        purchasePriceEditText.setSelection(Math.min(selection, purchasePriceEditText.getText().length()));
+
+                        purchasePriceEditText.addTextChangedListener(this);
+                    }
+
+                    /*String input = arg0.toString();
+
+                    // Get a currency formatter for the current locale.
+                    NumberFormat fmt = NumberFormat.getCurrencyInstance();
+                    String formattedInput = "";
+
+                    try
+                    {
+                        formattedInput = fmt.format(Double.parseDouble(input));
+                        purchasePriceEditText.setText(formattedInput);
+                    }
+                    catch (NumberFormatException e)
+                    {
+                        formattedInput = fmt.format(0);
+                        purchasePriceEditText.setText("0.00");
+                    }*/
+
+                    //currentPurchase.setPurchasePrice(formattedInput);
                 }
                 else if (purchaseNotesEditText.hasFocus())
                 {
@@ -182,13 +230,9 @@ public class PurchaseEditFragment extends Fragment
             public void onClick(View v)
             {
                 FragmentManager fragManager = getFragmentManager();
-
                 DatePickerDialogFragment dateDialog = DatePickerDialogFragment.newInstance(currentPurchase.getPurchaseDate());
-
                 dateDialog.setTargetFragment(PurchaseEditFragment.this, REQUEST_PURCHASE_DATE);
-
                 dateDialog.show(fragManager, PURCHASE_DATE);
-
             }
         });
 
@@ -209,19 +253,9 @@ public class PurchaseEditFragment extends Fragment
             @Override
             public void onClick(View v)
             {
-                //TODO: clear the purchase info from all textBoxes and the spinner (and stay on the page)
-            }
-        });
-
-        deleteButton.setOnClickListener(new OnClickListener()
-        {
-            @Override
-            public void onClick(View v)
-            {
-                //TODO: Delete the purchase info from the db
-
-                //return to list view
-                returnToPurchasesList();
+                purchaseNameEditText.setText("");
+                purchasePriceEditText.setText("");
+                purchaseNotesEditText.setText("");
             }
         });
 
@@ -248,7 +282,6 @@ public class PurchaseEditFragment extends Fragment
         saveButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                //TODO: save the purchase details
 
                 //Check to see if the ID hasn't been set yet (isn't in the list)
                 //Else update the changes
@@ -267,7 +300,6 @@ public class PurchaseEditFragment extends Fragment
         });
 
         //TODO: Add a listener to the spinner
-
 
         //Inflate the view
         return myView;
@@ -303,22 +335,20 @@ public class PurchaseEditFragment extends Fragment
         fragmentTransaction.commit();
     }
 
-
     //Need this for the date picker dialog. Called when the OK button is clicked
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data)
     {
         // If this wasn't called by the date dialog exit
+        if(resultCode != Activity.RESULT_OK)
+        {
+            return;
+        }
 
-        if(resultCode != Activity.RESULT_OK) return;
+        if(requestCode == REQUEST_PURCHASE_DATE)
+        {
 
-        // If it was get the date and save it to the Contact and
-        // update the date EditText box
-
-        if(requestCode == REQUEST_PURCHASE_DATE){
-
-            Date date = (Date) data
-                    .getSerializableExtra(DatePickerDialogFragment.DATE);
+            Date date = (Date) data.getSerializableExtra(DatePickerDialogFragment.DATE);
 
             currentPurchase.setPurchaseDate(date);
 

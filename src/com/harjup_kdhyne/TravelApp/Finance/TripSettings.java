@@ -5,6 +5,7 @@ import java.util.Date;
 /**
  * Created by Kyle 2.1 on 1/29/14.
  */
+//TODO: make this a singleton. It will hold all of the trip settings retrieved from the DB
 public class TripSettings
 {
     private Date startDate;
