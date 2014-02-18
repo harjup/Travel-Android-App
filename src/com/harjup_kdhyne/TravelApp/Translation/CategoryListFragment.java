@@ -1,6 +1,7 @@
 package com.harjup_kdhyne.TravelApp.Translation;
 
 import android.os.Bundle;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.app.ListFragment;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -46,8 +47,27 @@ public class CategoryListFragment extends ListFragment
 
 
     @Override
-    public void onListItemClick(ListView l, View v, int position, long id) {
+    public void onListItemClick(ListView l, View v, int position, long id)
+    {
+        viewCategory(categoryList.get(position));
+
         super.onListItemClick(l, v, position, id);
     }
+
+    private void viewCategory(Category category)
+    {
+        TranslationListFragment translationListFragment = new TranslationListFragment();
+
+        Bundle args = new Bundle();
+        args.putSerializable("com.harjup_kdhyne.TravelApp.Category", category);
+        translationListFragment.setArguments(args);
+
+        FragmentTransaction ft = getFragmentManager().beginTransaction();
+        ft.replace(R.id.translationActivityContainer, translationListFragment);
+        ft.addToBackStack(null);
+        ft.commit();
+
+    }
+
 
 }

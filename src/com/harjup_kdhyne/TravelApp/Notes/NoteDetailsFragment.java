@@ -24,6 +24,8 @@ import java.util.Date;
  */
 public class NoteDetailsFragment extends Fragment
 {
+    public final String NOTE_SERIALIZABLE_ID = "com.harjup_kdhyne.TravelApp.Notes.NOTE";
+
     private NotesDataSource notesDataSource;
     Note currentNote;
 
@@ -35,13 +37,15 @@ public class NoteDetailsFragment extends Fragment
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
+
+        Bundle bundle = getArguments();
+        if (bundle != null)
+        {
+            currentNote = (Note) bundle.getSerializable(NOTE_SERIALIZABLE_ID);
+        }
+
         super.onCreate(savedInstanceState);
     }
-
-    public void setNote(Note note){
-        currentNote = note;
-    }
-
 
     void openDbConnection(){
         notesDataSource = new NotesDataSource(getActivity());
@@ -121,6 +125,13 @@ public class NoteDetailsFragment extends Fragment
         idTextView.setText(String.valueOf(currentNote.getId()));
 
         return myView;
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        outState.putSerializable(NOTE_SERIALIZABLE_ID, currentNote);
+
+        super.onSaveInstanceState(outState);
     }
 
     @Override

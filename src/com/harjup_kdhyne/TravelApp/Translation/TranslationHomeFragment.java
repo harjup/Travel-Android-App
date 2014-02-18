@@ -37,6 +37,7 @@ public class TranslationHomeFragment extends Fragment
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
     {
+        Log.d("lifeCycle", "TranslationHomeOnCreate called");
         View myView = inflater.inflate(R.layout.translation_home, container, false);
 
         final EditText inputField = (EditText) myView.findViewById(R.id.tranlationInputEditText);
@@ -50,11 +51,14 @@ public class TranslationHomeFragment extends Fragment
         {
             if (savedInstanceState.getString(INPUT_TEXT_ID) != null)
             {
-                inputField.setText(savedInstanceState.getString(INPUT_TEXT_ID));
+                stringToTranslate = savedInstanceState.getString(INPUT_TEXT_ID);
+                inputField.setText(stringToTranslate);
             }
             if (savedInstanceState.getString(OUTPUT_TEXT_ID) != null)
             {
-                outputField.setText(savedInstanceState.getString(OUTPUT_TEXT_ID));
+                translatedString = savedInstanceState.getString(OUTPUT_TEXT_ID);
+                outputField.setText(translatedString);
+
             }
         }
 
@@ -76,6 +80,24 @@ public class TranslationHomeFragment extends Fragment
             }
         });
 
+        outputField.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i2, int i3) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i2, int i3) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+                translatedString = editable.toString();
+            }
+        });
+
+
         translateButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view)
@@ -87,7 +109,8 @@ public class TranslationHomeFragment extends Fragment
                         //outputField.setText(translatedString);
                         Log.d("Translation" ,"Translating " + inputField.getText().toString() + " to " + result);
                         outputField.setText(result);
-                        translatedString = result;
+                        if (result != null)
+                            translatedString = result;
                     }
                 }.execute(inputField.getText().toString());
             }
@@ -119,7 +142,6 @@ public class TranslationHomeFragment extends Fragment
     @Override
     public void onSaveInstanceState(Bundle outState)
     {
-        if (stringToTranslate != null)
         outState.putString(INPUT_TEXT_ID, stringToTranslate);
         outState.putString(OUTPUT_TEXT_ID, translatedString);
         super.onSaveInstanceState(outState);

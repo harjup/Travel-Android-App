@@ -100,7 +100,10 @@ public class NotesListFragment extends ListFragment
     private void viewNoteDetails(Note note){
         NoteDetailsFragment myNoteDetails = new NoteDetailsFragment();
 
-        myNoteDetails.setNote(note);
+        Bundle args = new Bundle();
+        args.putSerializable("com.harjup_kdhyne.TravelApp.Notes.NOTE", note);
+        myNoteDetails.setArguments(args);
+        //myNoteDetails.setNote(note);
 
         FragmentTransaction ft = getFragmentManager().beginTransaction();
         ft.replace(R.id.notesActivityContainer, myNoteDetails);

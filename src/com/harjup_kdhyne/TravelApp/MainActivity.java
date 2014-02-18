@@ -5,6 +5,7 @@ import android.app.FragmentTransaction;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.view.ViewPager;
+import android.util.Log;
 
 public class MainActivity extends FragmentActivity implements ActionBar.TabListener {
 
@@ -29,6 +30,8 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
     @Override
     public void onCreate(Bundle savedInstanceState)
     {
+        Log.d("lifeCycle", "MainActivityOnCreate run");
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
@@ -47,6 +50,7 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
         // user swipes between sections.
         myViewPager = (ViewPager) findViewById(R.id.pager);
         myViewPager.setAdapter(myAppSectionsPagerAdapter);
+        myViewPager.setOffscreenPageLimit(3);
         myViewPager.setOnPageChangeListener(new ViewPager.SimpleOnPageChangeListener() {
             @Override
             public void onPageSelected(int position) {

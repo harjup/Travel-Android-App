@@ -1,8 +1,40 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              android:orientation="vertical"
-              android:layout_width="match_parent"
-              android:layout_height="match_parent">
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:orientation="vertical"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
 
-</LinearLayout>
+    <TextView
+            android:id="@+id/homeLanguagePhraseTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:text="List Item"/>
+
+    <TextView
+            android:id="@+id/targetLanguagePhraseTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:text="List Item2"
+            android:layout_below="@+id/homeLanguagePhraseTextView"/>
+
+    <TextView
+            android:id="@+id/homeLanguageTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:text="  en"
+            android:layout_toRightOf="@+id/homeLanguagePhraseTextView"
+            />
+
+    <TextView
+            android:id="@+id/targetLanguageTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:text="  fr"
+            android:layout_below="@+id/homeLanguagePhraseTextView"
+            android:layout_toRightOf="@+id/targetLanguagePhraseTextView"/>
+</RelativeLayout>

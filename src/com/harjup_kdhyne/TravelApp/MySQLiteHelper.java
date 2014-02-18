@@ -12,7 +12,7 @@ public class MySQLiteHelper extends SQLiteOpenHelper
 {
     //Database constants
     private static final String DATABASE_NAME = "TravelApp.db";
-    private static final int DATABASE_VERSION = 3;
+    private static final int DATABASE_VERSION = 4;
 
     //Finances table constants
     public static final String PURCHASES_TABLE = "purchases";
@@ -42,6 +42,12 @@ public class MySQLiteHelper extends SQLiteOpenHelper
     public static final String CATEGORY_TABLE = "categories";
     public static final String CATEGORY_COLUMN_ID = "_id";
     public static final String CATEGORY_COLUMN_NAME = "name";
+
+    //Translation to Category mapping table
+    public static final String TRANSLATION_TO_CATEGORY_TABLE = "translation_category_ownership";
+    public static final String TRANSLATIONS_TO_CATEGORY_COLUMN_ID = "_id";
+    public static final String TRANSLATIONS_TO_CATEGORY_COLUMN_TRANSLATION_ID = "translationId";
+    public static final String TRANSLATIONS_TO_CATEGORY_COLUMN_CATEGORY_ID = "categoryId";
 
 
     //Notes table constants
@@ -84,13 +90,21 @@ public class MySQLiteHelper extends SQLiteOpenHelper
             + PHRASE_COLUMN_CONTENT + " text not null"
             + ");";
     //Translation category table creation statement
+    private static final String TRANSLATION_TO_CATEGORY_TABLE_CREATE = "create table "
+            + TRANSLATION_TO_CATEGORY_TABLE
+            + "("
+            + TRANSLATIONS_TO_CATEGORY_COLUMN_ID + " integer primary key autoincrement, "
+            + TRANSLATIONS_TO_CATEGORY_COLUMN_TRANSLATION_ID + " integer not null,"
+            + TRANSLATIONS_TO_CATEGORY_COLUMN_CATEGORY_ID + " integer not null"
+            + ");";
+
+    //Translation category table creation statement
     private static final String CATEGORY_TABLE_CREATE = "create table "
             + CATEGORY_TABLE
             + "("
             + CATEGORY_COLUMN_ID + " integer primary key autoincrement, "
             + CATEGORY_COLUMN_NAME + " text not null"
             + ");";
-
 
 
     // Notes table creation statement
@@ -117,6 +131,7 @@ public class MySQLiteHelper extends SQLiteOpenHelper
         database.execSQL(TRANSLATIONS_TABLE_CREATE);
         database.execSQL(PHRASE_TABLE_CREATE);
         database.execSQL(CATEGORY_TABLE_CREATE);
+        database.execSQL(TRANSLATION_TO_CATEGORY_TABLE_CREATE);
         database.execSQL(NOTES_TABLE_CREATE);
     }
 
@@ -127,6 +142,7 @@ public class MySQLiteHelper extends SQLiteOpenHelper
         database.execSQL("DROP TABLE IF EXISTS " + TRANSLATIONS_TABLE);
         database.execSQL("DROP TABLE IF EXISTS " + PHRASE_TABLE);
         database.execSQL("DROP TABLE IF EXISTS " + CATEGORY_TABLE);
+        database.execSQL("DROP TABLE IF EXISTS " + TRANSLATION_TO_CATEGORY_TABLE);
         database.execSQL("DROP TABLE IF EXISTS " + NOTES_TABLE);
         onCreate(database);
     }

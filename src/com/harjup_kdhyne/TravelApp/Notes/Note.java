@@ -1,5 +1,6 @@
 package com.harjup_kdhyne.TravelApp.Notes;
 
+import java.io.Serializable;
 import java.security.Timestamp;
 import java.text.DateFormat;
 import java.text.ParseException;
@@ -10,8 +11,7 @@ import java.util.Date;
  * Created by Paul on 1/28/14.
  * Note object
  */
-public class Note
-{
+public class Note implements Serializable {
     private long id = -1;       //id for insertion in the database
     private String title;       //Title/short description the note contains
     private String content;     //Text content of the note

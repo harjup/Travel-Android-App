@@ -2,6 +2,7 @@ package com.harjup_kdhyne.TravelApp.Notes;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.app.ListFragment;
 import android.view.LayoutInflater;
@@ -21,10 +22,19 @@ public class NotesContainerFragment extends Fragment
 
         View myView = inflater.inflate(R.layout.note_activity_container, container, false);
 
-        ListFragment notesListFragment = new NotesListFragment();
-        FragmentTransaction transaction = getFragmentManager().beginTransaction();
-        transaction.replace(R.id.notesActivityContainer, notesListFragment);
-        transaction.commit();
+
+        FragmentManager fm = getFragmentManager();
+
+        Fragment notesActivityFragment = fm.findFragmentById(R.id.notesActivityContainer);
+
+        if (notesActivityFragment == null)
+        {
+            ListFragment notesListFragment = new NotesListFragment();
+            FragmentTransaction transaction = getFragmentManager().beginTransaction();
+            transaction.replace(R.id.notesActivityContainer, notesListFragment);
+            transaction.commit();
+        }
+
 
         return myView;
     }
