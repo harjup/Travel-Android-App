@@ -21,9 +21,6 @@ public class FinanceContainerFragment extends Fragment
 
         View myView = inflater.inflate(R.layout.finance_activity_container, container, false);
 
-
-
-
         FragmentManager fm = getFragmentManager();
 
         Fragment financeSummaryFragment = fm.findFragmentById(R.id.financeSummaryContainer);
