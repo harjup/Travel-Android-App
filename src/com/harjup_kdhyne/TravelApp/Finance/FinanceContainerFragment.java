@@ -2,6 +2,7 @@ package com.harjup_kdhyne.TravelApp.Finance;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.app.ListFragment;
 import android.view.LayoutInflater;
@@ -24,15 +25,26 @@ public class FinanceContainerFragment extends Fragment
         transaction.replace(R.id.financeActivityContainer,financePurchaseListFragment);
         transaction.commit();
     */
-        Fragment financeSummaryFragment = new SummaryFragment();
-        ListFragment financePurchaseListFragment = new PurchaseListFragment();
 
-        FragmentTransaction transaction = getFragmentManager().beginTransaction();
-        transaction.replace(R.id.financeSummaryContainer,financeSummaryFragment);
-        transaction.replace(R.id.financePurchaseListContainer,financePurchaseListFragment);
 
-        transaction.commit();
 
+
+        FragmentManager fm = getFragmentManager();
+
+        Fragment financeSummaryFragment = fm.findFragmentById(R.id.financeSummaryContainer);
+        ListFragment financePurchaseListFragment = (ListFragment) fm.findFragmentById(R.id.financePurchaseListContainer);
+
+        if (financeSummaryFragment == null && financePurchaseListFragment == null)
+        {
+            financeSummaryFragment = new SummaryFragment();
+            financePurchaseListFragment = new PurchaseListFragment();
+
+            FragmentTransaction transaction = fm.beginTransaction();
+            transaction.replace(R.id.financeSummaryContainer,financeSummaryFragment);
+            transaction.replace(R.id.financePurchaseListContainer,financePurchaseListFragment);
+
+            transaction.commit();
+        }
         return myView;
     }
 }

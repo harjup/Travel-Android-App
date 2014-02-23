@@ -63,6 +63,7 @@ public class PurchaseEditFragment extends Fragment
         super.onCreate(savedInstanceState);
     }
 
+    //TODO: Persist Purchase object between oncreate and on destroy when rotating device
     public void setCurrentPurchase(Purchase purchase){
         currentPurchase = purchase;
     }
