@@ -8,6 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import com.harjup_kdhyne.TravelApp.R;
 
 /**
@@ -19,8 +20,11 @@ public class TripSettingsEditFragment extends Fragment
     private EditText startDateEditText;
     private EditText endDateEditText;
 
+    private TextView currentExchangeTextView;
+
     private Button backButton;
     private Button saveButton;
+    private Button updateExchangeButton;
 
     //TODO: add reference to singleton TripSettings
     //TODO: add reference to DB
@@ -42,11 +46,25 @@ public class TripSettingsEditFragment extends Fragment
             startDateEditText = (EditText)myView.findViewById(R.id.startDateEditText);
             endDateEditText = (EditText)myView.findViewById(R.id.endDateEditText);
 
-            //TODO: Fill date fields with correct info
+            currentExchangeTextView = (TextView)myView.findViewById(R.id.currentExchangeTextView);
 
             //Retrieve buttons
             backButton = (Button)myView.findViewById(R.id.backButton);
-            saveButton = (Button)myView.findViewById(R.id.backButton);
+            saveButton = (Button)myView.findViewById(R.id.saveButton);
+            updateExchangeButton = (Button)myView.findViewById(R.id.updateExchangeButton);
+
+
+            //Fill editTexts if they aren't null
+            if (startDateEditText != null)
+                startDateEditText.setText("test1");
+
+            if (endDateEditText != null)
+                endDateEditText.setText("test2");
+
+            if (endDateEditText != null)
+                endDateEditText.setText("test2");
+
+
         }
 
         //TODO: Set up listeners for Date Pickers
@@ -70,6 +88,14 @@ public class TripSettingsEditFragment extends Fragment
             }
         });
 
+        updateExchangeButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //TODO: Call the exchange API to get the latest exchange rate between two currencies
+
+            }
+        });
+
 
         return myView;
     }
@@ -81,7 +107,7 @@ public class TripSettingsEditFragment extends Fragment
 
         FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
         fragmentTransaction.replace(R.id.financeSummaryContainer, summaryFragment);
-        fragmentTransaction.addToBackStack(null);
+        //fragmentTransaction.addToBackStack(null);
         fragmentTransaction.commit();
     }
 }

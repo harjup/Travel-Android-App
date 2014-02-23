@@ -3,16 +3,14 @@ package com.harjup_kdhyne.TravelApp.Finance;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.Calendar;
 import java.util.Date;
-import java.util.UUID;
 
 /**
- * Created by Kyle 2.1 on 2/2/14.
+ * Created by Kyle 2.1 on 2/2/14
+ * Holds individual purchase data
  */
 public class Purchase
 {
-    private UUID purchaseUUID;
     private long purchaseID = -1;           //id for insertion in the database
     private String purchaseName;            //Name/short description of purchase
     private Date purchaseDate;              //Time the purchase was made
@@ -24,10 +22,6 @@ public class Purchase
 
     public Purchase()
     {
-        //Create a new UUID for this purchase
-        //Used to reference this purchase at any given point in time
-        purchaseUUID = UUID.randomUUID();
-
         //Define a default date
         purchaseName = "";
         purchaseDate = new Date();
@@ -35,16 +29,6 @@ public class Purchase
         paidCurrency = "";
         purchaseExchangeRate = 0.00;
         purchaseNotes = "";
-    }
-
-
-
-    public UUID getPurchaseUUID() {
-        return purchaseUUID;
-    }
-
-    public void setPurchaseUUID(UUID purchaseUUID) {
-        this.purchaseUUID = purchaseUUID;
     }
 
     public long getPurchaseID() {
@@ -113,25 +97,15 @@ public class Purchase
 
     // Used to return date in the format mm/dd/yyyy
     // as a string
-    public String getDateString()
-    {
+    public String getDateString() {
         DateFormat dateFormat = new SimpleDateFormat("MM/dd/yyyy");
-
-        String date = dateFormat.format(purchaseDate);
-
-        return date;
+        return dateFormat.format(purchaseDate);
     }
 
-    public void setDateFromString(String dateString)
-    {
+    public void setDateFromString(String dateString) {
         DateFormat dateFormat = new SimpleDateFormat("MM/dd/yyyy");
-        try
-        {
-            this.purchaseDate = dateFormat.parse(dateString);
-        }
-        catch (ParseException e)
-        {
-            e.printStackTrace();
-        }
+
+        try {this.purchaseDate = dateFormat.parse(dateString);}
+        catch (ParseException e) {e.printStackTrace();}
     }
 }

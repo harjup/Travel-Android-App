@@ -12,7 +12,7 @@ public class MySQLiteHelper extends SQLiteOpenHelper
 {
     //Database constants
     private static final String DATABASE_NAME = "TravelApp.db";
-    private static final int DATABASE_VERSION = 4;
+    private static final int DATABASE_VERSION = 6;
 
     //Finances table constants
     public static final String PURCHASES_TABLE = "purchases";
@@ -24,6 +24,15 @@ public class MySQLiteHelper extends SQLiteOpenHelper
     public static final String PURCHASES_COLUMN_EXCHANGE_RATE = "exchangeRate";
     public static final String PURCHASES_COLUMN_NOTES = "notes";
     public static final String PURCHASES_COLUMN_IMAGEURI = "imageUri";
+
+    //Finances Trip Settings constants
+    public static final String TRIP_TABLE = "trip_settings";
+    public static final String TRIP_COLUMN_ID = "_id";
+    public static final String TRIP_COLUMN_START_DATE = "start_date";
+    public static final String TRIP_COLUMN_END_DATE = "end_date";
+    public static final String TRIP_COLUMN_TOTAL_BUDGET = "total_budget";
+    public static final String TRIP_COLUMN_TOTAL_EXPENSES = "total_expenses";
+    public static final String TRIP_COLUMN_CURRENCY = "currency";
 
     //Translation table constants
     public static final String TRANSLATIONS_TABLE = "translations";
@@ -68,7 +77,20 @@ public class MySQLiteHelper extends SQLiteOpenHelper
             + PURCHASES_COLUMN_PRICE + " text,"
             + PURCHASES_COLUMN_CURRENCY + " text,"
             + PURCHASES_COLUMN_EXCHANGE_RATE + " real,"
-            + PURCHASES_COLUMN_NOTES + " text"
+            + PURCHASES_COLUMN_NOTES + " text,"
+            + PURCHASES_COLUMN_IMAGEURI + " text"
+            + ");";
+
+    //Trip Settings table creation statement
+    private static final String TRIP_TABLE_CREATE = "create table "
+            + TRIP_TABLE
+            + "("
+            + TRIP_COLUMN_ID + " integer primary key autoincrement, "
+            + TRIP_COLUMN_START_DATE + " text,"
+            + TRIP_COLUMN_END_DATE + " text not null,"
+            + TRIP_COLUMN_TOTAL_BUDGET + " text,"
+            + TRIP_COLUMN_TOTAL_EXPENSES + " text,"
+            + TRIP_COLUMN_CURRENCY + " text"
             + ");";
 
     //Translation table creation statement
@@ -128,6 +150,7 @@ public class MySQLiteHelper extends SQLiteOpenHelper
     @Override
     public void onCreate(SQLiteDatabase database) {
         database.execSQL(PURCHASES_TABLE_CREATE);
+        database.execSQL(TRIP_TABLE_CREATE);
         database.execSQL(TRANSLATIONS_TABLE_CREATE);
         database.execSQL(PHRASE_TABLE_CREATE);
         database.execSQL(CATEGORY_TABLE_CREATE);
@@ -139,6 +162,7 @@ public class MySQLiteHelper extends SQLiteOpenHelper
     @Override
     public void onUpgrade(SQLiteDatabase database, int i, int i2) {
         database.execSQL("DROP TABLE IF EXISTS " + PURCHASES_TABLE);
+        database.execSQL("DROP TABLE IF EXISTS " + TRIP_TABLE);
         database.execSQL("DROP TABLE IF EXISTS " + TRANSLATIONS_TABLE);
         database.execSQL("DROP TABLE IF EXISTS " + PHRASE_TABLE);
         database.execSQL("DROP TABLE IF EXISTS " + CATEGORY_TABLE);

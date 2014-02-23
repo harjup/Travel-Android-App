@@ -5,7 +5,6 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.app.ListFragment;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,7 +22,7 @@ import java.util.List;
  * Clicking on an item in this list will show details of the transaction
  * Clicking "Add Purchase" will show a new editPurchaseFragment
  * Clicking "Delete" will cause the next tapped item to be deleted from the list and the database
- * Clicking "Delete" again will exit delete mode.
+ * Clicking "Delete" again will exit delete mode
  */
 public class PurchaseListFragment extends ListFragment
 {
@@ -38,14 +37,6 @@ public class PurchaseListFragment extends ListFragment
 
     //Operations
     private boolean deleteMode = false;
-
-    public PurchasesDataSource getPurchasesDataSource() {
-        return purchasesDataSource;
-    }
-
-    public PurchaseAdapter getPurchaseAdapter() {
-        return purchaseAdapter;
-    }
 
     @Override
     public void onCreate(Bundle savedInstanceState)
@@ -99,7 +90,7 @@ public class PurchaseListFragment extends ListFragment
             @Override
             public void onClick(View v)
             {
-                //TODO: Implement 'Delete Mode' to delete any note that the user taps on (toggleable)
+                //TODO: Fix the toggling colors of the delete button
                 if(deleteMode)
                 {
                     deleteMode = false;

@@ -63,6 +63,7 @@ public class PurchaseEditFragment extends Fragment
         super.onCreate(savedInstanceState);
     }
 
+    //TODO: Persist Purchase object between oncreate and on destroy when rotating device
     public void setCurrentPurchase(Purchase purchase){
         currentPurchase = purchase;
     }
@@ -91,8 +92,7 @@ public class PurchaseEditFragment extends Fragment
         openDbConnection();
 
         //If the view isn't null, grab all of the textBox, button, and spinner objects
-        if(myView != null)
-        {
+        if(myView != null) {
             //TextBoxes
             purchaseNameEditText = (EditText) myView.findViewById(R.id.purchaseNameEditText);
             purchaseDateEditText = (EditText) myView.findViewById(R.id.purchaseDateEditText);
@@ -125,8 +125,7 @@ public class PurchaseEditFragment extends Fragment
         }
 
         //TextWatcher used by all of the textBoxes
-        TextWatcher editTextWatcher = new TextWatcher()
-        {
+        TextWatcher editTextWatcher = new TextWatcher() {
             NumberFormat currencyFormat = NumberFormat.getCurrencyInstance();
             private String current = "";
 
@@ -178,26 +177,9 @@ public class PurchaseEditFragment extends Fragment
                         purchasePriceEditText.setSelection(Math.min(selection, purchasePriceEditText.getText().length()));
 
                         purchasePriceEditText.addTextChangedListener(this);
+
+                        currentPurchase.setPurchasePrice(arg0.toString());
                     }
-
-                    /*String input = arg0.toString();
-
-                    // Get a currency formatter for the current locale.
-                    NumberFormat fmt = NumberFormat.getCurrencyInstance();
-                    String formattedInput = "";
-
-                    try
-                    {
-                        formattedInput = fmt.format(Double.parseDouble(input));
-                        purchasePriceEditText.setText(formattedInput);
-                    }
-                    catch (NumberFormatException e)
-                    {
-                        formattedInput = fmt.format(0);
-                        purchasePriceEditText.setText("0.00");
-                    }*/
-
-                    //currentPurchase.setPurchasePrice(formattedInput);
                 }
                 else if (purchaseNotesEditText.hasFocus())
                 {
