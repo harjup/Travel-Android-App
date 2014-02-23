@@ -2,7 +2,9 @@ package com.harjup_kdhyne.TravelApp.Translation;
 
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -44,7 +46,8 @@ public class TranslationHomeFragment extends Fragment
         final TextView outputField = (TextView) myView.findViewById(R.id.translationOutputTextView);
 
         final Button translateButton = (Button) myView.findViewById(R.id.translateButton);
-        final Button phraseBookButton = (Button) myView.findViewById(R.id.phraseBookButton);
+        final Button addToPhrasebookButton = (Button) myView.findViewById(R.id.addToPhrasebookButton);
+        final Button phraseBookButton = (Button) myView.findViewById(R.id.phrasebookButton);
 
 
         if (savedInstanceState != null)
@@ -103,7 +106,7 @@ public class TranslationHomeFragment extends Fragment
             public void onClick(View view)
             {
                 outputField.setText("Getting translation...");
-                new MyAsyncTask(){
+                new AsyncTranslate(){
                     @Override
                     protected void onPostExecute(String result) {
                         //outputField.setText(translatedString);
@@ -115,6 +118,30 @@ public class TranslationHomeFragment extends Fragment
                 }.execute(inputField.getText().toString());
             }
         });
+
+
+        addToPhrasebookButton.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View view) {
+                //stringToTranslate
+                //translatedString
+                //Needs to open some kinda pop up that asks for categories it should be stuck under
+                //Phrase homePhrase = new Phrase("en", stringToTranslate);
+                //Phrase targetPhrase = new Phrase("fr", translatedString);
+                FragmentManager fm = getFragmentManager();
+                FragmentTransaction ft = fm.beginTransaction();
+                Fragment prev = getFragmentManager().findFragmentByTag("dialog");
+                if (prev != null) {
+                    ft.remove(prev);
+                }
+                ft.addToBackStack(null);
+
+                // Create and show the dialog.
+                AddTranslationDialog newFragment = new AddTranslationDialog();
+                newFragment.show(fm, "dialog");
+            }
+        });
+
 
         phraseBookButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -150,7 +177,7 @@ public class TranslationHomeFragment extends Fragment
 
 
 
-    class MyAsyncTask extends AsyncTask<String, Integer, String> {
+    class AsyncTranslate extends AsyncTask<String, Integer, String> {
 
         String stringToTranslate;
         String translatedString;
