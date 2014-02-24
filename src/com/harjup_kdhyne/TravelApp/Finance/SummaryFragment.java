@@ -3,6 +3,7 @@ package com.harjup_kdhyne.TravelApp.Finance;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
 import android.support.v4.app.FragmentTransaction;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -54,8 +55,17 @@ public class SummaryFragment extends Fragment
 
                     //This is for debug. Gets the first entry in the Trip settings table
                     //Create a new entry if it doesn't exist
-                    try {viewTripSettings(tripSettingsList.get(0));}
-                    catch (Exception e) {viewTripSettings(new TripSettings());}
+                    try
+                    {
+
+                        viewTripSettings(tripSettingsList.get(0));
+                        Log.d("Try succeeded","Retrieving first existing entry");
+                    }
+                    catch (Exception e)
+                    {
+                        Log.d("Caught Exception","No existing entry, create new");
+                        viewTripSettings(new TripSettings());
+                    }
                 }
             });
         }

@@ -80,7 +80,6 @@ public class PurchasesDataSource
     public TripSettings createTripSettings(TripSettings tripSettings) {
         ContentValues values = new ContentValues();
 
-        values.put(MySQLiteHelper.TRIP_COLUMN_ID, tripSettings.getTripID());
         values.put(MySQLiteHelper.TRIP_COLUMN_NAME, tripSettings.getName());
         values.put(MySQLiteHelper.TRIP_COLUMN_START_DATE, tripSettings.getStartDateAsString());
         values.put(MySQLiteHelper.TRIP_COLUMN_END_DATE, tripSettings.getEndDateAsString());
@@ -121,7 +120,6 @@ public class PurchasesDataSource
     public void updateTripSettings(TripSettings tripSettings) {
         ContentValues values = new ContentValues();
 
-        values.put(MySQLiteHelper.TRIP_COLUMN_ID, tripSettings.getTripID());
         values.put(MySQLiteHelper.TRIP_COLUMN_NAME, tripSettings.getName());
         values.put(MySQLiteHelper.TRIP_COLUMN_START_DATE, tripSettings.getStartDateAsString());
         values.put(MySQLiteHelper.TRIP_COLUMN_END_DATE, tripSettings.getEndDateAsString());
