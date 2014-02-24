@@ -47,6 +47,7 @@ public class SummaryFragment extends Fragment
 
         if (myView != null)
         {
+            //Listens for when the user taps on the summary fragment
             myView.setOnClickListener(new View.OnClickListener()
             {
                 @Override
@@ -55,15 +56,12 @@ public class SummaryFragment extends Fragment
 
                     //This is for debug. Gets the first entry in the Trip settings table
                     //Create a new entry if it doesn't exist
-                    try
+                    if (tripSettingsList.get(0) != null)
                     {
-
                         viewTripSettings(tripSettingsList.get(0));
-                        Log.d("Try succeeded","Retrieving first existing entry");
                     }
-                    catch (Exception e)
+                    else
                     {
-                        Log.d("Caught Exception","No existing entry, create new");
                         viewTripSettings(new TripSettings());
                     }
                 }
@@ -92,7 +90,7 @@ public class SummaryFragment extends Fragment
      *  Returns a string that describes the number of days
      *  between dateOne and dateTwo.
      */
-    //TODO: move this somewhere more appropriate?
+    //TODO: Decide where this should live
     public String getDateDiffString(Date dateOne, Date dateTwo)
     {
         long timeOne = dateOne.getTime();

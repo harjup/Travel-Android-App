@@ -68,23 +68,19 @@ public class NoteDetailsFragment extends Fragment
         final EditText timeText = (EditText) myView.findViewById(R.id.notes_detail_time);
 
         // check to see if each individual textview is null.
-        // if not, assign some text!
+        // if not, assign some text and set their respective textChanged listener
         if (titleText != null){
             titleText.setText(currentNote.getTitle());
+            titleText.addTextChangedListener(getTextWatcher(textBoxes.title));
         }
         if (contentText != null){
             contentText.setText(currentNote.getContent());
+            contentText.addTextChangedListener(getTextWatcher(textBoxes.content));
         }
         if (timeText != null){
             timeText.setText(currentNote.getTimeStampAsString());
+            timeText.addTextChangedListener(getTextWatcher(textBoxes.time));
         }
-
-        titleText.addTextChangedListener(getTextWatcher(textBoxes.title));
-        contentText.addTextChangedListener(getTextWatcher(textBoxes.content));
-        timeText.addTextChangedListener(getTextWatcher(textBoxes.time));
-
-
-
 
 
         Button saveButton = (Button) myView.findViewById(R.id.notesSaveNote);
@@ -99,20 +95,8 @@ public class NoteDetailsFragment extends Fragment
                 }
                 else
                 {
-                    //Here' a shitty method of updating the current note
-                    //object to reflect the changes made in the text boxes!
-
-                    //This should probably be implemented by having two-way data-binding
-                    // between the textViews and currentNote object
-                    //Note newNote = new Note();
-                    //newNote.setId(currentNote.getId());
-                    //newNote.setTitle(titleText.getText().toString());
-                    //newNote.setContent(contentText.getText().toString());
-
-                    //notesDataSource.updateNote(newNote);
                     notesDataSource.updateNote(currentNote);
                 }
-
 
                 ViewNoteList();
             }
@@ -147,7 +131,6 @@ public class NoteDetailsFragment extends Fragment
 
         FragmentTransaction ft = getFragmentManager().beginTransaction();
         ft.replace(R.id.notesActivityContainer, notesListFragment);
-        //ft.addToBackStack(null);
         ft.commit();
     }
 

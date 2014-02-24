@@ -107,18 +107,13 @@ public class TripSettingsEditFragment extends Fragment
 
             if (currentExchangeTextView != null)
             {
-                //TODO: Call the openExchange API to get exchange rate
-                //TODO: Need to determine when is most appropriate
-                String currentExchange = "1 USD = 5 DHY";
-
-                currentExchangeTextView.setText(currentExchange);
+                //Get current exchange rate,
+                //TODO: Check if it's too old and get a new one if we need to
+                currentExchangeTextView.setText(String.valueOf(currentTrip.getCurrentExchangeRate()));
             }
 
         }
 
-        //TODO: Set up listeners for Date Pickers
-
-        //TODO: Set up Listeners for Buttons
         backButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -154,16 +149,13 @@ public class TripSettingsEditFragment extends Fragment
         updateExchangeButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //TODO: Call the exchange API to get the latest exchange rate between two currencies
+                //TODO: Possibly extract this into its own method
                 new AsyncGetExchange(){
                     @Override
                     protected void onPostExecute(BigDecimal result) {
-                        //outputField.setText(translatedString);
-                        Log.d("exchange", "EUR conversion in terms of USD is... "  + result.toString());
                         currentExchangeTextView.setText(result.toString());
+                        currentTrip.setCurrentExchangeRate(Double.parseDouble(result.toString()));
                     }
-
-
                 }.execute();
 
                 //currentExchangeTextView.setText(value.toString());

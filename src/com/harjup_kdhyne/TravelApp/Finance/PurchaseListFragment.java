@@ -62,7 +62,7 @@ public class PurchaseListFragment extends ListFragment
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
     {
-        getActivity().setTitle(R.string.finance_summary_title);
+        //getActivity().setTitle(R.string.finance_summary_title);
 
         fillPurchasesList();
 

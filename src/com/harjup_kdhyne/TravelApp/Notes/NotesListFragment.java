@@ -103,7 +103,6 @@ public class NotesListFragment extends ListFragment
         Bundle args = new Bundle();
         args.putSerializable("com.harjup_kdhyne.TravelApp.Notes.NOTE", note);
         myNoteDetails.setArguments(args);
-        //myNoteDetails.setNote(note);
 
         FragmentTransaction ft = getFragmentManager().beginTransaction();
         ft.replace(R.id.notesActivityContainer, myNoteDetails);
