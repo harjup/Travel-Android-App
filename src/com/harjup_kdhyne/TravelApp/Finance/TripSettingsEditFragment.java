@@ -2,6 +2,7 @@ package com.harjup_kdhyne.TravelApp.Finance;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -14,11 +15,12 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import com.harjup_kdhyne.TravelApp.R;
+import org.openexchangerates.oerjava.Currency;
+import org.openexchangerates.oerjava.OpenExchangeRates;
 
+import java.math.BigDecimal;
 import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
 
 /**
  * Created by Kyle 2.1 on 2/16/14.
@@ -35,7 +37,7 @@ public class TripSettingsEditFragment extends Fragment
 
     //Used to track when we are performing an action on start/end date
     public static final int REQUEST_START_DATE = 0;
-    public static final int REQUEST_END_DATE = 0;
+    public static final int REQUEST_END_DATE = 1;
 
     private EditText startDateEditText;
     private EditText endDateEditText;
@@ -61,9 +63,25 @@ public class TripSettingsEditFragment extends Fragment
         currentTrip = tripSettings;
     }
 
+    void openDbConnection()
+    {
+        dataSource = new PurchasesDataSource(getActivity());
+
+        try
+        {
+            dataSource.open();
+        }
+        catch (SQLException e)
+        {
+            e.printStackTrace();
+        }
+    }
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
     {
+        openDbConnection();
+
         View myView = inflater.inflate(R.layout.finance_trip_settings_edit, container, false);
 
         if (myView != null)
@@ -112,7 +130,6 @@ public class TripSettingsEditFragment extends Fragment
         saveButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //TODO: Save settings to a table in the DB
 
                 if (currentTrip != null)
                 {
@@ -138,7 +155,18 @@ public class TripSettingsEditFragment extends Fragment
             @Override
             public void onClick(View v) {
                 //TODO: Call the exchange API to get the latest exchange rate between two currencies
+                new AsyncGetExchange(){
+                    @Override
+                    protected void onPostExecute(BigDecimal result) {
+                        //outputField.setText(translatedString);
+                        Log.d("exchange", "EUR conversion in terms of USD is... "  + result.toString());
+                        currentExchangeTextView.setText(result.toString());
+                    }
 
+
+                }.execute();
+
+                //currentExchangeTextView.setText(value.toString());
             }
         });
 
@@ -203,4 +231,17 @@ public class TripSettingsEditFragment extends Fragment
             endDateEditText.setText(currentTrip.getEndDateAsString());
         }
     }
+
+
+    class AsyncGetExchange extends AsyncTask<Void, Integer, BigDecimal> {
+        @Override
+        protected BigDecimal doInBackground(Void... voids) {
+            OpenExchangeRates oer = OpenExchangeRates.getClient("4b0f1a4d3ed14188b6bb2b007b695e20");
+            BigDecimal value = oer.getCurrencyValue(Currency.EUR);
+
+            return value;
+        }
+    }
+
 }
+

@@ -218,8 +218,6 @@ public class PurchaseEditFragment extends Fragment
         });
 
 
-        //TODO: look for ways to simplify these listeners like the textBox listeners above
-
         backButton.setOnClickListener(new OnClickListener()
         {
             @Override
