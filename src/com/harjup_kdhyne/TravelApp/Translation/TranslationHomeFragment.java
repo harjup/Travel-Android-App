@@ -125,9 +125,8 @@ public class TranslationHomeFragment extends Fragment
             public void onClick(View view) {
                 //stringToTranslate
                 //translatedString
+
                 //Needs to open some kinda pop up that asks for categories it should be stuck under
-                //Phrase homePhrase = new Phrase("en", stringToTranslate);
-                //Phrase targetPhrase = new Phrase("fr", translatedString);
                 FragmentManager fm = getFragmentManager();
                 FragmentTransaction ft = fm.beginTransaction();
                 Fragment prev = getFragmentManager().findFragmentByTag("dialog");

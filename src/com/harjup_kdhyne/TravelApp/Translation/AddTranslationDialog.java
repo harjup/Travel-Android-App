@@ -3,8 +3,11 @@ package com.harjup_kdhyne.TravelApp.Translation;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -42,8 +45,25 @@ public class AddTranslationDialog extends DialogFragment
 
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         builder.setTitle("asdf");
-        builder.setPositiveButton("Pon", null);
         builder.setNegativeButton("Nop", null);
+
+        builder.setPositiveButton("Pon", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                FragmentManager fm = getFragmentManager();
+                FragmentTransaction ft = fm.beginTransaction();
+                Fragment prev = getFragmentManager().findFragmentByTag("newCategory");
+                if (prev != null) {
+                    ft.remove(prev);
+                }
+                ft.addToBackStack(null);
+
+                // Create and show the dialog.
+                NewCategoryDialog newFragment = new NewCategoryDialog();
+                newFragment.show(fm, "newCategory");
+            }
+        });
+
 
         View myView = getActivity().getLayoutInflater().inflate(R.layout.translation_add_dialog, null);
         assert myView != null;
