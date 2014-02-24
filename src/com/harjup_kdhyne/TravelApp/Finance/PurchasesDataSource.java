@@ -21,11 +21,14 @@ public class PurchasesDataSource
 
     //All column names for trip settings table
     private String[] tripSettingsColumns = {
+            MySQLiteHelper.TRIP_COLUMN_ID,
+            MySQLiteHelper.TRIP_COLUMN_NAME,
             MySQLiteHelper.TRIP_COLUMN_START_DATE,
             MySQLiteHelper.TRIP_COLUMN_END_DATE,
             MySQLiteHelper.TRIP_COLUMN_TOTAL_BUDGET,
             MySQLiteHelper.TRIP_COLUMN_TOTAL_EXPENSES,
-            MySQLiteHelper.TRIP_COLUMN_CURRENCY
+            MySQLiteHelper.TRIP_COLUMN_CURRENCY,
+            MySQLiteHelper.TRIP_COLUMN_EXCHANGE_RATE
     };
 
     //All column names for purchases table
@@ -77,11 +80,14 @@ public class PurchasesDataSource
     public TripSettings createTripSettings(TripSettings tripSettings) {
         ContentValues values = new ContentValues();
 
+        values.put(MySQLiteHelper.TRIP_COLUMN_ID, tripSettings.getTripID());
+        values.put(MySQLiteHelper.TRIP_COLUMN_NAME, tripSettings.getName());
         values.put(MySQLiteHelper.TRIP_COLUMN_START_DATE, tripSettings.getStartDateAsString());
         values.put(MySQLiteHelper.TRIP_COLUMN_END_DATE, tripSettings.getEndDateAsString());
         values.put(MySQLiteHelper.TRIP_COLUMN_TOTAL_BUDGET, tripSettings.getTotalBudget());
         values.put(MySQLiteHelper.TRIP_COLUMN_TOTAL_EXPENSES, tripSettings.getTotalExpenses());
         values.put(MySQLiteHelper.TRIP_COLUMN_CURRENCY, tripSettings.getCurrency());
+        values.put(MySQLiteHelper.TRIP_COLUMN_EXCHANGE_RATE, tripSettings.getCurrentExchangeRate());
 
         long insertID = database.insert(MySQLiteHelper.TRIP_TABLE, null, values);
 
@@ -115,11 +121,14 @@ public class PurchasesDataSource
     public void updateTripSettings(TripSettings tripSettings) {
         ContentValues values = new ContentValues();
 
+        values.put(MySQLiteHelper.TRIP_COLUMN_ID, tripSettings.getTripID());
+        values.put(MySQLiteHelper.TRIP_COLUMN_NAME, tripSettings.getName());
         values.put(MySQLiteHelper.TRIP_COLUMN_START_DATE, tripSettings.getStartDateAsString());
         values.put(MySQLiteHelper.TRIP_COLUMN_END_DATE, tripSettings.getEndDateAsString());
         values.put(MySQLiteHelper.TRIP_COLUMN_TOTAL_BUDGET, tripSettings.getTotalBudget());
         values.put(MySQLiteHelper.TRIP_COLUMN_TOTAL_EXPENSES, tripSettings.getTotalExpenses());
         values.put(MySQLiteHelper.TRIP_COLUMN_CURRENCY, tripSettings.getCurrency());
+        values.put(MySQLiteHelper.TRIP_COLUMN_EXCHANGE_RATE, tripSettings.getCurrentExchangeRate());
 
         database.update(MySQLiteHelper.TRIP_TABLE,
                 values,
@@ -189,12 +198,13 @@ public class PurchasesDataSource
     private TripSettings cursorToTripSettings(Cursor cursor) {
         TripSettings settings = new TripSettings();
         settings.setTripID(cursor.getLong(0));
-        settings.setStartDateFromString(cursor.getString(1));
-        settings.setEndDateFromString(cursor.getString(2));
-        settings.setTotalBudget(cursor.getDouble(3));
-        settings.setTotalExpenses(cursor.getDouble(4));
-        settings.setCurrency(cursor.getString(5));
-        settings.setCurrentExchangeRate(cursor.getDouble(6));
+        settings.setName(cursor.getString(1));
+        settings.setStartDateFromString(cursor.getString(2));
+        settings.setEndDateFromString(cursor.getString(3));
+        settings.setTotalBudget(cursor.getDouble(4));
+        settings.setTotalExpenses(cursor.getDouble(5));
+        settings.setCurrency(cursor.getString(6));
+        settings.setCurrentExchangeRate(cursor.getDouble(7));
         return settings;
     }
 

@@ -12,7 +12,8 @@ import java.util.Date;
 //TODO: There is a potential for there to be more than one trip planned on the app. For now we're sticking to one.
 public class TripSettings
 {
-    private long tripID;
+    private long tripID = -1;
+    private String name;
 
     private Date startDate;
     private Date endDate;
@@ -24,6 +25,18 @@ public class TripSettings
 
     private double currentExchangeRate;
 
+    public TripSettings()
+    {
+        //Define default values
+        name = "";
+        startDate = new Date();
+        endDate = new Date();
+        totalBudget = 0.00;
+        totalExpenses = 0.00;
+        currency = "";
+        currentExchangeRate = 0.00;
+    }
+
     //Getters and Setters
     public long getTripID() {
         return tripID;
@@ -31,6 +44,14 @@ public class TripSettings
 
     public void setTripID(long tripID) {
         this.tripID = tripID;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 
     public Date getStartDate() {
@@ -94,14 +115,14 @@ public class TripSettings
     public void setStartDateFromString(String dateString){
         DateFormat dateFormat = new SimpleDateFormat("MM/dd/yyyy");
 
-        try {this.startDate = dateFormat.parse(dateString);}
+        try {setStartDate(dateFormat.parse(dateString));}
         catch (ParseException e) {e.printStackTrace();}
     }
 
     public void setEndDateFromString(String dateString){
         DateFormat dateFormat = new SimpleDateFormat("MM/dd/yyyy");
 
-        try {this.endDate = dateFormat.parse(dateString);}
+        try {setEndDate(dateFormat.parse(dateString));}
         catch (ParseException e) {e.printStackTrace();}
     }
 }

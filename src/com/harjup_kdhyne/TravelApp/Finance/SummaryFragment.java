@@ -3,35 +3,46 @@ package com.harjup_kdhyne.TravelApp.Finance;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
 import android.support.v4.app.FragmentTransaction;
-import android.support.v4.app.ListFragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import com.harjup_kdhyne.TravelApp.R;
-import android.support.v4.app.FragmentActivity;
-import android.support.v4.app.FragmentManager;
 
+import java.sql.SQLException;
 import java.util.Date;
+import java.util.List;
 
 /**
  * Created by Kyle 2.1 on 1/29/14.
  */
 public class SummaryFragment extends Fragment
 {
+    private PurchasesDataSource dataSource;
+    private List<TripSettings> tripSettingsList;
 
     @Override
     public void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
+    }
 
+    //Open a connection to the purchasesDatabase and use it to fill the tripSettingsList
+    private void fillTripSettingsList()
+    {
+        dataSource = new PurchasesDataSource(getActivity());
 
+        try { dataSource.open();}
+        catch (SQLException e) { e.printStackTrace(); }
+
+        tripSettingsList = dataSource.getAllTripSettings();
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
     {
         View myView = inflater.inflate(R.layout.finance_summary, container, false);
+
+        fillTripSettingsList();
 
         if (myView != null)
         {
@@ -40,19 +51,31 @@ public class SummaryFragment extends Fragment
                 @Override
                 public void onClick(View v)
                 {
-                    //Replace the Summary with the trip settings edit fragment
-                    Fragment settingsFragment = new TripSettingsEditFragment();
 
-                    FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
-                    fragmentTransaction.replace(R.id.financeSummaryContainer, settingsFragment);
-                    fragmentTransaction.addToBackStack(null);
-                    fragmentTransaction.commit();
+                    //This is for debug. Gets the first entry in the Trip settings table
+                    //Create a new entry if it doesn't exist
+                    try {viewTripSettings(tripSettingsList.get(0));}
+                    catch (Exception e) {viewTripSettings(new TripSettings());}
                 }
             });
         }
         //Inflate the view and
         //Place it on the screen
         return  myView;
+    }
+
+
+    public void viewTripSettings (TripSettings tripSettings)
+    {
+        //Replace the Summary with the trip settings edit fragment
+        TripSettingsEditFragment settingsFragment = new TripSettingsEditFragment();
+
+        settingsFragment.setCurrentTrip(tripSettings);
+
+        FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
+        fragmentTransaction.replace(R.id.financeSummaryContainer, settingsFragment);
+        fragmentTransaction.addToBackStack(null);
+        fragmentTransaction.commit();
     }
 
     /**
