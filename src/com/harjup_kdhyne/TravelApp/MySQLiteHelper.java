@@ -12,7 +12,7 @@ public class MySQLiteHelper extends SQLiteOpenHelper
 {
     //Database constants
     private static final String DATABASE_NAME = "TravelApp.db";
-    private static final int DATABASE_VERSION = 7;
+    private static final int DATABASE_VERSION = 8;
 
     //Finances table constants
     public static final String PURCHASES_TABLE = "purchases";
