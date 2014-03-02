@@ -90,7 +90,6 @@ public class PurchaseListFragment extends ListFragment
             @Override
             public void onClick(View v)
             {
-                //TODO: Fix the toggling colors of the delete button
                 if(deleteMode)
                 {
                     deleteMode = false;
@@ -146,7 +145,9 @@ public class PurchaseListFragment extends ListFragment
         PurchaseEditFragment editPurchaseFragment = new PurchaseEditFragment();
         Fragment summaryFragment = getFragmentManager().findFragmentById(R.id.financeSummaryContainer);
 
-        editPurchaseFragment.setCurrentPurchase(currentPurchase);
+        Bundle args = new Bundle();
+        args.putSerializable("com.harjup_kdhyne.TravelApp.Purchases.PURCHASE", currentPurchase);
+        editPurchaseFragment.setArguments(args);
 
         FragmentTransaction transaction = getFragmentManager().beginTransaction();
         transaction.remove(this);

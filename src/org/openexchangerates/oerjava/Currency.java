@@ -24,637 +24,649 @@ public enum Currency {
 	/**
 	 * United Arab Emirates Dirham
 	 */
-	AED,
+	AED("AED"),
 	/**
 	 * Afghan Afghani
 	 */
-	AFN,
+	AFN("AFN"),
 	/**
 	 * Albanian Lek
 	 */
-	ALL,
+	ALL("ALL"),
 	/**
 	 * Armenian Dram
 	 */
-	AMD,
+	AMD("AMD"),
 	/**
 	 * Netherlands Antillean Guilder
 	 */
-	ANG,
+	ANG("ANG"),
 	/**
 	 * Angolan Kwanza
 	 */
-	AOA,
+	AOA("AOA"),
 	/**
 	 * Argentine Peso
 	 */
-	ARS,
+	ARS("ARS"),
 	/**
 	 * Australian Dollar
 	 */
-	AUD,
+	AUD("AUD"),
 	/**
 	 * Aruban Florin
 	 */
-	AWG,
+	AWG("AWG"),
 	/**
 	 * Azerbaijani Manat
 	 */
-	AZN,
+	AZN("AZN"),
 	/**
 	 * Bosnia-Herzegovina Convertible Mark
 	 */
-	BAM,
+	BAM("BAM"),
 	/**
 	 * Barbadian Dollar
 	 */
-	BBD,
+	BBD("BBD"),
 	/**
 	 * Bangladeshi Taka
 	 */
-	BDT,
+	BDT("BDT"),
 	/**
 	 * Bulgarian Lev
 	 */
-	BGN,
+	BGN("BGN"),
 	/**
 	 * Bahraini Dinar
 	 */
-	BHD,
+	BHD("BHD"),
 	/**
 	 * Burundian Franc
 	 */
-	BIF,
+	BIF("BIF"),
 	/**
 	 * Bermudan Dollar
 	 */
-	BMD,
+	BMD("BMD"),
 	/**
 	 * Brunei Dollar
 	 */
-	BND,
+	BND("BND"),
 	/**
 	 * Bolivian Boliviano
 	 */
-	BOB,
+	BOB("BOB"),
 	/**
 	 * Brazilian Real
 	 */
-	BRL,
+	BRL("BRL"),
 	/**
 	 * Bahamian Dollar
 	 */
-	BSD,
+	BSD("BSD"),
 	/**
 	 * Bhutanese Ngultrum
 	 */
-	BTN,
+	BTN("BTN"),
 	/**
 	 * Botswanan Pula
 	 */
-	BWP,
+	BWP("BWP"),
 	/**
 	 * Belarusian Ruble
 	 */
-	BYR,
+	BYR("BYR"),
 	/**
 	 * Belize Dollar
 	 */
-	BZD,
+	BZD("BZD"),
 	/**
 	 * Canadian Dollar
 	 */
-	CAD,
+	CAD("CAD"),
 	/**
 	 * Congolese Franc
 	 */
-	CDF,
+	CDF("CDF"),
 	/**
 	 * Swiss Franc
 	 */
-	CHF,
+	CHF("CHF"),
 	/**
 	 * Chilean Unit of Account (UF)
 	 */
-	CLF,
+	CLF("CLF"),
 	/**
 	 * Chilean Peso
 	 */
-	CLP,
+	CLP("CLP"),
 	/**
 	 * Chinese Yuan
 	 */
-	CNY,
+	CNY("CNY"),
 	/**
 	 * Colombian Peso
 	 */
-	COP,
+	COP("COP"),
 	/**
 	 * Costa Rican Colón
 	 */
-	CRC,
+	CRC("CRC"),
 	/**
 	 * Cuban Peso
 	 */
-	CUP,
+	CUP("CUP"),
 	/**
 	 * Cape Verdean Escudo
 	 */
-	CVE,
+	CVE("CVE"),
 	/**
 	 * Czech Republic Koruna
 	 */
-	CZK,
+	CZK("CZK"),
 	/**
 	 * Djiboutian Franc
 	 */
-	DJF,
+	DJF("DJF"),
 	/**
 	 * Danish Krone
 	 */
-	DKK,
+	DKK("DKK"),
 	/**
 	 * Dominican Peso
 	 */
-	DOP,
+	DOP("DOP"),
 	/**
 	 * Algerian Dinar
 	 */
-	DZD,
+	DZD("DZD"),
 	/**
 	 * Egyptian Pound
 	 */
-	EGP,
+	EGP("EGP"),
 	/**
 	 * Ethiopian Birr
 	 */
-	ETB,
+	ETB("ETB"),
 	/**
 	 * Euro
 	 */
-	EUR,
+	EUR("EUR"),
 	/**
 	 * Fijian Dollar
 	 */
-	FJD,
+	FJD("FJD"),
 	/**
 	 * Falkland Islands Pound
 	 */
-	FKP,
+	FKP("FKP"),
 	/**
 	 * British Pound Sterling
 	 */
-	GBP,
+	GBP("GBP"),
 	/**
 	 * Georgian Lari
 	 */
-	GEL,
+	GEL("GEL"),
 	/**
 	 * Ghanaian Cedi
 	 */
-	GHS,
+	GHS("GHS"),
 	/**
 	 * Gibraltar Pound
 	 */
-	GIP,
+	GIP("GIP"),
 	/**
 	 * Gambian Dalasi
 	 */
-	GMD,
+	GMD("GMD"),
 	/**
 	 * Guinean Franc
 	 */
-	GNF,
+	GNF("GNF"),
 	/**
 	 * Guatemalan Quetzal
 	 */
-	GTQ,
+	GTQ("GTQ"),
 	/**
 	 * Guyanaese Dollar
 	 */
-	GYD,
+	GYD("GYD"),
 	/**
 	 * Hong Kong Dollar
 	 */
-	HKD,
+	HKD("HKD"),
 	/**
 	 * Honduran Lempira
 	 */
-	HNL,
+	HNL("HNL"),
 	/**
 	 * Croatian Kuna
 	 */
-	HRK,
+	HRK("HRK"),
 	/**
 	 * Haitian Gourde
 	 */
-	HTG,
+	HTG("HTG"),
 	/**
 	 * Hungarian Forint
 	 */
-	HUF,
+	HUF("HUF"),
 	/**
 	 * Indonesian Rupiah
 	 */
-	IDR,
+	IDR("IDR"),
 	/**
 	 * Irish Pound
 	 */
-	IEP,
+	IEP("IEP"),
 	/**
 	 * Israeli New Sheqel
 	 */
-	ILS,
+	ILS("ILS"),
 	/**
 	 * Indian Rupee
 	 */
-	INR,
+	INR("INR"),
 	/**
 	 * Iraqi Dinar
 	 */
-	IQD,
+	IQD("IQD"),
 	/**
 	 * Iranian Rial
 	 */
-	IRR,
+	IRR("IRR"),
 	/**
 	 * Icelandic Króna
 	 */
-	ISK,
+	ISK("ISK"),
 	/**
 	 * Jamaican Dollar
 	 */
-	JMD,
+	JMD("JMD"),
 	/**
 	 * Jordanian Dinar
 	 */
-	JOD,
+	JOD("JOD"),
 	/**
 	 * Japanese Yen
 	 */
-	JPY,
+	JPY("JPY"),
 	/**
 	 * Kenyan Shilling
 	 */
-	KES,
+	KES("KES"),
 	/**
 	 * Kyrgystani Som
 	 */
-	KGS,
+	KGS("KGS"),
 	/**
 	 * Cambodian Riel
 	 */
-	KHR,
+	KHR("KHR"),
 	/**
 	 * Comorian Franc
 	 */
-	KMF,
+	KMF("KMF"),
 	/**
 	 * North Korean Won
 	 */
-	KPW,
+	KPW("KPW"),
 	/**
 	 * South Korean Won
 	 */
-	KRW,
+	KRW("KRW"),
 	/**
 	 * Kuwaiti Dinar
 	 */
-	KWD,
+	KWD("KWD"),
 	/**
 	 * Kazakhstani Tenge
 	 */
-	KZT,
+	KZT("KZT"),
 	/**
 	 * Laotian Kip
 	 */
-	LAK,
+	LAK("LAK"),
 	/**
 	 * Lebanese Pound
 	 */
-	LBP,
+	LBP("LBP"),
 	/**
 	 * Sri Lankan Rupee
 	 */
-	LKR,
+	LKR("LKR"),
 	/**
 	 * Liberian Dollar
 	 */
-	LRD,
+	LRD("LRD"),
 	/**
 	 * Lesotho Loti
 	 */
-	LSL,
+	LSL("LSL"),
 	/**
 	 * Lithuanian Litas
 	 */
-	LTL,
+	LTL("LTL"),
 	/**
 	 * Latvian Lats
 	 */
-	LVL,
+	LVL("LVL"),
 	/**
 	 * Libyan Dinar
 	 */
-	LYD,
+	LYD("LYD"),
 	/**
 	 * Moroccan Dirham
 	 */
-	MAD,
+	MAD("MAD"),
 	/**
 	 * Moldovan Leu
 	 */
-	MDL,
+	MDL("MDL"),
 	/**
 	 * Malagasy Ariary
 	 */
-	MGA,
+	MGA("MGA"),
 	/**
 	 * Macedonian Denar
 	 */
-	MKD,
+	MKD("MKD"),
 	/**
 	 * Myanma Kyat
 	 */
-	MMK,
+	MMK("MMK"),
 	/**
 	 * Mongolian Tugrik
 	 */
-	MNT,
+	MNT("MNT"),
 	/**
 	 * Macanese Pataca
 	 */
-	MOP,
+	MOP("MOP"),
 	/**
 	 * Mauritanian Ouguiya
 	 */
-	MRO,
+	MRO("MRO"),
 	/**
 	 * Mauritian Rupee
 	 */
-	MUR,
+	MUR("MUR"),
 	/**
 	 * Maldivian Rufiyaa
 	 */
-	MVR,
+	MVR("MVR"),
 	/**
 	 * Malawian Kwacha
 	 */
-	MWK,
+	MWK("MWK"),
 	/**
 	 * Mexican Peso
 	 */
-	MXN,
+	MXN("MXN"),
 	/**
 	 * Malaysian Ringgit
 	 */
-	MYR,
+	MYR("MYR"),
 	/**
 	 * Mozambican Metical
 	 */
-	MZN,
+	MZN("MZN"),
 	/**
 	 * Namibian Dollar
 	 */
-	NAD,
+	NAD("NAD"),
 	/**
 	 * Nigerian Naira
 	 */
-	NGN,
+	NGN("NGN"),
 	/**
 	 * Nicaraguan Córdoba
 	 */
-	NIO,
+	NIO("NIO"),
 	/**
 	 * Norwegian Krone
 	 */
-	NOK,
+	NOK("NOK"),
 	/**
 	 * Nepalese Rupee
 	 */
-	NPR,
+	NPR("NPR"),
 	/**
 	 * New Zealand Dollar
 	 */
-	NZD,
+	NZD("NZD"),
 	/**
 	 * Omani Rial
 	 */
-	OMR,
+	OMR("OMR"),
 	/**
 	 * Panamanian Balboa
 	 */
-	PAB,
+	PAB("PAB"),
 	/**
 	 * Peruvian Nuevo Sol
 	 */
-	PEN,
+	PEN("PEN"),
 	/**
 	 * Papua New Guinean Kina
 	 */
-	PGK,
+	PGK("PGK"),
 	/**
 	 * Philippine Peso
 	 */
-	PHP,
+	PHP("PHP"),
 	/**
 	 * Pakistani Rupee
 	 */
-	PKR,
+	PKR("PKR"),
 	/**
 	 * Polish Zloty
 	 */
-	PLN,
+	PLN("PLN"),
 	/**
 	 * Paraguayan Guarani
 	 */
-	PYG,
+	PYG("PYG"),
 	/**
 	 * Qatari Rial
 	 */
-	QAR,
+	QAR("QAR"),
 	/**
 	 * Romanian Leu
 	 */
-	RON,
+	RON("RON"),
 	/**
 	 * Serbian Dinar
 	 */
-	RSD,
+	RSD("RSD"),
 	/**
 	 * Russian Ruble
 	 */
-	RUB,
+	RUB("RUB"),
 	/**
 	 * Rwandan Franc
 	 */
-	RWF,
+	RWF("RWF"),
 	/**
 	 * Saudi Riyal
 	 */
-	SAR,
+	SAR("SAR"),
 	/**
 	 * Solomon Islands Dollar
 	 */
-	SBD,
+	SBD("SBD"),
 	/**
 	 * Seychellois Rupee
 	 */
-	SCR,
+	SCR("SCR"),
 	/**
 	 * Sudanese Pound
 	 */
-	SDG,
+	SDG("SDG"),
 	/**
 	 * Swedish Krona
 	 */
-	SEK,
+	SEK("SEK"),
 	/**
 	 * Singapore Dollar
 	 */
-	SGD,
+	SGD("SGD"),
 	/**
 	 * Saint Helena Pound
 	 */
-	SHP,
+	SHP("SHP"),
 	/**
 	 * Sierra Leonean Leone
 	 */
-	SLL,
+	SLL("SLL"),
 	/**
 	 * Somali Shilling
 	 */
-	SOS,
+	SOS("SOS"),
 	/**
 	 * Surinamese Dollar
 	 */
-	SRD,
+	SRD("SRD"),
 	/**
 	 * São Tomé and Príncipe Dobra
 	 */
-	STD,
+	STD("STD"),
 	/**
 	 * Salvadoran Colón
 	 */
-	SVC,
+	SVC("SVC"),
 	/**
 	 * Syrian Pound
 	 */
-	SYP,
+	SYP("SYP"),
 	/**
 	 * Swazi Lilangeni
 	 */
-	SZL,
+	SZL("SZL"),
 	/**
 	 * Thai Baht
 	 */
-	THB,
+	THB("THB"),
 	/**
 	 * Tajikistani Somoni
 	 */
-	TJS,
+	TJS("TJS"),
 	/**
 	 * Turkmenistani Manat
 	 */
-	TMT,
+	TMT("TMT"),
 	/**
 	 * Tunisian Dinar
 	 */
-	TND,
+	TND("TND"),
 	/**
 	 * Tongan Paʻanga
 	 */
-	TOP,
+	TOP("TOP"),
 	/**
 	 * Turkish Lira
 	 */
-	TRY,
+	TRY("TRY"),
 	/**
 	 * Trinidad and Tobago Dollar
 	 */
-	TTD,
+	TTD("TTD"),
 	/**
 	 * New Taiwan Dollar
 	 */
-	TWD,
+	TWD("TWD"),
 	/**
 	 * Tanzanian Shilling
 	 */
-	TZS,
+	TZS("TZS"),
 	/**
 	 * Ukrainian Hryvnia
 	 */
-	UAH,
+	UAH("UAH"),
 	/**
 	 * Ugandan Shilling
 	 */
-	UGX,
+	UGX("UGX"),
 	/**
 	 * United States Dollar
 	 */
-	USD,
+	USD("USD"),
 	/**
 	 * Uruguayan Peso
 	 */
-	UYU,
+	UYU("UYU"),
 	/**
 	 * Uzbekistan Som
 	 */
-	UZS,
+	UZS("UZS"),
 	/**
 	 * Venezuelan Bolívar
 	 */
-	VEF,
+	VEF("VEF"),
 	/**
 	 * Vietnamese Dong
 	 */
-	VND,
+	VND("VND"),
 	/**
 	 * Vanuatu Vatu
 	 */
-	VUV,
+	VUV("VUV"),
 	/**
 	 * Samoan Tala
 	 */
-	WST,
+	WST("WST"),
 	/**
 	 * CFA Franc BEAC
 	 */
-	XAF,
+	XAF("XAF"),
 	/**
 	 * East Caribbean Dollar
 	 */
-	XCD,
+	XCD("XCD"),
 	/**
 	 * Special Drawing Rights
 	 */
-	XDR,
+	XDR("XDR"),
 	/**
 	 * CFA Franc BCEAO
 	 */
-	XOF,
+	XOF("XOF"),
 	/**
 	 * CFP Franc
 	 */
-	XPF,
+	XPF("XPF"),
 	/**
 	 * Yemeni Rial
 	 */
-	YER,
+	YER("YER"),
 	/**
 	 * South African Rand
 	 */
-	ZAR,
+	ZAR("ZAR"),
 	/**
 	 * Zambian Kwacha
 	 */
-	ZMK,
+	ZMK("ZMK"),
 	/**
 	 * Zimbabwean Dollar (1980-2008)
 	 */
-	ZWD,
+	ZWD("ZWD"),
 	/**
 	 * Zimbabwean Dollar
 	 */
-	ZWL
+	ZWL("ZWL");
+
+    private String stringValue;
+    private Currency(String toString)
+    {
+        stringValue = toString;
+    }
+
+    @Override
+    public String toString()
+    {
+        return stringValue;
+    }
 }

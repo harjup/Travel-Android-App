@@ -29,7 +29,8 @@ public class TripSettingsEditFragment extends Fragment
     private FinanceDataSource dataSource;
     private TripSettings currentTrip;
 
-    //Keys for start/end date
+    //Keys for ID and start/end date
+    public static final String TRIP_SERIALIZABLE_ID = "com.harjup_kdhyne.TravelApp.TripSettings.TRIP";
     public static final String START_DATE = "com.harjup_kdhyne.TravelApp.Finance.start_date";
     public static final String END_DATE = "com.harjup_kdhyne.TravelApp.Finance.end_date";
 
@@ -49,13 +50,13 @@ public class TripSettingsEditFragment extends Fragment
     @Override
     public void onCreate(Bundle savedInstanceState)
     {
-        super.onCreate(savedInstanceState);
-    }
+        Bundle bundle = getArguments();
+        if (bundle != null)
+        {
+            currentTrip = (TripSettings) bundle.getSerializable(TRIP_SERIALIZABLE_ID);
+        }
 
-    //TODO: Persist Purchase object between onCreate and on destroy when rotating device
-    public void setCurrentTrip(TripSettings tripSettings)
-    {
-        currentTrip = tripSettings;
+        super.onCreate(savedInstanceState);
     }
 
     void openDbConnection()
@@ -104,10 +105,13 @@ public class TripSettingsEditFragment extends Fragment
             {
                 //Get current exchange rate,
                 //TODO: Check if it's too old and get a new one if we need to
+                CheckForExchangeUpdate();
                 currentExchangeTextView.setText(String.valueOf(currentTrip.getCurrentExchangeRate()));
             }
 
         }
+
+
 
         backButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -142,12 +146,15 @@ public class TripSettingsEditFragment extends Fragment
             @Override
             public void onClick(View v)
             {
-                new AsyncGetExchangeRate(Currency.EUR)
+
+                new AsyncGetExchangeRate(currentTrip.getCurrency())
                 {
                     @Override
                     protected void onPostExecute(BigDecimal result)
                     {
-                        currentExchangeTextView.setText(result.toString());
+
+
+                        currentExchangeTextView.setText("1 USD = " + result.toString() + " " + currentTrip.getCurrency());
                         currentTrip.setCurrentExchangeRate(Double.parseDouble(result.toString()));
                     }
                 }.execute();
@@ -181,6 +188,28 @@ public class TripSettingsEditFragment extends Fragment
         });
 
         return myView;
+    }
+
+    private void CheckForExchangeUpdate()
+    {
+        long timeOne = new Date().getTime();
+        long timeTwo = currentTrip.getExchangeRateTimeStamp().getTime();
+        long oneDay = 1000 * 60 * 60 * 24;
+        long delta = (timeTwo - timeOne) / oneDay;
+
+        TripSettings.FrequencySettings updateFrequency = currentTrip.getRefreshFrequency();
+
+        switch (updateFrequency)
+        {
+            case THREE_DAYS:
+                break;
+            case EVERY_OTHER:
+                break;
+            case DAILY:
+                break;
+            case HOURLY:
+                break;
+        }
     }
 
     //Return to the trip summary

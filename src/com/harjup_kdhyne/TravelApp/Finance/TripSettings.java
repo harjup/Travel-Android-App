@@ -1,5 +1,8 @@
 package com.harjup_kdhyne.TravelApp.Finance;
 
+import org.openexchangerates.oerjava.Currency;
+
+import java.io.Serializable;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -7,11 +10,10 @@ import java.util.Date;
 
 /**
  * Created by Kyle 2.1 on 1/29/14
- * Tracks various metrics for each trip including days, money, and default currency
+ * Tracks various metrics for each trip including days, money, and default currency.
+ * There is a potential for there to be more than one trip planned on the app. For now we're sticking to one
  */
-//TODO: There is a potential for there to be more than one trip planned on the app. For now we're sticking to one.
-public class TripSettings
-{
+public class TripSettings implements Serializable {
     private long tripID = -1;
     private String name;
 
@@ -21,7 +23,7 @@ public class TripSettings
     private double totalBudget;
     private double totalExpenses;
 
-    private String currency;
+    private Currency currency;
     private double currentExchangeRate;
     private Date exchangeRateTimeStamp;
     private FrequencySettings refreshFrequency;
@@ -55,7 +57,7 @@ public class TripSettings
         endDate = new Date();
         totalBudget = 0.00;
         totalExpenses = 0.00;
-        currency = "";
+        currency = Currency.EUR;
         currentExchangeRate = 0.00;
         exchangeRateTimeStamp = new Date();
         refreshFrequency = FrequencySettings.DAILY;
@@ -110,12 +112,12 @@ public class TripSettings
         this.totalExpenses = totalExpenses;
     }
 
-    public String getCurrency() {
+    public Currency getCurrency() {
         return currency;
     }
 
     public void setCurrency(String currency) {
-        this.currency = currency;
+        this.currency = Currency.valueOf(currency);
     }
 
     public double getCurrentExchangeRate() {
@@ -152,6 +154,11 @@ public class TripSettings
         return dateFormat.format(endDate);
     }
 
+    public String getExchangeRateTimeStampAsString() {
+        DateFormat dateFormat = new SimpleDateFormat("HH/DD");
+        return dateFormat.format(exchangeRateTimeStamp);
+    }
+
     public void setStartDateFromString(String dateString){
         DateFormat dateFormat = new SimpleDateFormat("MM/dd/yyyy");
 
@@ -163,6 +170,13 @@ public class TripSettings
         DateFormat dateFormat = new SimpleDateFormat("MM/dd/yyyy");
 
         try {setEndDate(dateFormat.parse(dateString));}
+        catch (ParseException e) {e.printStackTrace();}
+    }
+
+    public void setExchangeRateTimeStampFromString(String dateString) {
+        DateFormat dateFormat = new SimpleDateFormat("HH/DD");
+
+        try {setExchangeRateTimeStamp(dateFormat.parse(dateString));}
         catch (ParseException e) {e.printStackTrace();}
     }
 }

@@ -1,5 +1,8 @@
 package com.harjup_kdhyne.TravelApp.Finance;
 
+import org.openexchangerates.oerjava.Currency;
+
+import java.io.Serializable;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -9,13 +12,12 @@ import java.util.Date;
  * Created by Kyle 2.1 on 2/2/14
  * Holds individual purchase data
  */
-public class Purchase
-{
+public class Purchase implements Serializable {
     private long purchaseID = -1;           //id for insertion in the database
     private String purchaseName;            //Name/short description of purchase
     private Date purchaseDate;              //Time the purchase was made
     private String purchasePrice;           //Price of purchase
-    private String paidCurrency;            //Currency used to pay for purchase
+    private Currency paidCurrency;            //Currency used to pay for purchase
     private Double purchaseExchangeRate;    //Exchange rate at time of purchase
     private String purchaseNotes;           //Notes to describe purchase
     private String imageId;     //TODO: Determine how to store picture(s), probably pointing to them somehow
@@ -26,7 +28,7 @@ public class Purchase
         purchaseName = "";
         purchaseDate = new Date();
         purchasePrice = "";
-        paidCurrency = "";
+        paidCurrency = Currency.USD;
         purchaseExchangeRate = 0.00;
         purchaseNotes = "";
     }
@@ -63,11 +65,11 @@ public class Purchase
         this.purchaseDate = purchaseDate;
     }
 
-    public String getPaidCurrency() {
+    public Currency getPaidCurrency() {
         return paidCurrency;
     }
 
-    public void setPaidCurrency(String paidCurrency) {
+    public void setPaidCurrency(Currency paidCurrency) {
         this.paidCurrency = paidCurrency;
     }
 

@@ -76,12 +76,14 @@ public class SummaryFragment extends Fragment
     public void viewTripSettings (TripSettings tripSettings)
     {
         //Replace the Summary with the trip settings edit fragment
-        TripSettingsEditFragment settingsFragment = new TripSettingsEditFragment();
+        TripSettingsEditFragment settingsEditFragment = new TripSettingsEditFragment();
 
-        settingsFragment.setCurrentTrip(tripSettings);
+        Bundle args = new Bundle();
+        args.putSerializable("com.harjup_kdhyne.TravelApp.Purchases.PURCHASE", tripSettings);
+        settingsEditFragment.setArguments(args);
 
         FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
-        fragmentTransaction.replace(R.id.financeSummaryContainer, settingsFragment);
+        fragmentTransaction.replace(R.id.financeSummaryContainer, settingsEditFragment);
         fragmentTransaction.addToBackStack(null);
         fragmentTransaction.commit();
     }
