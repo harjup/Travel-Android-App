@@ -35,6 +35,9 @@ public class TripSettingsEditFragment extends Fragment
     public static final String START_DATE = "com.harjup_kdhyne.TravelApp.Finance.start_date";
     public static final String END_DATE = "com.harjup_kdhyne.TravelApp.Finance.end_date";
 
+    // App ID for Open Exchange Rates API
+    private static final String APP_ID= "4b0f1a4d3ed14188b6bb2b007b695e20";
+
     //Used to track when we are performing an action on start/end date
     public static final int REQUEST_START_DATE = 0;
     public static final int REQUEST_END_DATE = 1;
@@ -48,16 +51,13 @@ public class TripSettingsEditFragment extends Fragment
     private Button saveButton;
     private Button updateExchangeButton;
 
-    //TODO: add reference to singleton TripSettings
-    //TODO: add reference to DB
-
     @Override
     public void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
     }
 
-    //TODO: Persist Purchase object between oncreate and on destroy when rotating device
+    //TODO: Persist Purchase object between onCreate and on destroy when rotating device
     public void setCurrentTrip(TripSettings tripSettings)
     {
         currentTrip = tripSettings;
@@ -122,43 +122,34 @@ public class TripSettingsEditFragment extends Fragment
             }
         });
 
-        saveButton.setOnClickListener(new View.OnClickListener() {
+        saveButton.setOnClickListener(new View.OnClickListener()
+        {
             @Override
-            public void onClick(View v) {
-
+            public void onClick(View v)
+            {
                 if (currentTrip != null)
                 {
                     Log.d("Trip is here", String.valueOf(currentTrip.getTripID()));
+                    //Check to see if the ID hasn't been set yet (isn't in the list)
+                    //Else update the changes
+                    if (currentTrip.getTripID() == -1)
+                        dataSource.createTripSettings(currentTrip);
+                    else
+                        dataSource.updateTripSettings(currentTrip);
                 }
-                //Check to see if the ID hasn't been set yet (isn't in the list)
-                //Else update the changes
-                if (currentTrip.getTripID() == -1)
-                {
-                    dataSource.createTripSettings(currentTrip);
-                }
-                else
-                {
-                    dataSource.updateTripSettings(currentTrip);
-                }
-
                 //Return after saving
                 returnToSummary();
             }
         });
 
-        updateExchangeButton.setOnClickListener(new View.OnClickListener() {
+        updateExchangeButton.setOnClickListener(new View.OnClickListener()
+        {
             @Override
-            public void onClick(View v) {
-                //TODO: Possibly extract this into its own method
-                new AsyncGetExchange(){
-                    @Override
-                    protected void onPostExecute(BigDecimal result) {
-                        currentExchangeTextView.setText(result.toString());
-                        currentTrip.setCurrentExchangeRate(Double.parseDouble(result.toString()));
-                    }
-                }.execute();
-
-                //currentExchangeTextView.setText(value.toString());
+            public void onClick(View v)
+            {
+                BigDecimal newExchangeRate = GetNewExchangeRate();
+                currentExchangeTextView.setText(newExchangeRate.toString());
+                currentTrip.setCurrentExchangeRate(Double.parseDouble(newExchangeRate.toString()));
             }
         });
 
@@ -224,14 +215,29 @@ public class TripSettingsEditFragment extends Fragment
         }
     }
 
+    //Call the Async method to retrieve the latest exchange rate
+    public BigDecimal GetNewExchangeRate()
+    {
+        //Needs to be declared in this manner to
+        final BigDecimal[] exchangeRate = new BigDecimal[1];
+
+        new AsyncGetExchange(){
+            @Override
+            protected void onPostExecute(BigDecimal result) {
+                exchangeRate[0] = result;
+            }
+        }.execute();
+
+        return exchangeRate[0];
+    }
+
 
     class AsyncGetExchange extends AsyncTask<Void, Integer, BigDecimal> {
         @Override
         protected BigDecimal doInBackground(Void... voids) {
-            OpenExchangeRates oer = OpenExchangeRates.getClient("4b0f1a4d3ed14188b6bb2b007b695e20");
-            BigDecimal value = oer.getCurrencyValue(Currency.EUR);
+            OpenExchangeRates oer = OpenExchangeRates.getClient(APP_ID);
 
-            return value;
+            return oer.getCurrencyValue(Currency.EUR);
         }
     }
 

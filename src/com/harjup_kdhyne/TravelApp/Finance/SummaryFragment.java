@@ -3,22 +3,20 @@ package com.harjup_kdhyne.TravelApp.Finance;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
 import android.support.v4.app.FragmentTransaction;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import com.harjup_kdhyne.TravelApp.R;
 
 import java.sql.SQLException;
-import java.util.Date;
 import java.util.List;
 
 /**
  * Created by Kyle 2.1 on 1/29/14.
+ * Displays a summary of days traveled and money spent
  */
 public class SummaryFragment extends Fragment
 {
-    private PurchasesDataSource dataSource;
     private List<TripSettings> tripSettingsList;
 
     @Override
@@ -30,7 +28,7 @@ public class SummaryFragment extends Fragment
     //Open a connection to the purchasesDatabase and use it to fill the tripSettingsList
     private void fillTripSettingsList()
     {
-        dataSource = new PurchasesDataSource(getActivity());
+        PurchasesDataSource dataSource = new PurchasesDataSource(getActivity());
 
         try { dataSource.open();}
         catch (SQLException e) { e.printStackTrace(); }
@@ -56,9 +54,11 @@ public class SummaryFragment extends Fragment
 
                     //This is for debug. Gets the first entry in the Trip settings table
                     //Create a new entry if it doesn't exist
-                    if (tripSettingsList.get(0) != null)
+                    TripSettings first = tripSettingsList.get(0);
+
+                    if (first != null)
                     {
-                        viewTripSettings(tripSettingsList.get(0));
+                        viewTripSettings(first);
                     }
                     else
                     {
@@ -91,7 +91,7 @@ public class SummaryFragment extends Fragment
      *  between dateOne and dateTwo.
      */
     //TODO: Decide where this should live
-    public String getDateDiffString(Date dateOne, Date dateTwo)
+    /*public String getDateDiffString(Date dateOne, Date dateTwo)
     {
         long timeOne = dateOne.getTime();
         long timeTwo = dateTwo.getTime();
@@ -105,6 +105,6 @@ public class SummaryFragment extends Fragment
             delta *= -1;
             return "dateTwo is " + delta + " days before dateOne";
         }
-    }
+    }*/
 
 }
