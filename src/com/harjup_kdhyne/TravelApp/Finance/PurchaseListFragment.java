@@ -27,7 +27,7 @@ import java.util.List;
 public class PurchaseListFragment extends ListFragment
 {
     // Stores the list of Contacts
-    private PurchasesDataSource purchasesDataSource;
+    private FinanceDataSource financeDataSource;
     private List<Purchase> purchasesList;
     private PurchaseAdapter purchaseAdapter;
 
@@ -48,12 +48,12 @@ public class PurchaseListFragment extends ListFragment
     //then insert the purchasesList into the purchaseAdapter so the view can use it
     private void fillPurchasesList()
     {
-        purchasesDataSource = new PurchasesDataSource(getActivity());
+        financeDataSource = new FinanceDataSource(getActivity());
 
-        try { purchasesDataSource.open();}
+        try { financeDataSource.open();}
         catch (SQLException e) { e.printStackTrace(); }
 
-        purchasesList = purchasesDataSource.getAllPurchases();
+        purchasesList = financeDataSource.getAllPurchases();
 
         purchaseAdapter = new PurchaseAdapter(getActivity(), R.layout.finance_purchase_item, (ArrayList<Purchase>) purchasesList);
         setListAdapter(purchaseAdapter);
@@ -94,12 +94,12 @@ public class PurchaseListFragment extends ListFragment
                 if(deleteMode)
                 {
                     deleteMode = false;
-                    deletePurchaseButton.setBackgroundColor(Color.parseColor("#0A0A0A"));
+                    deletePurchaseButton.setBackgroundColor(Color.parseColor("#1A0000"));
                 }
                 else
                 {
                     deleteMode = true;
-                    deletePurchaseButton.setBackgroundColor(Color.parseColor("#0F0F0F"));
+                    deletePurchaseButton.setBackgroundColor(Color.parseColor("#B20000"));
                 }
             }
         });
@@ -115,7 +115,7 @@ public class PurchaseListFragment extends ListFragment
         //Delete object if deleteMode is enabled, otherwise show purchase details
         if(deleteMode)
         {
-            purchasesDataSource.deletePurchase(purchasesList.get(position));
+            financeDataSource.deletePurchase(purchasesList.get(position));
             purchaseAdapter.remove(purchasesList.get(position));
         }
         else
@@ -131,7 +131,7 @@ public class PurchaseListFragment extends ListFragment
     {
         try
         {
-            purchasesDataSource.close();
+            financeDataSource.close();
         }
         catch (Exception e)
         {

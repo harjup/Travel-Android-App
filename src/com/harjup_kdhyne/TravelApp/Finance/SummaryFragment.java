@@ -28,7 +28,7 @@ public class SummaryFragment extends Fragment
     //Open a connection to the purchasesDatabase and use it to fill the tripSettingsList
     private void fillTripSettingsList()
     {
-        PurchasesDataSource dataSource = new PurchasesDataSource(getActivity());
+        FinanceDataSource dataSource = new FinanceDataSource(getActivity());
 
         try { dataSource.open();}
         catch (SQLException e) { e.printStackTrace(); }
@@ -54,11 +54,11 @@ public class SummaryFragment extends Fragment
 
                     //This is for debug. Gets the first entry in the Trip settings table
                     //Create a new entry if it doesn't exist
-                    TripSettings first = tripSettingsList.get(0);
+                    //TripSettings first = tripSettingsList.get(0);
 
-                    if (first != null)
+                    if (tripSettingsList.size() != 0)
                     {
-                        viewTripSettings(first);
+                        viewTripSettings(tripSettingsList.get(0));
                     }
                     else
                     {

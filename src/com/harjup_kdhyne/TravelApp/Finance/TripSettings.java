@@ -22,8 +22,30 @@ public class TripSettings
     private double totalExpenses;
 
     private String currency;
-
     private double currentExchangeRate;
+    private Date exchangeRateTimeStamp;
+    private FrequencySettings refreshFrequency;
+
+    //Options for how often the exchange rate is automatically refreshed
+    public enum FrequencySettings
+    {
+        THREE_DAYS("Every three days"),
+        EVERY_OTHER("Every other day"),
+        DAILY("Daily"),
+        HOURLY("Hourly");
+
+        private String stringValue;
+        private FrequencySettings(String toString)
+        {
+            stringValue = toString;
+        }
+
+        @Override
+        public String toString()
+        {
+            return stringValue;
+        }
+    }
 
     public TripSettings()
     {
@@ -35,6 +57,8 @@ public class TripSettings
         totalExpenses = 0.00;
         currency = "";
         currentExchangeRate = 0.00;
+        exchangeRateTimeStamp = new Date();
+        refreshFrequency = FrequencySettings.DAILY;
     }
 
     //Getters and Setters
@@ -100,6 +124,22 @@ public class TripSettings
 
     public void setCurrentExchangeRate(double currentExchangeRate) {
         this.currentExchangeRate = currentExchangeRate;
+    }
+
+    public Date getExchangeRateTimeStamp() {
+        return exchangeRateTimeStamp;
+    }
+
+    public void setExchangeRateTimeStamp(Date exchangeRateTimeStamp) {
+        this.exchangeRateTimeStamp = exchangeRateTimeStamp;
+    }
+
+    public FrequencySettings getRefreshFrequency() {
+        return refreshFrequency;
+    }
+
+    public void setRefreshFrequency(FrequencySettings refreshFrequency) {
+        this.refreshFrequency = refreshFrequency;
     }
 
     public String getStartDateAsString() {

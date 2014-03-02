@@ -14,7 +14,7 @@ import java.util.List;
  * Created by Kyle 2.1 on 2/9/14
  * Retrieves information from the database related to trip settings and purchases
  */
-public class PurchasesDataSource
+public class FinanceDataSource
 {
     private SQLiteDatabase database;
     private MySQLiteHelper dbHelper;
@@ -42,7 +42,7 @@ public class PurchasesDataSource
             MySQLiteHelper.PURCHASES_COLUMN_NOTES
     };
 
-    public PurchasesDataSource(Context context) {
+    public FinanceDataSource(Context context) {
         dbHelper = new MySQLiteHelper(context);
     }
 

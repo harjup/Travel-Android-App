@@ -17,13 +17,10 @@ import android.widget.EditText;
 import android.widget.Spinner;
 import com.harjup_kdhyne.TravelApp.R;
 
-import java.text.Format;
 import java.text.NumberFormat;
-import java.util.Formatter;
 
 import java.sql.SQLException;
 import java.util.Date;
-import java.util.Locale;
 
 import static android.view.View.OnClickListener;
 
@@ -33,7 +30,7 @@ import static android.view.View.OnClickListener;
  */
 public class PurchaseEditFragment extends Fragment
 {
-    private PurchasesDataSource purchasesDataSource;
+    private FinanceDataSource financeDataSource;
     private Purchase currentPurchase;
 
     //Keys for ID and date
@@ -69,11 +66,11 @@ public class PurchaseEditFragment extends Fragment
 
     void openDbConnection()
     {
-        purchasesDataSource = new PurchasesDataSource(getActivity());
+        financeDataSource = new FinanceDataSource(getActivity());
 
         try
         {
-            purchasesDataSource.open();
+            financeDataSource.open();
         }
         catch (SQLException e)
         {
@@ -266,11 +263,11 @@ public class PurchaseEditFragment extends Fragment
                 //Else update the changes
                 if (currentPurchase.getPurchaseID() == -1)
                 {
-                    purchasesDataSource.createPurchase(currentPurchase);
+                    financeDataSource.createPurchase(currentPurchase);
                 }
                 else
                 {
-                    purchasesDataSource.updatePurchase(currentPurchase);
+                    financeDataSource.updatePurchase(currentPurchase);
                 }
 
                 //return to list view
@@ -290,7 +287,7 @@ public class PurchaseEditFragment extends Fragment
     {
         try
         {
-            purchasesDataSource.close();
+            financeDataSource.close();
         }
         catch (Exception e)
         {

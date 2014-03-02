@@ -2,7 +2,6 @@ package com.harjup_kdhyne.TravelApp.Finance;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -16,7 +15,6 @@ import android.widget.EditText;
 import android.widget.TextView;
 import com.harjup_kdhyne.TravelApp.R;
 import org.openexchangerates.oerjava.Currency;
-import org.openexchangerates.oerjava.OpenExchangeRates;
 
 import java.math.BigDecimal;
 import java.sql.SQLException;
@@ -28,15 +26,12 @@ import java.util.Date;
  */
 public class TripSettingsEditFragment extends Fragment
 {
-    private PurchasesDataSource dataSource;
+    private FinanceDataSource dataSource;
     private TripSettings currentTrip;
 
     //Keys for start/end date
     public static final String START_DATE = "com.harjup_kdhyne.TravelApp.Finance.start_date";
     public static final String END_DATE = "com.harjup_kdhyne.TravelApp.Finance.end_date";
-
-    // App ID for Open Exchange Rates API
-    private static final String APP_ID= "4b0f1a4d3ed14188b6bb2b007b695e20";
 
     //Used to track when we are performing an action on start/end date
     public static final int REQUEST_START_DATE = 0;
@@ -65,7 +60,7 @@ public class TripSettingsEditFragment extends Fragment
 
     void openDbConnection()
     {
-        dataSource = new PurchasesDataSource(getActivity());
+        dataSource = new FinanceDataSource(getActivity());
 
         try
         {
@@ -147,9 +142,15 @@ public class TripSettingsEditFragment extends Fragment
             @Override
             public void onClick(View v)
             {
-                BigDecimal newExchangeRate = GetNewExchangeRate();
-                currentExchangeTextView.setText(newExchangeRate.toString());
-                currentTrip.setCurrentExchangeRate(Double.parseDouble(newExchangeRate.toString()));
+                new AsyncGetExchangeRate(Currency.EUR)
+                {
+                    @Override
+                    protected void onPostExecute(BigDecimal result)
+                    {
+                        currentExchangeTextView.setText(result.toString());
+                        currentTrip.setCurrentExchangeRate(Double.parseDouble(result.toString()));
+                    }
+                }.execute();
             }
         });
 
@@ -214,32 +215,5 @@ public class TripSettingsEditFragment extends Fragment
             endDateEditText.setText(currentTrip.getEndDateAsString());
         }
     }
-
-    //Call the Async method to retrieve the latest exchange rate
-    public BigDecimal GetNewExchangeRate()
-    {
-        //Needs to be declared in this manner to
-        final BigDecimal[] exchangeRate = new BigDecimal[1];
-
-        new AsyncGetExchange(){
-            @Override
-            protected void onPostExecute(BigDecimal result) {
-                exchangeRate[0] = result;
-            }
-        }.execute();
-
-        return exchangeRate[0];
-    }
-
-
-    class AsyncGetExchange extends AsyncTask<Void, Integer, BigDecimal> {
-        @Override
-        protected BigDecimal doInBackground(Void... voids) {
-            OpenExchangeRates oer = OpenExchangeRates.getClient(APP_ID);
-
-            return oer.getCurrencyValue(Currency.EUR);
-        }
-    }
-
 }
 

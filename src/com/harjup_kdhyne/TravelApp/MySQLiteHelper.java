@@ -12,7 +12,7 @@ public class MySQLiteHelper extends SQLiteOpenHelper
 {
     //Database constants
     private static final String DATABASE_NAME = "TravelApp.db";
-    private static final int DATABASE_VERSION = 8;
+    private static final int DATABASE_VERSION = 9;
 
     //Finances table constants
     public static final String PURCHASES_TABLE = "purchases";
@@ -35,6 +35,8 @@ public class MySQLiteHelper extends SQLiteOpenHelper
     public static final String TRIP_COLUMN_TOTAL_EXPENSES = "total_expenses";
     public static final String TRIP_COLUMN_CURRENCY = "currency";
     public static final String TRIP_COLUMN_EXCHANGE_RATE = "exchange_rate";
+    public static final String TRIP_COLUMN_TIMESTAMP = "timestamp";
+    public static final String TRIP_COLUMN_REFRESH_FREQUENCY = "refresh_frequency";
 
     //Translation table constants
     public static final String TRANSLATIONS_TABLE = "translations";
@@ -95,7 +97,9 @@ public class MySQLiteHelper extends SQLiteOpenHelper
             + TRIP_COLUMN_TOTAL_BUDGET + " real,"
             + TRIP_COLUMN_TOTAL_EXPENSES + " real,"
             + TRIP_COLUMN_CURRENCY + " text,"
-            + TRIP_COLUMN_EXCHANGE_RATE + " real"
+            + TRIP_COLUMN_EXCHANGE_RATE + " real,"
+            + TRIP_COLUMN_TIMESTAMP + "text,"
+            + TRIP_COLUMN_REFRESH_FREQUENCY + "text"
             + ");";
 
     //Translation table creation statement
