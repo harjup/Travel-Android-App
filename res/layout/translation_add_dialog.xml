@@ -10,10 +10,21 @@
             android:layout_height="wrap_content"
             android:textAppearance="?android:attr/textAppearanceLarge"
             android:text="Ok done I did it goodbye"
-            android:id="@+id/translationAddPlaceholderTextView"/>
-    <CheckBox
+            android:id="@+id/translationAddText"/>
+    <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="BOX"
-            android:id="@+id/boxboxbox"/>
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:text="Categories:"
+            android:id="@+id/textView"/>
+    <ListView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/categoryListView"
+            android:layout_weight=".5"/>
+    <Button
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:text="New Category"
+            android:id="@+id/newCategoryButton"/>
 </LinearLayout>

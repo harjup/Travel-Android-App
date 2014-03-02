@@ -8,7 +8,8 @@ import java.util.Locale;
  */
 public class Phrase
 {
-    long id = -1;
+    private long id = -1;
+    private long translationId = -1;
     private String language;
     private String contents;
 
@@ -16,6 +17,21 @@ public class Phrase
     {
         language = _language;
         contents = _contents;
+    }
+    public long getId() {
+        return id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
+    }
+
+    public long getTranslationId() {
+        return translationId;
+    }
+
+    public void setTranslationId(long translationId) {
+        this.translationId = translationId;
     }
 
     public String getLanguage() {
@@ -26,11 +42,13 @@ public class Phrase
         this.language = language;
     }
 
-    public String getContents() {
+    public String getContent() {
         return contents;
     }
 
     public void setContents(String contents) {
         this.contents = contents;
     }
+
+
 }

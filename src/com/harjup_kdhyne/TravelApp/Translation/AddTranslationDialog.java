@@ -9,6 +9,7 @@ import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,12 +24,26 @@ import com.harjup_kdhyne.TravelApp.R;
  */
 public class AddTranslationDialog extends DialogFragment
 {
-    public static AddTranslationDialog newInstance(int num)
+    String homePhrase = "";
+    String homeLanguage;
+    String targetPhrase = "";
+    String targetLanguage;
+
+    public static AddTranslationDialog newInstance(String homePhrase, String homeLanguage, String targetPhrase, String targetLanguage)
     {
         AddTranslationDialog addTranslationDialog = new AddTranslationDialog();
         //Set any arguments for the dialog here
+        Bundle args = new Bundle();
+        args.putString("homePhrase", homePhrase);
+        args.putString("homeLanguage", homeLanguage);
+        args.putString("targetPhrase", targetPhrase);
+        args.putString("targetLanguage", targetLanguage);
+        addTranslationDialog.setArguments(args);
+
+
         return addTranslationDialog;
     }
+
 
     public AddTranslationDialog() {
 //        super();
@@ -37,11 +52,18 @@ public class AddTranslationDialog extends DialogFragment
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+
     }
 
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         //super.onCreateDialog(savedInstanceState);
+
+        homePhrase = getArguments().getString("homePhrase");
+        homeLanguage = getArguments().getString("homeLanguage");
+        targetPhrase = getArguments().getString("targetPhrase");
+        targetLanguage = getArguments().getString("targetLanguage");
 
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         builder.setTitle("asdf");
@@ -67,24 +89,22 @@ public class AddTranslationDialog extends DialogFragment
 
         View myView = getActivity().getLayoutInflater().inflate(R.layout.translation_add_dialog, null);
         assert myView != null;
-        final TextView myTextView = (TextView) myView.findViewById(R.id.translationAddPlaceholderTextView);
-        final CheckBox myCheckBox = (CheckBox) myView.findViewById(R.id.boxboxbox);
+        final TextView myTextView = (TextView) myView.findViewById(R.id.translationAddText);
 
-        myCheckBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton compoundButton, boolean isChecked) {
-                if (isChecked)
-                {
-                    myTextView.setText("I AM CHECKED AS YOU CAN PLAINLY SEE");
-                }
-                else
-                {
-                    myTextView.setText("BUTTS BUTTS BUTTS BUTTS");
-                }
-            }
-        });
+        myTextView.setText(homePhrase + " - " + targetPhrase);
 
         builder.setView(myView);
         return builder.create();
     }
+
+
+    void initDialog()
+    {
+        //Check if the translation already exists (if input phrase exactly matches homePhrase)
+        //If it does not, create a new translation and assign input phrases to their respective values
+
+        //Get a list of categories and populate them in the list box
+        //If the translation has any categories, check all the corresponding category boxes
+    }
+
 }

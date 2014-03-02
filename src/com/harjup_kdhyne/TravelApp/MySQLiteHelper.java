@@ -12,7 +12,7 @@ public class MySQLiteHelper extends SQLiteOpenHelper
 {
     //Database constants
     private static final String DATABASE_NAME = "TravelApp.db";
-    private static final int DATABASE_VERSION = 7;
+    private static final int DATABASE_VERSION = 8;
 
     //Finances table constants
     public static final String PURCHASES_TABLE = "purchases";
@@ -39,13 +39,14 @@ public class MySQLiteHelper extends SQLiteOpenHelper
     //Translation table constants
     public static final String TRANSLATIONS_TABLE = "translations";
     public static final String TRANSLATIONS_COLUMN_ID = "_id";
-    public static final String TRANSLATIONS_COLUMN_PHRASES = "phrases";
-    public static final String TRANSLATIONS_COLUMN_CATEGORIES = "categories";
+    public static final String TRANSLATIONS_COLUMN_HOMEPHRASE = "homePhrase";
+    public static final String TRANSLATIONS_COLUMN_HOMELANGUAGE = "homeLanguage";
     public static final String TRANSLATIONS_COLUMN_IMAGEURI = "imageUri";
 
     //Translation Phrase table constants
     public static final String PHRASE_TABLE = "phrases";
     public static final String PHRASE_COLUMN_ID = "_id";
+    public static final String PHRASE_COLUMN_TRANSLATION_ID = "translationId";
     public static final String PHRASE_COLUMN_LANGUAGE = "language";
     public static final String PHRASE_COLUMN_CONTENT = "content";
 
@@ -102,8 +103,8 @@ public class MySQLiteHelper extends SQLiteOpenHelper
             + TRANSLATIONS_TABLE
             + "("
             + TRANSLATIONS_COLUMN_ID + " integer primary key autoincrement, "
-            + TRANSLATIONS_COLUMN_PHRASES + " text,"    //A comma separated list of IDs for phrases it contains. Fairly hackish but whatever
-            + TRANSLATIONS_COLUMN_CATEGORIES + " text," //A comma separated list of IDs for categories it contains
+            + TRANSLATIONS_COLUMN_HOMEPHRASE + " text,"    //A comma separated list of IDs for phrases it contains. Fairly hackish but whatever
+            + TRANSLATIONS_COLUMN_HOMELANGUAGE + " text," //A comma separated list of IDs for categories it contains
             + TRANSLATIONS_COLUMN_IMAGEURI + " text"
             + ");";
 
@@ -112,6 +113,7 @@ public class MySQLiteHelper extends SQLiteOpenHelper
             + PHRASE_TABLE
             + "("
             + PHRASE_COLUMN_ID + " integer primary key autoincrement, "
+            + PHRASE_COLUMN_TRANSLATION_ID + " integer not null,"
             + PHRASE_COLUMN_LANGUAGE + " text not null,"
             + PHRASE_COLUMN_CONTENT + " text not null"
             + ");";

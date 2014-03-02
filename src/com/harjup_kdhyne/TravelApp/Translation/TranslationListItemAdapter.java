@@ -55,23 +55,23 @@ public class TranslationListItemAdapter extends ArrayAdapter<Translation>
             // if not, assign some text!
             if (homeLanguagePhraseView != null)
             {
-                homeLanguagePhraseView.setText(translation.getPhraseByIndex(0).getContents());
+                homeLanguagePhraseView.setText(translation.getHomePhrase());
             }
 
             if (homeLanguageView != null)
             {
-                homeLanguageView.setText(translation.getPhraseByIndex(0).getLanguage());
+                homeLanguageView.setText(translation.getPhrase("fr").getContent());
             }
 
 
             if (targetLanguagePhraseView != null)
             {
-                targetLanguagePhraseView.setText(translation.getPhraseByIndex(1).getContents());
+                targetLanguagePhraseView.setText(translation.getHomeLanguage());
             }
 
             if (targetLanguageView != null)
             {
-                targetLanguageView.setText(translation.getPhraseByIndex(1).getLanguage());
+                targetLanguageView.setText("fr");
             }
 
 

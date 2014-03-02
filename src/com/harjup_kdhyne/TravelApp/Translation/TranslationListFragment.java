@@ -20,7 +20,7 @@ public class TranslationListFragment extends ListFragment
 {
     private TranslationListItemAdapter translationListItemAdapter;
 
-
+/*
     private List<Translation> translationList = new ArrayList<Translation>() {{
         add(new Translation(
                 1 ,
@@ -34,7 +34,7 @@ public class TranslationListFragment extends ListFragment
                     add(new Phrase("en","chump"));
                     add(new Phrase("es","chumpo"));
                 }}));
-    }};
+    }};*/
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -44,10 +44,10 @@ public class TranslationListFragment extends ListFragment
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
     {
-        translationListItemAdapter = new TranslationListItemAdapter(getActivity(), R.layout.translation_phrase_list, translationList);
+        /*translationListItemAdapter = new TranslationListItemAdapter(getActivity(), R.layout.translation_phrase_list, translationList);
         setListAdapter(translationListItemAdapter);
 
-
+*/
         View myView = inflater.inflate(R.layout.translation_phrase_list, container, false);
 
 
@@ -58,7 +58,7 @@ public class TranslationListFragment extends ListFragment
     @Override
     public void onListItemClick(ListView l, View v, int position, long id)
     {
-        viewTranslation(translationList.get(position));
+       /* viewTranslation(translationList.get(position));*/
 
         super.onListItemClick(l, v, position, id);
     }

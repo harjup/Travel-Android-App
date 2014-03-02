@@ -135,8 +135,11 @@ public class TranslationHomeFragment extends Fragment
                 }
                 ft.addToBackStack(null);
 
+
                 // Create and show the dialog.
-                AddTranslationDialog newFragment = new AddTranslationDialog();
+                AddTranslationDialog newFragment = AddTranslationDialog.newInstance(stringToTranslate, "en", translatedString, "fr");
+                //newFragment.setArguments(INPUT_TEXT_ID, stringToTranslate);
+
                 newFragment.show(fm, "dialog");
             }
         });

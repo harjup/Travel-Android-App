@@ -17,6 +17,14 @@ public class Category implements Serializable
         name = _name;
     }
 
+    public long getId() {
+        return id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
+    }
+
     public String getName() {
         return name;
     }
@@ -25,11 +33,5 @@ public class Category implements Serializable
         this.name = name;
     }
 
-    public long getId() {
-        return id;
-    }
 
-    public void setId(long id) {
-        this.id = id;
-    }
 }
