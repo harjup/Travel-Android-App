@@ -6,6 +6,8 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -81,6 +83,7 @@ public class TripSettingsEditFragment extends Fragment
             //Retrieve EditTexts
             startDateEditText = (EditText)myView.findViewById(R.id.startDateEditText);
             endDateEditText = (EditText)myView.findViewById(R.id.endDateEditText);
+            EditText totalBudgetEditText = (EditText)myView.findViewById(R.id.totalBudgetEditText);
 
             //Fill editTexts if they aren't null
             if (startDateEditText != null)
@@ -89,16 +92,31 @@ public class TripSettingsEditFragment extends Fragment
             if (endDateEditText != null)
                 endDateEditText.setText(currentTrip.getEndDateAsString());
 
+            if (totalBudgetEditText != null)
+            {
+                totalBudgetEditText.setText(String.valueOf(currentTrip.getTotalBudget()));
+                totalBudgetEditText.addTextChangedListener(getTextWatcher());
+            }
+
             currentExchangeTextView = (TextView)myView.findViewById(R.id.currentExchangeTextView);
 
             if (currentExchangeTextView != null)
             {
-                //Get current exchange rate,
-                //TODO: Check if it's too old and get a new one if we need to
+                //Get current exchange rate if timeStamp of last exchange is outdated
                 if (isExchangeOutdated(currentTrip.getExchangeRateTimeStamp()))
                 {
-                    currentExchangeTextView.setText(String.valueOf(currentTrip.getCurrentExchangeRate()));
+                    new AsyncGetExchangeRate(currentTrip.getTargetCurrency())
+                    {
+                        @Override
+                        protected void onPostExecute(BigDecimal result)
+                        {
+                            currentExchangeTextView.setText("1 USD = " + result.toString() + " " + currentTrip.getTargetCurrency());
+                            currentTrip.setCurrentExchangeRate(Double.parseDouble(result.toString()));
+                        }
+                    }.execute();
                 }
+
+                currentExchangeTextView.setText(String.valueOf(currentTrip.getCurrentExchangeRate()));
             }
 
             //Retrieve buttons
@@ -108,8 +126,9 @@ public class TripSettingsEditFragment extends Fragment
 
             backButton.setOnClickListener(new View.OnClickListener() {
                 @Override
-                public void onClick(View v) {
-                    //Return after saving
+                public void onClick(View v)
+                {
+                    //Return without saving
                     returnToSummary();
                 }
             });
@@ -119,20 +138,27 @@ public class TripSettingsEditFragment extends Fragment
                 @Override
                 public void onClick(View v)
                 {
-                    //TODO:Check if endDate is before startDate
-
+                    //Save or update TripSettings, then return to Summary
                     if (currentTrip != null)
                     {
-                        Log.d("Trip is here", String.valueOf(currentTrip.getTripID()));
-                        //Check to see if the ID hasn't been set yet (isn't in the list)
-                        //Else update the changes
-                        if (currentTrip.getTripID() == -1)
-                            dataSource.createTripSettings(currentTrip);
-                        else
-                            dataSource.updateTripSettings(currentTrip);
+                        if (currentTrip.getStartDate().isBefore(currentTrip.getEndDate()))
+                        {
+                            Log.d("Trip is here", String.valueOf(currentTrip.getTripID()));
+                            //Check to see if the ID hasn't been set yet (isn't in the list)
+                            //Else update the changes
+                            if (currentTrip.getTripID() == -1)
+                                dataSource.createTripSettings(currentTrip);
+                            else
+                                dataSource.updateTripSettings(currentTrip);
+
+                            //Return to financeSummary after saving
+                            returnToSummary();
+                        }
+                        //else
+                        //{
+                            //TODO:Make message box to inform user of date error
+                        //}
                     }
-                    //Return after saving
-                    returnToSummary();
                 }
             });
 
@@ -181,31 +207,107 @@ public class TripSettingsEditFragment extends Fragment
 
             //Spinner to select currency used to purchase the item
             Spinner purchaseCurrencySpinner = (Spinner)myView.findViewById(R.id.targetCurrencySpinner);
-            //Populate the spinner with the Currency enum
-            purchaseCurrencySpinner.setAdapter(new ArrayAdapter<Currency>(this.getActivity(), android.R.layout.simple_spinner_item, Currency.values()));
 
-            purchaseCurrencySpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-                @Override
-                public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                    Currency paidCurrency = (Currency) parent.getItemAtPosition(position);
-                    Log.d("Currency", paidCurrency.toString());
-                    currentTrip.setTargetCurrency(paidCurrency);
-                }
+            if (purchaseCurrencySpinner != null)
+            {
+                ArrayAdapter<Currency> adapter = new ArrayAdapter<Currency>(this.getActivity(), android.R.layout.simple_spinner_item, Currency.values());
 
-                @Override
-                public void onNothingSelected(AdapterView<?> parent) {
+                //Populate the spinner with the Currency enum
+                purchaseCurrencySpinner.setAdapter(adapter);
 
-                }
-            });
+                purchaseCurrencySpinner.setSelection(adapter.getPosition(currentTrip.getTargetCurrency()));
 
+                purchaseCurrencySpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                    @Override
+                    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                        Currency paidCurrency = (Currency) parent.getItemAtPosition(position);
+                        if (paidCurrency != null) {
+                            Log.d("Currency", paidCurrency.toString());
+                        }
+                        currentTrip.setTargetCurrency(paidCurrency);
+                    }
+
+                    @Override
+                    public void onNothingSelected(AdapterView<?> parent) {
+
+                    }
+                });
+            }
         }
 
-
-
-
-
-
         return myView;
+    }
+
+    /**
+     * Called when the OK button is clicked. Need this for the date picker dialog
+     */
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data)
+    {
+        // If this wasn't called by the date dialog exit
+        if(resultCode != Activity.RESULT_OK)
+            return;
+
+        if(requestCode == REQUEST_START_DATE)
+        {
+            Date date = (Date) data.getSerializableExtra(DatePickerDialogFragment.DATE);
+            currentTrip.setStartDate(new DateTime(date));
+            startDateEditText.setText(currentTrip.getStartDateAsString());
+        }
+        else if(requestCode == REQUEST_END_DATE)
+        {
+            Date date = (Date) data.getSerializableExtra(DatePickerDialogFragment.DATE);
+            currentTrip.setEndDate(new DateTime(date));
+            endDateEditText.setText(currentTrip.getEndDateAsString());
+        }
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState)
+    {
+        outState.putSerializable(TRIP_SERIALIZABLE_ID, currentTrip);
+        super.onSaveInstanceState(outState);
+    }
+
+    @Override
+    public void onDestroyView()
+    {
+        try { dataSource.close();}
+        catch (Exception e) { e.printStackTrace(); }
+
+        super.onDestroyView();
+    }
+
+    private  TextWatcher getTextWatcher()
+    {
+        return new TextWatcher()
+        {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after)
+            {
+                //Auto-generated method stub
+            }
+
+            @Override
+            public void onTextChanged(CharSequence arg0, int arg1, int arg2, int arg3)
+            {
+                Log.d("TEXT WAS CHANGED", arg0.toString());
+                try
+                {
+                    currentTrip.setTotalBudget(Double.parseDouble(arg0.toString()));
+                }
+                catch (Exception e)
+                {
+                    Log.e("Null double", arg0.toString());
+                }
+            }
+
+            @Override
+            public void afterTextChanged(Editable s)
+            {
+                //Auto-generated method stub
+            }
+        };
     }
 
     /**
@@ -252,46 +354,6 @@ public class TripSettingsEditFragment extends Fragment
         FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
         fragmentTransaction.replace(R.id.financeSummaryContainer, summaryFragment);
         fragmentTransaction.commit();
-    }
-
-    /**
-     * Called when the OK button is clicked. Need this for the date picker dialog
-     */
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data)
-    {
-        // If this wasn't called by the date dialog exit
-        if(resultCode != Activity.RESULT_OK)
-            return;
-
-        if(requestCode == REQUEST_START_DATE)
-        {
-            Date date = (Date) data.getSerializableExtra(DatePickerDialogFragment.DATE);
-            currentTrip.setStartDate(new DateTime(date));
-            startDateEditText.setText(currentTrip.getStartDateAsString());
-        }
-        else if(requestCode == REQUEST_END_DATE)
-        {
-            Date date = (Date) data.getSerializableExtra(DatePickerDialogFragment.DATE);
-            currentTrip.setEndDate(new DateTime(date));
-            endDateEditText.setText(currentTrip.getEndDateAsString());
-        }
-    }
-
-    @Override
-    public void onSaveInstanceState(Bundle outState)
-    {
-        outState.putSerializable(TRIP_SERIALIZABLE_ID, currentTrip);
-        super.onSaveInstanceState(outState);
-    }
-
-    @Override
-    public void onDestroyView()
-    {
-        try { dataSource.close();}
-        catch (Exception e) { e.printStackTrace(); }
-
-        super.onDestroyView();
     }
 }
 

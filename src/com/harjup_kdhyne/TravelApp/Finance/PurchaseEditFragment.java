@@ -15,8 +15,6 @@ import android.widget.*;
 import com.harjup_kdhyne.TravelApp.R;
 import org.openexchangerates.oerjava.Currency;
 
-import java.text.NumberFormat;
-
 import java.sql.SQLException;
 import java.util.Date;
 
@@ -102,8 +100,8 @@ public class PurchaseEditFragment extends Fragment
 
             //TextWatcher used by all of the textBoxes
             TextWatcher editTextWatcher = new TextWatcher() {
-                NumberFormat currencyFormat = NumberFormat.getCurrencyInstance();
-                private String current = "";
+                //NumberFormat currencyFormat = NumberFormat.getCurrencyInstance();
+                //private String current = "";
 
                 @Override
                 public void onTextChanged(CharSequence arg0, int arg1, int arg2, int arg3)
@@ -116,8 +114,8 @@ public class PurchaseEditFragment extends Fragment
                     }
                     else if (purchasePriceEditText.hasFocus())
                     {
-                        //TODO: There's some funky stuff going on with the price entry. Fix it!
-                        if (!arg0.toString().equals(current))
+                        //TODO: Make necessary changes this after converting price to double
+                        /*if (!arg0.toString().equals(current))
                         {
                             purchasePriceEditText.removeTextChangedListener(this);
                             double price;
@@ -155,6 +153,16 @@ public class PurchaseEditFragment extends Fragment
                             purchasePriceEditText.addTextChangedListener(this);
 
                             currentPurchase.setPurchasePrice(arg0.toString());
+                        }*/
+
+                        Log.d("TEXT WAS CHANGED", arg0.toString());
+                        try
+                        {
+                            currentPurchase.setPurchasePrice(arg0.toString());
+                        }
+                        catch (Exception e)
+                        {
+                            Log.e("Null string", arg0.toString());
                         }
                     }
                     else if (purchaseNotesEditText.hasFocus())
@@ -261,19 +269,26 @@ public class PurchaseEditFragment extends Fragment
             //Populate the spinner with the Currency enum
             purchaseCurrencySpinner.setAdapter(new ArrayAdapter<Currency>(this.getActivity(), android.R.layout.simple_spinner_item, Currency.values()));
 
-            purchaseCurrencySpinner.setOnItemSelectedListener(new OnItemSelectedListener() {
+            purchaseCurrencySpinner.setOnItemSelectedListener(new OnItemSelectedListener()
+            {
                 @Override
-                public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                public void onItemSelected(AdapterView<?> parent, View view, int position, long id)
+                {
                     Currency paidCurrency = (Currency) parent.getItemAtPosition(position);
-                    Log.d("Currency", paidCurrency.toString());
+                    //Log.d("Currency", paidCurrency.toString());
                     currentPurchase.setPaidCurrency(paidCurrency);
                 }
 
                 @Override
-                public void onNothingSelected(AdapterView<?> parent) {
-
+                public void onNothingSelected(AdapterView<?> parent)
+                {
+                    //Auto-Generated Method Stub
                 }
             });
+
+            //TODO: Set exchange rate for purchase based on currentTrip exchangeRate. Hardcode to EUR for now
+            currentPurchase.setPurchaseExchangeRate(.728);
+
         }
         //Inflate the view
         return myView;
@@ -295,6 +310,13 @@ public class PurchaseEditFragment extends Fragment
         super.onDestroyView();
     }
 
+    @Override
+    public void onSaveInstanceState(Bundle outState)
+    {
+        outState.putSerializable(PURCHASE_SERIALIZABLE_ID, currentPurchase);
+        super.onSaveInstanceState(outState);
+    }
+
     //Return to the purchases list
     public void returnToPurchasesList()
     {
@@ -303,8 +325,8 @@ public class PurchaseEditFragment extends Fragment
 
         FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
         fragmentTransaction.remove(this);
-        fragmentTransaction.add(R.id.financeSummaryContainer, summaryFragment);
         fragmentTransaction.add(R.id.financePurchaseListContainer, purchaseListFragment);
+        fragmentTransaction.add(R.id.financeSummaryContainer, summaryFragment);
         fragmentTransaction.addToBackStack(null);
         fragmentTransaction.commit();
     }

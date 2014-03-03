@@ -32,8 +32,8 @@ public class FinanceContainerFragment extends Fragment
             financePurchaseListFragment = new PurchaseListFragment();
 
             FragmentTransaction transaction = fm.beginTransaction();
-            transaction.replace(R.id.financeSummaryContainer,financeSummaryFragment);
             transaction.replace(R.id.financePurchaseListContainer,financePurchaseListFragment);
+            transaction.replace(R.id.financeSummaryContainer,financeSummaryFragment);
 
             transaction.commit();
         }

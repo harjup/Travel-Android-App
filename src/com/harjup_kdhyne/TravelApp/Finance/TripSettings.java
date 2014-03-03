@@ -1,17 +1,11 @@
 package com.harjup_kdhyne.TravelApp.Finance;
 
-import android.util.Log;
 import org.joda.time.DateTime;
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
-import org.joda.time.format.ISODateTimeFormat;
 import org.openexchangerates.oerjava.Currency;
 
 import java.io.Serializable;
-import java.text.DateFormat;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 
 /**
  * Created by Kyle 2.1 on 1/29/14
@@ -34,7 +28,8 @@ public class TripSettings implements Serializable
     private DateTime exchangeRateTimeStamp;
     private FrequencySettings refreshFrequency;
 
-    private DateTimeFormatter fmt = DateTimeFormat.forPattern("MM/dd/yyyy");
+    //Declared as transient because DateTimeFormatter is not serializable
+    private transient DateTimeFormatter fmt = DateTimeFormat.forPattern("MM/dd/yyyy");
 
     //Options for how often the exchange rate is automatically refreshed
     public enum FrequencySettings
@@ -165,35 +160,29 @@ public class TripSettings implements Serializable
         this.refreshFrequency = refreshFrequency;
     }
 
-    public String getStartDateAsString()
-    {
+    public String getStartDateAsString() {
         return fmt.print(startDate);
     }
 
-    public String getEndDateAsString()
-    {
+    public String getEndDateAsString() {
         return fmt.print(endDate);
     }
 
-    public String getExchangeRateTimeStampAsString()
-    {
+    public String getExchangeRateTimeStampAsString() {
         return fmt.print(exchangeRateTimeStamp);
     }
 
-    public void setStartDateFromString(String dateString)
-    {
+    public void setStartDateFromString(String dateString) {
         try {setStartDate(fmt.parseDateTime(dateString));}
         catch (IllegalArgumentException e) {e.printStackTrace();}
     }
 
-    public void setEndDateFromString(String dateString)
-    {
+    public void setEndDateFromString(String dateString) {
         try {setEndDate(fmt.parseDateTime(dateString));}
         catch (IllegalArgumentException e) {e.printStackTrace();}
     }
 
-    public void setExchangeRateTimeStampFromString(String dateString)
-    {
+    public void setExchangeRateTimeStampFromString(String dateString) {
         try {setExchangeRateTimeStamp(fmt.parseDateTime(dateString));}
         catch (IllegalArgumentException e) {e.printStackTrace();}
     }

@@ -15,8 +15,8 @@ import java.util.Date;
 public class Purchase implements Serializable {
     private long purchaseID = -1;           //id for insertion in the database
     private String purchaseName;            //Name/short description of purchase
-    private Date purchaseDate;              //Time the purchase was made
-    private String purchasePrice;           //Price of purchase
+    private Date purchaseDate;              //Time the purchase was made TODO: Change to JodaTime => DateTime
+    private String purchasePrice;           //Price of purchase TODO: Change from string to double!!!
     private Currency paidCurrency;            //Currency used to pay for purchase
     private Double purchaseExchangeRate;    //Exchange rate at time of purchase
     private String purchaseNotes;           //Notes to describe purchase

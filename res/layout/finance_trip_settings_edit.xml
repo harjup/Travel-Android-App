@@ -59,14 +59,13 @@
                 android:layout_weight="1"/>
 
         <EditText
-                android:id="@+id/purchasePriceEditText"
+                android:id="@+id/totalBudgetEditText"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="@dimen/component_bottom_margin"
-                android:hint="@string/max_budget_hint"
+                android:hint="@string/total_budget_hint"
                 android:layout_weight="2"
                 android:paddingTop="20dp"
-                android:gravity="end"
                 android:inputType="numberDecimal"/>
 
     </TableRow>
@@ -83,7 +82,7 @@
                 android:text=""
                 android:layout_gravity="center_vertical"
                 android:layout_weight="1"
-                android:textSize="28sp"/>
+                android:textSize="18sp"/>
 
         <Button
                 android:id="@+id/updateExchangeButton"

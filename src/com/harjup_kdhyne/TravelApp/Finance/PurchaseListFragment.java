@@ -11,6 +11,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ListView;
 import com.harjup_kdhyne.TravelApp.R;
+import org.openexchangerates.oerjava.Currency;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -26,6 +27,8 @@ import java.util.List;
  */
 public class PurchaseListFragment extends ListFragment
 {
+    public static final String PURCHASE_SERIALIZABLE_ID = "com.harjup_kdhyne.TravelApp.Purchases.PURCHASE";
+
     // Stores the list of Contacts
     private FinanceDataSource financeDataSource;
     private List<Purchase> purchasesList;
@@ -41,6 +44,8 @@ public class PurchaseListFragment extends ListFragment
     @Override
     public void onCreate(Bundle savedInstanceState)
     {
+        fillPurchasesList();
+
         super.onCreate(savedInstanceState);
     }
 
@@ -62,10 +67,6 @@ public class PurchaseListFragment extends ListFragment
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
     {
-        //getActivity().setTitle(R.string.finance_summary_title);
-
-        fillPurchasesList();
-
         View myView = inflater.inflate(R.layout.finance_purchase_list,container,false);
 
         if(myView != null)
@@ -123,21 +124,55 @@ public class PurchaseListFragment extends ListFragment
         }
     }
 
+    //TODO: Add LCM
+
+    @Override
+    public void onSaveInstanceState(Bundle outState)
+    {
+        super.onSaveInstanceState(outState);
+    }
+
     //When the user navigates to a different fragment,
     //close the purchasesList database connection
     @Override
     public void onDestroyView()
     {
-        try
-        {
-            financeDataSource.close();
-        }
-        catch (Exception e)
-        {
-            e.printStackTrace();
-        }
+        try { financeDataSource.close();}
+        catch (Exception e) { e.printStackTrace(); }
 
         super.onDestroyView();
+    }
+
+    /**
+     * Calculate the total expense of all purchases converted to native currency and return as a double
+     * @return sum total of all expenses
+     */
+    public double calculateTotalExpenses()
+    {
+        double sumTotal = 0;
+
+        for (Purchase purchase : purchasesList)
+        {
+            //TODO: Fix conversions
+            //Currency paidCurrency = purchase.getPaidCurrency();
+            double purchasePrice = Double.parseDouble(purchase.getPurchasePrice());
+            //double purchaseExchange = purchase.getPurchaseExchangeRate();
+
+            double convertedPrice;
+
+            //If currency paid is not in target Currency, convert using purchase exchange
+//            if (paidCurrency != Currency.EUR)
+//            {
+//                convertedPrice = purchasePrice * purchaseExchange;
+//            }
+//            else
+//            {
+                convertedPrice = purchasePrice;
+//            }
+
+            sumTotal += convertedPrice;
+        }
+        return sumTotal;
     }
 
     public void viewPurchaseDetails (Purchase currentPurchase)
@@ -146,7 +181,7 @@ public class PurchaseListFragment extends ListFragment
         Fragment summaryFragment = getFragmentManager().findFragmentById(R.id.financeSummaryContainer);
 
         Bundle args = new Bundle();
-        args.putSerializable("com.harjup_kdhyne.TravelApp.Purchases.PURCHASE", currentPurchase);
+        args.putSerializable(PURCHASE_SERIALIZABLE_ID, currentPurchase);
         editPurchaseFragment.setArguments(args);
 
         FragmentTransaction transaction = getFragmentManager().beginTransaction();
