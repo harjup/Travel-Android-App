@@ -32,7 +32,9 @@ public class FinanceDataSource
             MySQLiteHelper.TRIP_COLUMN_TOTAL_BUDGET,
             MySQLiteHelper.TRIP_COLUMN_TOTAL_EXPENSES,
             MySQLiteHelper.TRIP_COLUMN_CURRENCY,
-            MySQLiteHelper.TRIP_COLUMN_EXCHANGE_RATE
+            MySQLiteHelper.TRIP_COLUMN_EXCHANGE_RATE,
+            MySQLiteHelper.TRIP_COLUMN_TIMESTAMP,
+            MySQLiteHelper.TRIP_COLUMN_REFRESH_FREQUENCY
     };
 
     //All column names for purchases table
@@ -89,7 +91,7 @@ public class FinanceDataSource
         values.put(MySQLiteHelper.TRIP_COLUMN_END_DATE, tripSettings.getEndDateAsString());
         values.put(MySQLiteHelper.TRIP_COLUMN_TOTAL_BUDGET, tripSettings.getTotalBudget());
         values.put(MySQLiteHelper.TRIP_COLUMN_TOTAL_EXPENSES, tripSettings.getTotalExpenses());
-        values.put(MySQLiteHelper.TRIP_COLUMN_CURRENCY, tripSettings.getCurrency().toString());
+        values.put(MySQLiteHelper.TRIP_COLUMN_CURRENCY, tripSettings.getTargetCurrency().toString());
         values.put(MySQLiteHelper.TRIP_COLUMN_EXCHANGE_RATE, tripSettings.getCurrentExchangeRate());
         values.put(MySQLiteHelper.TRIP_COLUMN_TIMESTAMP, tripSettings.getExchangeRateTimeStampAsString());
         values.put(MySQLiteHelper.TRIP_COLUMN_REFRESH_FREQUENCY, tripSettings.getRefreshFrequency().toString());
@@ -131,7 +133,7 @@ public class FinanceDataSource
         values.put(MySQLiteHelper.TRIP_COLUMN_END_DATE, tripSettings.getEndDateAsString());
         values.put(MySQLiteHelper.TRIP_COLUMN_TOTAL_BUDGET, tripSettings.getTotalBudget());
         values.put(MySQLiteHelper.TRIP_COLUMN_TOTAL_EXPENSES, tripSettings.getTotalExpenses());
-        values.put(MySQLiteHelper.TRIP_COLUMN_CURRENCY, tripSettings.getCurrency().toString());
+        values.put(MySQLiteHelper.TRIP_COLUMN_CURRENCY, tripSettings.getTargetCurrency().toString());
         values.put(MySQLiteHelper.TRIP_COLUMN_EXCHANGE_RATE, tripSettings.getCurrentExchangeRate());
         values.put(MySQLiteHelper.TRIP_COLUMN_TIMESTAMP, tripSettings.getExchangeRateTimeStampAsString());
         values.put(MySQLiteHelper.TRIP_COLUMN_REFRESH_FREQUENCY, tripSettings.getRefreshFrequency().toString());
@@ -194,7 +196,7 @@ public class FinanceDataSource
         purchase.setPurchaseName(cursor.getString(1));
         purchase.setDateFromString(cursor.getString(2));
         purchase.setPurchasePrice(cursor.getString(3));
-        purchase.setPaidCurrency(Currency.valueOf(cursor.getString(4)));
+        purchase.setPaidCurrency(Currency.fromString(cursor.getString(4)));
         purchase.setPurchaseExchangeRate(cursor.getDouble(5));
         purchase.setPurchaseNotes(cursor.getString(6));
         //TODO: Set image url
@@ -209,12 +211,10 @@ public class FinanceDataSource
         settings.setEndDateFromString(cursor.getString(3));
         settings.setTotalBudget(cursor.getDouble(4));
         settings.setTotalExpenses(cursor.getDouble(5));
-        settings.setCurrency(cursor.getString(6));
+        settings.setTargetCurrency(Currency.fromString(cursor.getString(6)));
         settings.setCurrentExchangeRate(cursor.getDouble(7));
         settings.setExchangeRateTimeStampFromString(cursor.getString(8));
-        settings.setRefreshFrequency(FrequencySettings.valueOf(cursor.getString(9)));
+        settings.setRefreshFrequency(FrequencySettings.fromString(cursor.getString(9)));
         return settings;
     }
-
-
 }

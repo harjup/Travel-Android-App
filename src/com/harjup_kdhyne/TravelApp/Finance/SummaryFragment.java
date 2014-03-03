@@ -3,10 +3,14 @@ package com.harjup_kdhyne.TravelApp.Finance;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
 import android.support.v4.app.FragmentTransaction;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ProgressBar;
 import com.harjup_kdhyne.TravelApp.R;
+import org.joda.time.DateTime;
+import org.joda.time.Days;
 
 import java.sql.SQLException;
 import java.util.List;
@@ -17,18 +21,23 @@ import java.util.List;
  */
 public class SummaryFragment extends Fragment
 {
+    public static final String TRIP_SERIALIZABLE_ID = "com.harjup_kdhyne.TravelApp.TripSettings.TRIP";
+
     private List<TripSettings> tripSettingsList;
+    private TripSettings currentTrip;
+    private FinanceDataSource dataSource;
 
     @Override
     public void onCreate(Bundle savedInstanceState)
     {
+
         super.onCreate(savedInstanceState);
     }
 
     //Open a connection to the purchasesDatabase and use it to fill the tripSettingsList
     private void fillTripSettingsList()
     {
-        FinanceDataSource dataSource = new FinanceDataSource(getActivity());
+        dataSource = new FinanceDataSource(getActivity());
 
         try { dataSource.open();}
         catch (SQLException e) { e.printStackTrace(); }
@@ -43,8 +52,31 @@ public class SummaryFragment extends Fragment
 
         fillTripSettingsList();
 
+        Bundle bundle = getArguments();
+        if (bundle != null)
+        {
+            currentTrip = (TripSettings) bundle.getSerializable(TRIP_SERIALIZABLE_ID);
+            Log.d("Got Bundle","Blop bloop");
+        }
+        else if (tripSettingsList.size() != 0)
+        {
+            currentTrip = tripSettingsList.get(0);
+            Log.d("Got current Trip", currentTrip.getStartDateAsString());
+        }
+        else
+        {
+            currentTrip = new TripSettings();
+            Log.d("Making new Trip", currentTrip.getStartDateAsString());
+        }
+
         if (myView != null)
         {
+            ProgressBar travelTimeProgressBar = (ProgressBar) myView.findViewById(R.id.travelTimeProgressBar);
+            //ProgressBar budgetSpentProgressBar = (ProgressBar) myView.findViewById(R.id.budgetSpentProgressBar);
+
+            if (currentTrip != null)
+                travelTimeProgressBar.setProgress(getTripProgress(currentTrip.getStartDate(), currentTrip.getEndDate()));
+
             //Listens for when the user taps on the summary fragment
             myView.setOnClickListener(new View.OnClickListener()
             {
@@ -56,13 +88,13 @@ public class SummaryFragment extends Fragment
                     //Create a new entry if it doesn't exist
                     //TripSettings first = tripSettingsList.get(0);
 
-                    if (tripSettingsList.size() != 0)
+                    try
                     {
-                        viewTripSettings(tripSettingsList.get(0));
+                        viewTripSettings(currentTrip);
                     }
-                    else
+                    catch (Exception e)
                     {
-                        viewTripSettings(new TripSettings());
+                        Log.e("Exception", "Can't get trip");
                     }
                 }
             });
@@ -72,6 +104,21 @@ public class SummaryFragment extends Fragment
         return  myView;
     }
 
+    @Override
+    public void onSaveInstanceState(Bundle outState)
+    {
+        outState.putSerializable(TRIP_SERIALIZABLE_ID, currentTrip);
+        super.onSaveInstanceState(outState);
+    }
+
+    @Override
+    public void onDestroyView()
+    {
+        try { dataSource.close();}
+        catch (Exception e) { e.printStackTrace(); }
+
+        super.onDestroyView();
+    }
 
     public void viewTripSettings (TripSettings tripSettings)
     {
@@ -79,7 +126,7 @@ public class SummaryFragment extends Fragment
         TripSettingsEditFragment settingsEditFragment = new TripSettingsEditFragment();
 
         Bundle args = new Bundle();
-        args.putSerializable("com.harjup_kdhyne.TravelApp.Purchases.PURCHASE", tripSettings);
+        args.putSerializable(TRIP_SERIALIZABLE_ID, tripSettings);
         settingsEditFragment.setArguments(args);
 
         FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
@@ -89,24 +136,22 @@ public class SummaryFragment extends Fragment
     }
 
     /**
-     *  Returns a string that describes the number of days
-     *  between dateOne and dateTwo.
+     * Returns the number of days between start and end date
+     *
+     *
+     * @param startDate
+     * @param endDate
+     * @return
      */
-    //TODO: Decide where this should live
-    /*public String getDateDiffString(Date dateOne, Date dateTwo)
+    public int getTripProgress(DateTime startDate, DateTime endDate)
     {
-        long timeOne = dateOne.getTime();
-        long timeTwo = dateTwo.getTime();
-        long oneDay = 1000 * 60 * 60 * 24;
-        long delta = (timeTwo - timeOne) / oneDay;
+        int daysBetween = Days.daysBetween(startDate, endDate).getDays();
+        int daysTraveled = Days.daysBetween(startDate, new DateTime()).getDays();
+        int progress = (int) Math.ceil(((double)daysTraveled / (double)daysBetween) * 100);
 
-        if (delta > 0) {
-            return "dateTwo is " + delta + " days after dateOne";
-        }
-        else {
-            delta *= -1;
-            return "dateTwo is " + delta + " days before dateOne";
-        }
-    }*/
+        Log.d("Progress", String.valueOf(progress));
+
+        return progress;
+    }
 
 }

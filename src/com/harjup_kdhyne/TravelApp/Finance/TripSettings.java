@@ -1,5 +1,10 @@
 package com.harjup_kdhyne.TravelApp.Finance;
 
+import android.util.Log;
+import org.joda.time.DateTime;
+import org.joda.time.format.DateTimeFormat;
+import org.joda.time.format.DateTimeFormatter;
+import org.joda.time.format.ISODateTimeFormat;
 import org.openexchangerates.oerjava.Currency;
 
 import java.io.Serializable;
@@ -10,23 +15,26 @@ import java.util.Date;
 
 /**
  * Created by Kyle 2.1 on 1/29/14
- * Tracks various metrics for each trip including days, money, and default currency.
+ * Tracks various metrics for each trip including days, money, and default targetCurrency.
  * There is a potential for there to be more than one trip planned on the app. For now we're sticking to one
  */
-public class TripSettings implements Serializable {
+public class TripSettings implements Serializable
+{
     private long tripID = -1;
     private String name;
 
-    private Date startDate;
-    private Date endDate;
+    private DateTime startDate;
+    private DateTime endDate;
 
     private double totalBudget;
     private double totalExpenses;
 
-    private Currency currency;
+    private Currency targetCurrency;
     private double currentExchangeRate;
-    private Date exchangeRateTimeStamp;
+    private DateTime exchangeRateTimeStamp;
     private FrequencySettings refreshFrequency;
+
+    private DateTimeFormatter fmt = DateTimeFormat.forPattern("MM/dd/yyyy");
 
     //Options for how often the exchange rate is automatically refreshed
     public enum FrequencySettings
@@ -47,19 +55,32 @@ public class TripSettings implements Serializable {
         {
             return stringValue;
         }
+
+        public static FrequencySettings fromString(String text)
+        {
+            if (text != null)
+            {
+                for(FrequencySettings frequency : FrequencySettings.values())
+                {
+                    if (text.equalsIgnoreCase(frequency.stringValue))
+                        return frequency;
+                }
+            }
+            return null;
+        }
     }
 
     public TripSettings()
     {
         //Define default values
         name = "";
-        startDate = new Date();
-        endDate = new Date();
+        startDate = new DateTime();
+        endDate = new DateTime().plusDays(90);
         totalBudget = 0.00;
         totalExpenses = 0.00;
-        currency = Currency.EUR;
+        targetCurrency = Currency.EUR;
         currentExchangeRate = 0.00;
-        exchangeRateTimeStamp = new Date();
+        exchangeRateTimeStamp = new DateTime();
         refreshFrequency = FrequencySettings.DAILY;
     }
 
@@ -80,19 +101,19 @@ public class TripSettings implements Serializable {
         this.name = name;
     }
 
-    public Date getStartDate() {
+    public DateTime getStartDate() {
         return startDate;
     }
 
-    public void setStartDate(Date startDate) {
+    public void setStartDate(DateTime startDate) {
         this.startDate = startDate;
     }
 
-    public Date getEndDate() {
+    public DateTime getEndDate() {
         return endDate;
     }
 
-    public void setEndDate(Date endDate) {
+    public void setEndDate(DateTime endDate) {
         this.endDate = endDate;
     }
 
@@ -112,12 +133,12 @@ public class TripSettings implements Serializable {
         this.totalExpenses = totalExpenses;
     }
 
-    public Currency getCurrency() {
-        return currency;
+    public Currency getTargetCurrency() {
+        return targetCurrency;
     }
 
-    public void setCurrency(String currency) {
-        this.currency = Currency.valueOf(currency);
+    public void setTargetCurrency(Currency targetCurrency) {
+        this.targetCurrency = targetCurrency;
     }
 
     public double getCurrentExchangeRate() {
@@ -128,11 +149,11 @@ public class TripSettings implements Serializable {
         this.currentExchangeRate = currentExchangeRate;
     }
 
-    public Date getExchangeRateTimeStamp() {
+    public DateTime getExchangeRateTimeStamp() {
         return exchangeRateTimeStamp;
     }
 
-    public void setExchangeRateTimeStamp(Date exchangeRateTimeStamp) {
+    public void setExchangeRateTimeStamp(DateTime exchangeRateTimeStamp) {
         this.exchangeRateTimeStamp = exchangeRateTimeStamp;
     }
 
@@ -144,39 +165,36 @@ public class TripSettings implements Serializable {
         this.refreshFrequency = refreshFrequency;
     }
 
-    public String getStartDateAsString() {
-        DateFormat dateFormat = new SimpleDateFormat("MM/dd/yyyy");
-        return dateFormat.format(startDate);
+    public String getStartDateAsString()
+    {
+        return fmt.print(startDate);
     }
 
-    public String getEndDateAsString() {
-        DateFormat dateFormat = new SimpleDateFormat("MM/dd/yyyy");
-        return dateFormat.format(endDate);
+    public String getEndDateAsString()
+    {
+        return fmt.print(endDate);
     }
 
-    public String getExchangeRateTimeStampAsString() {
-        DateFormat dateFormat = new SimpleDateFormat("HH/DD");
-        return dateFormat.format(exchangeRateTimeStamp);
+    public String getExchangeRateTimeStampAsString()
+    {
+        return fmt.print(exchangeRateTimeStamp);
     }
 
-    public void setStartDateFromString(String dateString){
-        DateFormat dateFormat = new SimpleDateFormat("MM/dd/yyyy");
-
-        try {setStartDate(dateFormat.parse(dateString));}
-        catch (ParseException e) {e.printStackTrace();}
+    public void setStartDateFromString(String dateString)
+    {
+        try {setStartDate(fmt.parseDateTime(dateString));}
+        catch (IllegalArgumentException e) {e.printStackTrace();}
     }
 
-    public void setEndDateFromString(String dateString){
-        DateFormat dateFormat = new SimpleDateFormat("MM/dd/yyyy");
-
-        try {setEndDate(dateFormat.parse(dateString));}
-        catch (ParseException e) {e.printStackTrace();}
+    public void setEndDateFromString(String dateString)
+    {
+        try {setEndDate(fmt.parseDateTime(dateString));}
+        catch (IllegalArgumentException e) {e.printStackTrace();}
     }
 
-    public void setExchangeRateTimeStampFromString(String dateString) {
-        DateFormat dateFormat = new SimpleDateFormat("HH/DD");
-
-        try {setExchangeRateTimeStamp(dateFormat.parse(dateString));}
-        catch (ParseException e) {e.printStackTrace();}
+    public void setExchangeRateTimeStampFromString(String dateString)
+    {
+        try {setExchangeRateTimeStamp(fmt.parseDateTime(dateString));}
+        catch (IllegalArgumentException e) {e.printStackTrace();}
     }
 }

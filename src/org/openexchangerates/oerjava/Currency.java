@@ -669,4 +669,17 @@ public enum Currency {
     {
         return stringValue;
     }
+
+    public static Currency fromString(String text)
+    {
+        if (text != null)
+        {
+            for(Currency currency : Currency.values())
+            {
+                if (text.equalsIgnoreCase(currency.stringValue))
+                    return currency;
+            }
+        }
+        return null;
+    }
 }
