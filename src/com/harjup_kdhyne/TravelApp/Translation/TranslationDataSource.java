@@ -324,7 +324,7 @@ public class TranslationDataSource
                 newTranslation.setHomeLanguage(cursor.getString(cursor.getColumnIndex(translationColumns[2])));
 
 
-                newTranslation.setPhrase("fr",new Phrase("fr", "no"));
+                newTranslation.setPhrase("fr", getPhraseByTranslation(newTranslation));
 
                 translationList.add(newTranslation);
 
@@ -335,6 +335,27 @@ public class TranslationDataSource
 
 
         return translationList;
+    }
+
+    //TODO: Filter this by the whatever language the user wants to see, right now it's only grabbing the first entry in the DB
+    public Phrase getPhraseByTranslation(Translation translation)
+    {
+        Phrase newPhrase = null;
+
+        Cursor cursor = database.query(MySQLiteHelper.PHRASE_TABLE,
+                phraseColumns,
+                MySQLiteHelper.PHRASE_COLUMN_ID + " = " + translation.getId(),
+                null, null, null, null);
+
+        if (cursor.moveToFirst())
+        {
+            newPhrase = new Phrase(
+                    cursor.getString(cursor.getColumnIndex(phraseColumns[2])),
+                    cursor.getString(cursor.getColumnIndex(phraseColumns[3]))
+            );
+        }
+
+        return newPhrase;
     }
 
     public List<Category> getAllCategories()

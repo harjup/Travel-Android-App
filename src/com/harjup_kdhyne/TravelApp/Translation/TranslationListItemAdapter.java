@@ -60,18 +60,20 @@ public class TranslationListItemAdapter extends ArrayAdapter<Translation>
 
             if (homeLanguageView != null)
             {
-                homeLanguageView.setText(translation.getPhrase("fr").getContent());
+                //targetLanguagePhraseView.setText(translation.getHomeLanguage());
+                homeLanguageView.setText("");
             }
 
 
             if (targetLanguagePhraseView != null)
             {
-                targetLanguagePhraseView.setText(translation.getHomeLanguage());
+                targetLanguagePhraseView.setText(translation.getPhrase("fr").getContent());
             }
 
             if (targetLanguageView != null)
             {
-                targetLanguageView.setText("fr");
+               // targetLanguageView.setText("fr");
+                 targetLanguageView.setText("");
             }
 
 
