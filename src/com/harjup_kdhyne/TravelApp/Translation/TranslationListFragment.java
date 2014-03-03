@@ -7,8 +7,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
+import com.harjup_kdhyne.TravelApp.MySQLiteHelper;
 import com.harjup_kdhyne.TravelApp.R;
 
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -19,35 +21,37 @@ import java.util.List;
 public class TranslationListFragment extends ListFragment
 {
     private TranslationListItemAdapter translationListItemAdapter;
-
-/*
-    private List<Translation> translationList = new ArrayList<Translation>() {{
-        add(new Translation(
-                1 ,
-                new ArrayList<Phrase>(){{
-                    add(new Phrase("en","milk"));
-                    add(new Phrase("fr","lait"));
-                }}));
-        add(new Translation(
-                2 ,
-                new ArrayList<Phrase>(){{
-                    add(new Phrase("en","chump"));
-                    add(new Phrase("es","chumpo"));
-                }}));
-    }};*/
+    Category currentCategory;
+    private List<Translation> translationList;
+    private TranslationDataSource myDataSource;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
+        myDataSource = new TranslationDataSource(getActivity());
+
+        try {
+            myDataSource.open();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+
+        Bundle bundle = getArguments();
+        if (bundle != null)
+        {
+            currentCategory = (Category)bundle.getSerializable("com.harjup_kdhyne.TravelApp.Category");
+            translationList = myDataSource.getTranslationsByCategory(currentCategory.getName());
+        }
+
         super.onCreate(savedInstanceState);
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
     {
-        /*translationListItemAdapter = new TranslationListItemAdapter(getActivity(), R.layout.translation_phrase_list, translationList);
+        translationListItemAdapter = new TranslationListItemAdapter(getActivity(), R.layout.translation_phrase_list, translationList);
         setListAdapter(translationListItemAdapter);
 
-*/
         View myView = inflater.inflate(R.layout.translation_phrase_list, container, false);
 
 

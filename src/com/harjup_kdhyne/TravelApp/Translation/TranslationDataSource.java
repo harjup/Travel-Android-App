@@ -8,10 +8,7 @@ import android.util.Log;
 import com.harjup_kdhyne.TravelApp.MySQLiteHelper;
 
 import java.sql.SQLException;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 /**
  * Created by Paul on 3/1/14.
@@ -251,17 +248,6 @@ public class TranslationDataSource
     }
 
 
-    public Translation[] getTranslations(){
-        return null;
-    }
-
-    public Category[] getAllCategories()
-    {
-        return null;
-    }
-
-
-
 
     //TODO: Refactor and shove in the save methods
     Boolean checkIfExists(String tableName, String[] tableColumns, String key, String value){
@@ -271,6 +257,114 @@ public class TranslationDataSource
                 key + " = " + value,
                 null, null, null, null).moveToFirst();
     }
+
+
+
+    public List<Translation> getTranslationsByCategory(String categoryName){
+        final String categoryTable =  MySQLiteHelper.CATEGORY_TABLE;
+        final String categoryIdColumn =  MySQLiteHelper.CATEGORY_COLUMN_ID;
+        final String categoryNameColumn =  MySQLiteHelper.CATEGORY_COLUMN_NAME;
+
+        final long categoryId;
+
+        Cursor cursor = database.query(categoryTable,
+                categoryColumns,
+                categoryNameColumn + " = " + "'" + categoryName + "'",
+                null, null, null, null);
+
+        if(cursor.moveToFirst())
+        {
+            categoryId = cursor.getLong(cursor.getColumnIndex(categoryColumns[0]));
+        }
+        else {return null;}
+
+        //Get all the translations to display by ID
+        cursor = database.query(MySQLiteHelper.TRANSLATION_TO_CATEGORY_TABLE,
+                translationCategoryMapColumns,
+                MySQLiteHelper.TRANSLATIONS_TO_CATEGORY_COLUMN_CATEGORY_ID + " = " +  categoryId,
+                null, null, null, null);
+
+        ArrayList<Long> translationIds = new ArrayList<Long>();
+        if (cursor.moveToFirst())
+        {
+            while (!cursor.isAfterLast())
+            {
+                translationIds.add(cursor.getLong(cursor.getColumnIndex(translationCategoryMapColumns[1])));
+                cursor.moveToNext();
+            }
+        } else {return null;}
+
+        //Turn the set of ids into a comma separated string
+        StringBuilder ids = new StringBuilder();
+        ids.append("(");
+        String prefix = "";
+        for (Long id : translationIds)
+        {
+            ids.append(prefix);
+            prefix = ", ";
+            ids.append(String.valueOf(id));
+        }
+        ids.append(")");
+
+        cursor = database.query(MySQLiteHelper.TRANSLATIONS_TABLE,
+                translationColumns,
+                MySQLiteHelper.TRANSLATIONS_COLUMN_ID + " IN " + ids,
+                null, null, null, null);
+
+        List<Translation> translationList = new ArrayList<Translation>();
+        if (cursor.moveToFirst())
+        {
+            while (!cursor.isAfterLast())
+            {
+                //translationList
+
+                Translation newTranslation = new Translation();
+                newTranslation.setId(cursor.getLong(cursor.getColumnIndex(translationColumns[0])));
+                newTranslation.setHomePhrase(cursor.getString(cursor.getColumnIndex(translationColumns[1])));
+                newTranslation.setHomeLanguage(cursor.getString(cursor.getColumnIndex(translationColumns[2])));
+
+
+                newTranslation.setPhrase("fr",new Phrase("fr", "no"));
+
+                translationList.add(newTranslation);
+
+                cursor.moveToNext();
+            }
+        }
+
+
+
+        return translationList;
+    }
+
+    public List<Category> getAllCategories()
+    {
+        final String myTable =  MySQLiteHelper.CATEGORY_TABLE;
+        List<Category> categoryList = new ArrayList<Category>();
+
+        Cursor cursor = database.query(myTable,
+                categoryColumns,
+                null,
+                null, null, null, null);
+
+
+        if (cursor.moveToFirst())
+        {
+            while (!cursor.isAfterLast())
+            {
+                Category newCategory = new Category(
+                        cursor.getLong(cursor.getColumnIndex(categoryColumns[0])),
+                        cursor.getString(cursor.getColumnIndex(categoryColumns[1])));
+
+                categoryList.add(newCategory);
+                cursor.moveToNext();
+            }
+
+        }
+        return categoryList;
+    }
+
+
 
 
 

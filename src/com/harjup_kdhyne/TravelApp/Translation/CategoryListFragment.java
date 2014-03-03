@@ -9,6 +9,7 @@ import android.view.ViewGroup;
 import android.widget.ListView;
 import com.harjup_kdhyne.TravelApp.R;
 
+import java.sql.SQLException;
 import java.util.*;
 
 /**
@@ -17,8 +18,9 @@ import java.util.*;
  */
 public class CategoryListFragment extends ListFragment
 {
+    TranslationDataSource myDataSource;
     private CategoryListItemAdapter categoryListItemAdapter;
-
+    final String CATEGORY_ARG = "com.harjup_kdhyne.TravelApp.Category";
 
     private List<Category> categoryList = new ArrayList<Category>() {{
         add(new Category(1,"Common"));
@@ -30,6 +32,22 @@ public class CategoryListFragment extends ListFragment
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        myDataSource = new TranslationDataSource(getActivity());
+
+        try {
+            myDataSource.open();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        categoryList = myDataSource.getAllCategories();
+    }
+
+    @Override
+    public void onDestroyView() {
+        myDataSource.close();
+        super.onDestroyView();
     }
 
     @Override
@@ -59,7 +77,7 @@ public class CategoryListFragment extends ListFragment
         TranslationListFragment translationListFragment = new TranslationListFragment();
 
         Bundle args = new Bundle();
-        args.putSerializable("com.harjup_kdhyne.TravelApp.Category", category);
+        args.putSerializable(CATEGORY_ARG, category);
         translationListFragment.setArguments(args);
 
         FragmentTransaction ft = getFragmentManager().beginTransaction();
