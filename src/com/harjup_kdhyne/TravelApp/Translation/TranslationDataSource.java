@@ -4,6 +4,7 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.util.Log;
 import com.harjup_kdhyne.TravelApp.MySQLiteHelper;
 
 import java.sql.SQLException;
@@ -52,6 +53,7 @@ public class TranslationDataSource
     public void open() throws SQLException
     {
         database = dbHelper.getWritableDatabase();
+        CheckDBContents();
     }
 
     public void close(){
@@ -71,7 +73,7 @@ public class TranslationDataSource
         //Check if the translation exists in the table
         Cursor cursor = database.query(MySQLiteHelper.TRANSLATIONS_TABLE,
                 translationColumns,
-                MySQLiteHelper.TRANSLATIONS_COLUMN_ID + " = " + translationId,
+                MySQLiteHelper.TRANSLATIONS_COLUMN_HOMEPHRASE + " = " + "'" + translation.getHomePhrase() + "'",
                 null, null, null, null);
 
         //If translation exists
@@ -79,16 +81,25 @@ public class TranslationDataSource
         {
             database.update(MySQLiteHelper.TRANSLATIONS_TABLE,
                     values,
-                    MySQLiteHelper.NOTES_COLUMN_ID + "=" + translation.getId(),
+                    //MySQLiteHelper.NOTES_COLUMN_ID + "=" + translation.getId(),
+                    MySQLiteHelper.TRANSLATIONS_COLUMN_HOMEPHRASE + " = " + "'" + translation.getHomePhrase() + "'",
                     null);
+
+            //Set the translation object's Id to the Id of the found translation in the DB
+            translationId = cursor.getLong(cursor.getColumnIndex(translationColumns[0]));
+
         }
         else
         {
+            //Get the ID for the newly inserted translation
             translationId =
                     database.insert(MySQLiteHelper.TRANSLATIONS_TABLE,
                     null,
                     values);
+
+
         }
+        translation.setId(translationId);
 
         //Iterate over the phrase objects held by the translation
         //and store them in their respective table
@@ -97,17 +108,29 @@ public class TranslationDataSource
         while(it.hasNext())
         {
             Map.Entry pair = (Map.Entry)it.next();
-            savePhrase((Phrase)pair.getValue());
+            Phrase phraseToSave = (Phrase)pair.getValue();
+            phraseToSave.setTranslationId(translationId);
+            savePhrase(phraseToSave);
             it.remove();
         }
 
         //For each category in the list...
         List<Category> categoryList = translation.getCategories();
+
+        //We are refreshing the translation-category map to reflect the set in the translation object,
+        //So drop all the current map rows for the current translation object...
+        database.delete(
+                MySQLiteHelper.TRANSLATION_TO_CATEGORY_TABLE,
+                translationCategoryMapColumns[1] + " =?",
+                new String[]{String.valueOf(translationId)}
+                );
+
+        //And then add new rows reflecting the currently selected categories
         for(Iterator<Category> iterator = categoryList.iterator(); iterator.hasNext();)
         {
             Category category = iterator.next();
-            saveCategory(category);
-            addTranslationCategoryMap(translationId, category.getId());
+            long categoryId = saveCategory(category);
+            addTranslationCategoryMap(translationId, categoryId);
         }
     }
 
@@ -121,67 +144,97 @@ public class TranslationDataSource
 
         long phraseId = phrase.getId();
 
-        Boolean phraseExists =
-                checkIfExists(MySQLiteHelper.PHRASE_TABLE,
+        //We are looking for a phrase that is in the given language AND is associated with the correct phrase
+        //By ignoring a check on context we can update the content value if it changes
+        String whereStatement =
+                "(" + MySQLiteHelper.PHRASE_COLUMN_LANGUAGE + " = " + "'" + phrase.getLanguage() + "') AND"
+                + "(" + MySQLiteHelper.PHRASE_COLUMN_TRANSLATION_ID + " = " + phrase.getTranslationId() + ")";
+
+
+        Cursor cursor = database.query(MySQLiteHelper.PHRASE_TABLE,
+                phraseColumns,
+                whereStatement,
+                null, null, null, null);
+
+        Boolean phraseExists = cursor.moveToFirst();
+                /*checkIfExists(MySQLiteHelper.PHRASE_TABLE,
                 phraseColumns,
                 MySQLiteHelper.PHRASE_COLUMN_ID,
-                String.valueOf(phraseId));
+                String.valueOf(phraseId));*/
 
         if (phraseExists)
         {
-            database.update(MySQLiteHelper.TRANSLATIONS_TABLE,
+            database.update(MySQLiteHelper.PHRASE_TABLE,
                     values,
-                    MySQLiteHelper.NOTES_COLUMN_ID + "=" + phraseId,
+                    whereStatement,
                     null);
         }
         else
         {
-            database.insert(MySQLiteHelper.TRANSLATIONS_TABLE,
+            database.insert(MySQLiteHelper.PHRASE_TABLE,
                     null,
                     values);
         }
 
     }
 
-    public void saveCategory(Category category)
+    public long saveCategory(Category category)
     {
         final String myTable =  MySQLiteHelper.CATEGORY_TABLE;
-        final String myIdColumn =  MySQLiteHelper.CATEGORY_COLUMN_ID;
+        final String myNameColumn =  MySQLiteHelper.CATEGORY_COLUMN_NAME;
 
         ContentValues values = new ContentValues();
         values.put(MySQLiteHelper.CATEGORY_COLUMN_NAME, category.getName());
 
 
+        String categoryName = category.getName();
         long categoryId = category.getId();
 
-        Boolean categoryExists =
+       /* Boolean categoryExists =
                 checkIfExists(myTable,
                         categoryColumns,
-                        myIdColumn,
-                        String.valueOf(categoryId));
+                        myNameColumn,
+                        String.valueOf(categoryName));*/
+
+
+
+        Cursor c = database.query(myTable,
+                categoryColumns,
+                myNameColumn + " = " + "'" + categoryName + "'",
+                null, null, null, null);
+
+        Boolean categoryExists = c.moveToFirst();
 
         if (categoryExists)
         {
             database.update(myTable,
                     values,
-                    myIdColumn + "=" + categoryId,
+                    myNameColumn + "=" + "'" + categoryName + "'",
                     null);
+
+            categoryId = c.getLong(c.getColumnIndex(categoryColumns[0]));
         }
         else
         {
-            database.insert(myTable,
+            categoryId =
+                    database.insert(myTable,
                     null,
                     values);
         }
+
+        return categoryId;
     }
 
     public void addTranslationCategoryMap(long translationId, long categoryId)
     {
         final String myTable =  MySQLiteHelper.TRANSLATION_TO_CATEGORY_TABLE;
 
+
+
+
         Boolean entryExists = database.query(myTable,
                 translationCategoryMapColumns,
-                "(" + translationCategoryMapColumns[1] + " = " + translationId + ", "
+                "(" + translationCategoryMapColumns[1] + " = " + translationId + ") AND ("
                 + translationCategoryMapColumns[2] + " = " + categoryId + ")",
                 null, null, null, null).moveToFirst();
 
@@ -197,11 +250,93 @@ public class TranslationDataSource
         }
     }
 
+
+    public Translation[] getTranslations(){
+        return null;
+    }
+
+    public Category[] getAllCategories()
+    {
+        return null;
+    }
+
+
+
+
+    //TODO: Refactor and shove in the save methods
     Boolean checkIfExists(String tableName, String[] tableColumns, String key, String value){
         //Check if the entry exists in the table
         return database.query(tableName,
                 tableColumns,
                 key + " = " + value,
                 null, null, null, null).moveToFirst();
+    }
+
+
+
+    void CheckDBContents(){
+        Log.d("database", "Checking db contents...");
+        Cursor cursor = database.rawQuery("select * from " + MySQLiteHelper.TRANSLATIONS_TABLE, null);
+        if (cursor .moveToFirst()) {
+
+            while (!cursor.isAfterLast()) {
+
+                for (int i = 0; i < translationColumns.length; i++)
+                {
+                    String name = cursor.getString(cursor
+                            .getColumnIndex(translationColumns[i]));
+                    Log.d("database", "Translation column: " + translationColumns[i] + " -- "  + name);
+                }
+                cursor.moveToNext();
+            }
+        }
+
+        cursor = database.rawQuery("select * from " + MySQLiteHelper.PHRASE_TABLE, null);
+        if (cursor .moveToFirst()) {
+
+            while (!cursor.isAfterLast()) {
+
+                for (int i = 0; i < phraseColumns.length; i++)
+                {
+                    String name = cursor.getString(cursor
+                            .getColumnIndex(phraseColumns[i]));
+                    Log.d("database", "Phrase column: " + phraseColumns[i] + " -- "  + name);
+                }
+                cursor.moveToNext();
+            }
+        }
+
+        cursor = database.rawQuery("select * from " + MySQLiteHelper.CATEGORY_TABLE, null);
+        if (cursor .moveToFirst()) {
+
+            while (!cursor.isAfterLast()) {
+
+                for (int i = 0; i < categoryColumns.length; i++)
+                {
+                    String name = cursor.getString(cursor
+                            .getColumnIndex(categoryColumns[i]));
+                    Log.d("database", "Category column: " + categoryColumns[i] + " -- "  + name);
+                }
+                cursor.moveToNext();
+            }
+        }
+
+        cursor = database.rawQuery("select * from " + MySQLiteHelper.TRANSLATION_TO_CATEGORY_TABLE, null);
+        if (cursor .moveToFirst()) {
+
+            while (!cursor.isAfterLast()) {
+
+                for (int i = 0; i < translationCategoryMapColumns.length; i++)
+                {
+                    String name = cursor.getString(cursor
+                            .getColumnIndex(translationCategoryMapColumns[i]));
+                    Log.d("database", "Translation-Category column: " + translationCategoryMapColumns[i] + " -- "  + name);
+                }
+                cursor.moveToNext();
+            }
+        }
+
+        Log.d("database", "Finished checking db contents...");
+
     }
 }

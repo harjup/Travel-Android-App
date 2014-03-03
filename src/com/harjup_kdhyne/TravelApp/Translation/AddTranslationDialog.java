@@ -10,13 +10,13 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.CheckBox;
-import android.widget.CompoundButton;
-import android.widget.TextView;
+import android.view.*;
+import android.widget.*;
 import com.harjup_kdhyne.TravelApp.R;
+
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by Paul on 2/23/14.
@@ -24,6 +24,8 @@ import com.harjup_kdhyne.TravelApp.R;
  */
 public class AddTranslationDialog extends DialogFragment
 {
+    TranslationDataSource myDataSource;
+    Translation myTranslation = new Translation();
     String homePhrase = "";
     String homeLanguage;
     String targetPhrase = "";
@@ -50,10 +52,19 @@ public class AddTranslationDialog extends DialogFragment
     }
 
     @Override
-    public void onCreate(Bundle savedInstanceState) {
+    public void onCreate(Bundle savedInstanceState)
+    {
+        myDataSource = new TranslationDataSource(getActivity());
+        try
+        {
+            myDataSource.open();
+        }
+        catch (SQLException e)
+        {
+            e.printStackTrace();
+        }
+
         super.onCreate(savedInstanceState);
-
-
     }
 
     @Override
@@ -65,6 +76,11 @@ public class AddTranslationDialog extends DialogFragment
         targetPhrase = getArguments().getString("targetPhrase");
         targetLanguage = getArguments().getString("targetLanguage");
 
+        myTranslation.setHomePhrase(homePhrase);
+        myTranslation.setHomeLanguage(homeLanguage);
+        //etc
+
+
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         builder.setTitle("asdf");
         builder.setNegativeButton("Nop", null);
@@ -72,7 +88,8 @@ public class AddTranslationDialog extends DialogFragment
         builder.setPositiveButton("Pon", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
-                FragmentManager fm = getFragmentManager();
+
+                /*FragmentManager fm = getFragmentManager();
                 FragmentTransaction ft = fm.beginTransaction();
                 Fragment prev = getFragmentManager().findFragmentByTag("newCategory");
                 if (prev != null) {
@@ -82,7 +99,12 @@ public class AddTranslationDialog extends DialogFragment
 
                 // Create and show the dialog.
                 NewCategoryDialog newFragment = new NewCategoryDialog();
-                newFragment.show(fm, "newCategory");
+                newFragment.show(fm, "newCategory");*/
+
+                //Package up and save/update the current translation object with all its categories and phrases
+                myTranslation.setPhrase(targetLanguage, new Phrase(targetLanguage, targetPhrase));
+                myDataSource.saveTranslation(myTranslation);
+                dialogInterface.dismiss();
             }
         });
 
@@ -93,10 +115,62 @@ public class AddTranslationDialog extends DialogFragment
 
         myTextView.setText(homePhrase + " - " + targetPhrase);
 
+
+        final Category[] categoryList = new Category[] {
+            new Category(-1, "Food"),
+            new Category(-1, "Drink"),
+            new Category(-1, "Common")
+        };
+
+     /*   String[] categoryList = new String[] {
+                "Food",
+                "Drink",
+                "Common",
+                "Food",
+                "Drink",
+                "Common",
+                "Food",
+                "Drink",
+                "Common",
+                "Food",
+                "Drink",
+                "Common"
+        };*/
+
+        final ListView myListView = (ListView) myView.findViewById(R.id.setCategoryListView);
+        final ArrayAdapter<Category> adapter = new ArrayAdapter<Category>(
+                getActivity(),
+                android.R.layout.simple_list_item_multiple_choice,
+                categoryList);
+        myListView.setAdapter(adapter);
+        //myListView.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
+        myListView.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
+
+
+        myListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                if(myListView.isItemChecked(i))
+                {
+                    myTranslation.addCategory(categoryList[i]);
+                }
+                else
+                {
+                    myTranslation.removeCategory(categoryList[i]);
+                }
+            }
+        });
+
+
         builder.setView(myView);
         return builder.create();
     }
 
+    @Override
+    public void onDestroyView() {
+        myDataSource.close();
+        super.onDestroyView();
+    }
 
     void initDialog()
     {

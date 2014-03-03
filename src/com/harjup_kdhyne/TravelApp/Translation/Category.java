@@ -33,5 +33,7 @@ public class Category implements Serializable
         this.name = name;
     }
 
-
+    //A list view will display the output of "toString" for the objects it holds
+    //By implementing our own toString we can manipulate what appears in the listView
+    public String toString(){return name;}
 }

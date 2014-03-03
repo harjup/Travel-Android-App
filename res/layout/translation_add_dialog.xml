@@ -20,7 +20,7 @@
     <ListView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/categoryListView"
+            android:id="@+id/setCategoryListView"
             android:layout_weight=".5"/>
     <Button
             android:layout_width="fill_parent"

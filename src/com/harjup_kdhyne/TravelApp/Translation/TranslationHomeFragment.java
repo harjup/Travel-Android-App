@@ -39,7 +39,6 @@ public class TranslationHomeFragment extends Fragment
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
     {
-        Log.d("lifeCycle", "TranslationHomeOnCreate called");
         View myView = inflater.inflate(R.layout.translation_home, container, false);
 
         final EditText inputField = (EditText) myView.findViewById(R.id.tranlationInputEditText);

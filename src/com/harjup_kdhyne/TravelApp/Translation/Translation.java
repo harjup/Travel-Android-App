@@ -1,6 +1,7 @@
 package com.harjup_kdhyne.TravelApp.Translation;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
@@ -13,8 +14,8 @@ public class Translation implements Serializable
     private long id = -1;       //id for insertion in the database
     private String homePhrase;
     private String homeLanguage;
-    private HashMap<String, Phrase> phraseHashMap;       //Title/short description the note contains
-    private List<Category> categories;       //Title/short description the note contains
+    private HashMap<String, Phrase> phraseHashMap = new HashMap<String, Phrase>();       //Title/short description the note contains
+    private List<Category> categories = new ArrayList<Category>();       //Title/short description the note contains
     private String imageId;
 
     public Translation(){}
@@ -69,6 +70,35 @@ public class Translation implements Serializable
     public List<Category> getCategories() {
         return categories;
     }
+
+    //Return whether it was added
+    public Boolean addCategory(Category _category){
+        for (Category category : categories)
+        {
+            if (category.getName() == _category.getName())
+            {
+                return false;
+            }
+        }
+        categories.add(_category);
+        return true;
+    }
+
+    //Return whether it was removed
+    public Boolean removeCategory(Category _category){
+        Boolean existsInList = false;
+
+        for (Category category : categories)
+        {
+            if (category.getName() == _category.getName())
+            {
+                categories.remove(category);
+                return true;
+            }
+        }
+        return false;
+    }
+
 
     public void setCategories(List<Category> categories) {
         this.categories = categories;
