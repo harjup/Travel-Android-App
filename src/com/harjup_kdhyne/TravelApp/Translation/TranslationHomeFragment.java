@@ -136,6 +136,8 @@ public class TranslationHomeFragment extends Fragment
 
 
                 // Create and show the dialog.
+                Translation translationToAdd = new Translation(-1, stringToTranslate, translatedString);
+                translationToAdd.setPhrase("fr", translatedString);
                 AddTranslationDialog newFragment = AddTranslationDialog.newInstance(stringToTranslate, "en", translatedString, "fr");
                 //newFragment.setArguments(INPUT_TEXT_ID, stringToTranslate);
 

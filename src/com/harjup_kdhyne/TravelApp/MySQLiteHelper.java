@@ -156,7 +156,6 @@ public class MySQLiteHelper extends SQLiteOpenHelper
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
     }
 
-    //TODO: Create tables for other data
     @Override
     public void onCreate(SQLiteDatabase database) {
         database.execSQL(PURCHASES_TABLE_CREATE);
@@ -168,7 +167,6 @@ public class MySQLiteHelper extends SQLiteOpenHelper
         database.execSQL(NOTES_TABLE_CREATE);
     }
 
-    //TODO: Run table drops for other data
     @Override
     public void onUpgrade(SQLiteDatabase database, int i, int i2) {
         database.execSQL("DROP TABLE IF EXISTS " + PURCHASES_TABLE);

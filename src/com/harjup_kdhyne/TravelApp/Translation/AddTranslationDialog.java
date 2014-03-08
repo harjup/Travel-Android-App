@@ -1,22 +1,15 @@
 package com.harjup_kdhyne.TravelApp.Translation;
 
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
-import android.util.Log;
 import android.view.*;
 import android.widget.*;
 import com.harjup_kdhyne.TravelApp.R;
 
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Created by Paul on 2/23/14.
@@ -71,6 +64,7 @@ public class AddTranslationDialog extends DialogFragment
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         //super.onCreateDialog(savedInstanceState);
 
+
         homePhrase = getArguments().getString("homePhrase");
         homeLanguage = getArguments().getString("homeLanguage");
         targetPhrase = getArguments().getString("targetPhrase");
@@ -102,14 +96,14 @@ public class AddTranslationDialog extends DialogFragment
                 newFragment.show(fm, "newCategory");*/
 
                 //Package up and save/update the current translation object with all its categories and phrases
-                myTranslation.setPhrase(targetLanguage, new Phrase(targetLanguage, targetPhrase));
+                myTranslation.setPhrase(targetLanguage, targetPhrase);
                 myDataSource.saveTranslation(myTranslation);
                 dialogInterface.dismiss();
             }
         });
 
 
-        View myView = getActivity().getLayoutInflater().inflate(R.layout.translation_add_dialog, null);
+        View myView = getActivity().getLayoutInflater().inflate(R.layout.translation_add_phrase_dialog, null);
         assert myView != null;
         final TextView myTextView = (TextView) myView.findViewById(R.id.translationAddText);
 

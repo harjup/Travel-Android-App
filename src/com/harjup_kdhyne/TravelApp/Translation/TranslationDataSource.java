@@ -73,22 +73,20 @@ public class TranslationDataSource
                 MySQLiteHelper.TRANSLATIONS_COLUMN_HOMEPHRASE + " = " + "'" + translation.getHomePhrase() + "'",
                 null, null, null, null);
 
-        //If translation exists
+        //If translation exists (search by phrase), get its id
         if (cursor.moveToFirst())
         {
             database.update(MySQLiteHelper.TRANSLATIONS_TABLE,
                     values,
-                    //MySQLiteHelper.NOTES_COLUMN_ID + "=" + translation.getId(),
                     MySQLiteHelper.TRANSLATIONS_COLUMN_HOMEPHRASE + " = " + "'" + translation.getHomePhrase() + "'",
                     null);
 
             //Set the translation object's Id to the Id of the found translation in the DB
             translationId = cursor.getLong(cursor.getColumnIndex(translationColumns[0]));
-
         }
+        //If translation isn't found in db, insert it into the database and get its id
         else
         {
-            //Get the ID for the newly inserted translation
             translationId =
                     database.insert(MySQLiteHelper.TRANSLATIONS_TABLE,
                     null,
@@ -100,12 +98,13 @@ public class TranslationDataSource
 
         //Iterate over the phrase objects held by the translation
         //and store them in their respective table
-        Set<Map.Entry<String,Phrase>> set = translation.getPhraseHashMap().entrySet();
-        Iterator it = set.iterator();
+        //Set<Map.Entry<String,String>> set = translation.getPhraseHashMap().entrySet();
+        List<Phrase> phraseList = translation.getPhraseList();
+        Iterator it = phraseList.iterator();
         while(it.hasNext())
         {
-            Map.Entry pair = (Map.Entry)it.next();
-            Phrase phraseToSave = (Phrase)pair.getValue();
+            Phrase phraseToSave = (Phrase)it.next();
+
             phraseToSave.setTranslationId(translationId);
             savePhrase(phraseToSave);
             it.remove();
@@ -141,8 +140,8 @@ public class TranslationDataSource
 
         long phraseId = phrase.getId();
 
-        //We are looking for a phrase that is in the given language AND is associated with the correct phrase
-        //By ignoring a check on context we can update the content value if it changes
+        //We are looking for a phrase that is in the given language AND is associated with the correct translation
+        //By ignoring a check on content we can update the content value if it changes
         String whereStatement =
                 "(" + MySQLiteHelper.PHRASE_COLUMN_LANGUAGE + " = " + "'" + phrase.getLanguage() + "') AND"
                 + "(" + MySQLiteHelper.PHRASE_COLUMN_TRANSLATION_ID + " = " + phrase.getTranslationId() + ")";
@@ -323,8 +322,9 @@ public class TranslationDataSource
                 newTranslation.setHomePhrase(cursor.getString(cursor.getColumnIndex(translationColumns[1])));
                 newTranslation.setHomeLanguage(cursor.getString(cursor.getColumnIndex(translationColumns[2])));
 
-
-                newTranslation.setPhrase("fr", getPhraseByTranslation(newTranslation));
+                Phrase newPhrase = getPhraseByTranslation(newTranslation);
+                //newTranslation.setPhrase(newPhrase.getLanguage(), newPhrase.getContent());
+                newTranslation.setPhrase(newPhrase);
 
                 translationList.add(newTranslation);
 
@@ -336,6 +336,26 @@ public class TranslationDataSource
 
         return translationList;
     }
+
+
+    public List<Long> getCategoryIdsByTranslationId(Long translationId)
+    {
+        List<Category> myCategory = new ArrayList<Category>();
+
+        Cursor cursor = database.query(MySQLiteHelper.TRANSLATION_TO_CATEGORY_TABLE,
+                translationCategoryMapColumns,
+                MySQLiteHelper.TRANSLATIONS_TO_CATEGORY_COLUMN_TRANSLATION_ID + " = " + translationId,
+                null, null, null, null);
+
+        List<Long> categoryIdList = new ArrayList<Long>();
+        if (cursor.moveToFirst())
+        {
+            categoryIdList.add(cursor.getLong(cursor.getColumnIndex(translationCategoryMapColumns[2])));
+        }
+
+        return categoryIdList;
+    }
+
 
     //TODO: Filter this by the whatever language the user wants to see, right now it's only grabbing the first entry in the DB
     public Phrase getPhraseByTranslation(Translation translation)
