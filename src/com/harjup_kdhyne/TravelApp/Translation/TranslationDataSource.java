@@ -16,6 +16,34 @@ import java.util.*;
  */
 public class TranslationDataSource
 {
+    private static TranslationDataSource instance = null;
+    public static TranslationDataSource getInstance(Context context){
+        if (instance == null){
+            instance = new TranslationDataSource(context.getApplicationContext());
+        }
+        return instance;
+    }
+
+    protected TranslationDataSource(Context context){
+        dbHelper = new MySQLiteHelper(context);
+        try {
+            open();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void open() throws SQLException
+    {
+        database = dbHelper.getWritableDatabase();
+        CheckDBContents();
+    }
+
+    public void close(){
+        dbHelper.close();
+    }
+
+
     private SQLiteDatabase database;
     private MySQLiteHelper dbHelper;
     private String[] translationColumns = {
@@ -43,19 +71,6 @@ public class TranslationDataSource
             MySQLiteHelper.CATEGORY_COLUMN_NAME
     };
 
-    public TranslationDataSource(Context context){
-        dbHelper = new MySQLiteHelper(context);
-    }
-
-    public void open() throws SQLException
-    {
-        database = dbHelper.getWritableDatabase();
-        CheckDBContents();
-    }
-
-    public void close(){
-        dbHelper.close();
-    }
 
     public void saveTranslation(Translation translation)
     {

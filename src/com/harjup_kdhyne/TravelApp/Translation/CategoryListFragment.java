@@ -33,21 +33,8 @@ public class CategoryListFragment extends ListFragment
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        myDataSource = new TranslationDataSource(getActivity());
-
-        try {
-            myDataSource.open();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-
+        myDataSource = TranslationDataSource.getInstance(getActivity());
         categoryList = myDataSource.getAllCategories();
-    }
-
-    @Override
-    public void onDestroyView() {
-        myDataSource.close();
-        super.onDestroyView();
     }
 
     @Override

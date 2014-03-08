@@ -27,7 +27,7 @@ public class TranslationListFragment extends ListFragment
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
-        myDataSource = new TranslationDataSource(getActivity());
+        myDataSource = TranslationDataSource.getInstance(getActivity());
 
         try {
             myDataSource.open();
