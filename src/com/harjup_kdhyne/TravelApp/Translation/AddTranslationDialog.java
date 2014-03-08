@@ -47,16 +47,7 @@ public class AddTranslationDialog extends DialogFragment
     @Override
     public void onCreate(Bundle savedInstanceState)
     {
-        myDataSource = new TranslationDataSource(getActivity());
-        try
-        {
-            myDataSource.open();
-        }
-        catch (SQLException e)
-        {
-            e.printStackTrace();
-        }
-
+        myDataSource = TranslationDataSource.getInstance(getActivity());
         super.onCreate(savedInstanceState);
     }
 

@@ -19,6 +19,8 @@ import com.harjup_kdhyne.TravelApp.R;
 import com.memetix.mst.language.Language;
 import com.memetix.mst.translate.Translate;
 
+import java.sql.SQLException;
+
 /**
  * Created by Paul on 2/10/14.
  * Home page of translation tab
@@ -27,6 +29,8 @@ import com.memetix.mst.translate.Translate;
 
 public class TranslationHomeFragment extends Fragment
 {
+    TranslationDataSource myDataSource;
+
     final String INPUT_TEXT_ID = "STRING_TO_TRANSLATE";
     final String OUTPUT_TEXT_ID = "TRANSLATED_STRING";
 
@@ -35,6 +39,13 @@ public class TranslationHomeFragment extends Fragment
     final String clientSecret = "rApbkdNvepN7+Lp1QAsve6b4xHx+/cXX4UJKksuivSE=";
     String stringToTranslate;
     String translatedString;
+
+    @Override
+    public void onCreate(Bundle savedInstanceState)
+    {
+        myDataSource = TranslationDataSource.getInstance(getActivity());
+        super.onCreate(savedInstanceState);
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
