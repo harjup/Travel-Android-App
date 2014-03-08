@@ -146,10 +146,17 @@ public class TranslationHomeFragment extends Fragment
                 ft.addToBackStack(null);
 
 
+                Translation translationToAdd = myDataSource.getTranslationByHomePhrase(stringToTranslate);
+
+                if (translationToAdd == null)
+                {
+                    translationToAdd = new Translation(-1, stringToTranslate, translatedString);
+                    translationToAdd.setPhrase("fr", translatedString);
+                }
+
                 // Create and show the dialog.
-                Translation translationToAdd = new Translation(-1, stringToTranslate, translatedString);
-                translationToAdd.setPhrase("fr", translatedString);
-                AddTranslationDialog newFragment = AddTranslationDialog.newInstance(stringToTranslate, "en", translatedString, "fr");
+                AddTranslationDialog newFragment = AddTranslationDialog.newInstance(translationToAdd);
+                //AddTranslationDialog newFragment = AddTranslationDialog.newInstance(stringToTranslate, "en", translatedString, "fr");
                 //newFragment.setArguments(INPUT_TEXT_ID, stringToTranslate);
 
                 newFragment.show(fm, "dialog");

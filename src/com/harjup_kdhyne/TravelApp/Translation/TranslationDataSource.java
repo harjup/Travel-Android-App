@@ -273,6 +273,21 @@ public class TranslationDataSource
     }
 
 
+    public Translation getTranslationByHomePhrase(String homePhrase)
+    {
+        //Get all the translations to display by ID
+        Cursor cursor = database.query(MySQLiteHelper.TRANSLATIONS_TABLE,
+                translationColumns,
+                MySQLiteHelper.TRANSLATIONS_COLUMN_HOMEPHRASE + " = '" +  homePhrase + "'",
+                null, null, null, null);
+
+        if (cursor.moveToFirst())
+        {
+            return cursorToTranslation(cursor);
+        }
+
+        return null;
+    }
 
     public List<Translation> getTranslationsByCategory(String categoryName){
         final String categoryTable =  MySQLiteHelper.CATEGORY_TABLE;
@@ -332,7 +347,7 @@ public class TranslationDataSource
             {
                 //translationList
 
-                Translation newTranslation = new Translation();
+               /* Translation newTranslation = new Translation();
                 newTranslation.setId(cursor.getLong(cursor.getColumnIndex(translationColumns[0])));
                 newTranslation.setHomePhrase(cursor.getString(cursor.getColumnIndex(translationColumns[1])));
                 newTranslation.setHomeLanguage(cursor.getString(cursor.getColumnIndex(translationColumns[2])));
@@ -340,9 +355,10 @@ public class TranslationDataSource
                 Phrase newPhrase = getPhraseByTranslation(newTranslation);
                 //newTranslation.setPhrase(newPhrase.getLanguage(), newPhrase.getContent());
                 newTranslation.setPhrase(newPhrase);
+                newTranslation.setCategories(getCategoriesByTranslation(newTranslation));
+                translationList.add(newTranslation);*/
 
-                translationList.add(newTranslation);
-
+                translationList.add(cursorToTranslation(cursor));
                 cursor.moveToNext();
             }
         }
@@ -352,11 +368,32 @@ public class TranslationDataSource
         return translationList;
     }
 
-
-    public List<Long> getCategoryIdsByTranslationId(Long translationId)
+    public List<Category> getCategoriesByTranslation(Translation translation)
     {
-        List<Category> myCategory = new ArrayList<Category>();
+        return getCategoriesByIds(getCategoryIdsByTranslationId(translation.getId()));
+    }
 
+    private List<Category> getCategoriesByIds(List<Long> categoryIdList)
+    {
+        String idQuery = idListToQueryString(categoryIdList);
+
+
+        Cursor cursor = database.query(MySQLiteHelper.CATEGORY_TABLE,
+                categoryColumns,
+                MySQLiteHelper.CATEGORY_COLUMN_ID + " = " + idQuery,
+                null, null, null, null);
+
+        List<Category> myCategoryList = new ArrayList<Category>();
+        if (cursor.moveToFirst())
+        {
+           myCategoryList.add(cursorToCategory(cursor));
+        }
+
+        return myCategoryList;
+    }
+
+    private List<Long> getCategoryIdsByTranslationId(Long translationId)
+    {
         Cursor cursor = database.query(MySQLiteHelper.TRANSLATION_TO_CATEGORY_TABLE,
                 translationCategoryMapColumns,
                 MySQLiteHelper.TRANSLATIONS_TO_CATEGORY_COLUMN_TRANSLATION_ID + " = " + translationId,
@@ -408,11 +445,7 @@ public class TranslationDataSource
         {
             while (!cursor.isAfterLast())
             {
-                Category newCategory = new Category(
-                        cursor.getLong(cursor.getColumnIndex(categoryColumns[0])),
-                        cursor.getString(cursor.getColumnIndex(categoryColumns[1])));
-
-                categoryList.add(newCategory);
+                categoryList.add(cursorToCategory(cursor));
                 cursor.moveToNext();
             }
 
@@ -421,8 +454,41 @@ public class TranslationDataSource
     }
 
 
+    private String idListToQueryString(List<Long> idList){
+        //Turn the set of ids into a comma separated string
+        StringBuilder ids = new StringBuilder();
+        ids.append("(");
+        String prefix = "";
+        for (Long id : idList)
+        {
+            ids.append(prefix);
+            prefix = ", ";
+            ids.append(String.valueOf(id));
+        }
+        ids.append(")");
+        return ids.toString();
+    }
 
 
+    private Translation cursorToTranslation(Cursor cursor)
+    {
+        Translation newTranslation = new Translation();
+        newTranslation.setId(cursor.getLong(cursor.getColumnIndex(translationColumns[0])));
+        newTranslation.setHomePhrase(cursor.getString(cursor.getColumnIndex(translationColumns[1])));
+        newTranslation.setHomeLanguage(cursor.getString(cursor.getColumnIndex(translationColumns[2])));
+
+        newTranslation.setPhrase(getPhraseByTranslation(newTranslation));
+        newTranslation.setCategories(getCategoriesByTranslation(newTranslation));
+
+        return  newTranslation;
+    }
+
+    private Category cursorToCategory(Cursor cursor)
+    {
+        return new Category(
+            cursor.getLong(cursor.getColumnIndex(categoryColumns[0])),
+            cursor.getString(cursor.getColumnIndex(categoryColumns[1])));
+    }
 
     void CheckDBContents(){
         Log.d("database", "Checking db contents...");

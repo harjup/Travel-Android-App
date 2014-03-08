@@ -10,6 +10,8 @@ import android.widget.*;
 import com.harjup_kdhyne.TravelApp.R;
 
 import java.sql.SQLException;
+import java.util.Iterator;
+import java.util.List;
 
 /**
  * Created by Paul on 2/23/14.
@@ -39,6 +41,18 @@ public class AddTranslationDialog extends DialogFragment
         return addTranslationDialog;
     }
 
+    public static AddTranslationDialog newInstance(Translation translation)
+    {
+        AddTranslationDialog addTranslationDialog = new AddTranslationDialog();
+        //Set any arguments for the dialog here
+        Bundle args = new Bundle();
+        args.putSerializable("translation", translation);
+        addTranslationDialog.setArguments(args);
+
+
+        return addTranslationDialog;
+    }
+
 
     public AddTranslationDialog() {
 //        super();
@@ -55,15 +69,24 @@ public class AddTranslationDialog extends DialogFragment
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         //super.onCreateDialog(savedInstanceState);
 
+        myTranslation = (Translation)getArguments().getSerializable("translation");
+        homeLanguage = myTranslation.getHomeLanguage();
+        homePhrase = myTranslation.getHomePhrase();
+        targetLanguage = "fr";
+        targetPhrase = myTranslation.getPhraseContent("fr");
 
-        homePhrase = getArguments().getString("homePhrase");
-        homeLanguage = getArguments().getString("homeLanguage");
-        targetPhrase = getArguments().getString("targetPhrase");
-        targetLanguage = getArguments().getString("targetLanguage");
 
-        myTranslation.setHomePhrase(homePhrase);
-        myTranslation.setHomeLanguage(homeLanguage);
-        //etc
+
+
+
+        /*final Category[] categoryList = new Category[] {
+                new Category(-1, "Food"),
+                new Category(-1, "Drink"),
+                new Category(-1, "Common")
+        };*/
+
+        List<Category> categories = myDataSource.getAllCategories();
+        final Category[] categoryList = categories.toArray(new Category[categories.size()]);
 
 
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
@@ -101,26 +124,6 @@ public class AddTranslationDialog extends DialogFragment
         myTextView.setText(homePhrase + " - " + targetPhrase);
 
 
-        final Category[] categoryList = new Category[] {
-            new Category(-1, "Food"),
-            new Category(-1, "Drink"),
-            new Category(-1, "Common")
-        };
-
-     /*   String[] categoryList = new String[] {
-                "Food",
-                "Drink",
-                "Common",
-                "Food",
-                "Drink",
-                "Common",
-                "Food",
-                "Drink",
-                "Common",
-                "Food",
-                "Drink",
-                "Common"
-        };*/
 
         final ListView myListView = (ListView) myView.findViewById(R.id.setCategoryListView);
         final ArrayAdapter<Category> adapter = new ArrayAdapter<Category>(
@@ -128,7 +131,6 @@ public class AddTranslationDialog extends DialogFragment
                 android.R.layout.simple_list_item_multiple_choice,
                 categoryList);
         myListView.setAdapter(adapter);
-        //myListView.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
         myListView.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
 
 
@@ -145,6 +147,23 @@ public class AddTranslationDialog extends DialogFragment
                 }
             }
         });
+
+        List<Category> translationCategories = myTranslation.getCategories();
+        //final Category[] translationCategories = translationCats.toArray(new Category[translationCats.size()]);
+
+
+        for (int i = 0; i < translationCategories.size(); i++)
+        {
+            for (int j = 0; j < categoryList.length; j++)
+            {
+                if (translationCategories.get(i).getName().equals(categoryList[j].getName()))
+                {
+                    myListView.setItemChecked(j, true);
+                }
+
+            }
+        }
+
 
 
         builder.setView(myView);
