@@ -2,7 +2,6 @@ package com.harjup_kdhyne.TravelApp.Translation;
 
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
@@ -18,8 +17,6 @@ import android.widget.TextView;
 import com.harjup_kdhyne.TravelApp.R;
 import com.memetix.mst.language.Language;
 import com.memetix.mst.translate.Translate;
-
-import java.sql.SQLException;
 
 /**
  * Created by Paul on 2/10/14.
@@ -155,8 +152,8 @@ public class TranslationHomeFragment extends Fragment
                 }
 
                 // Create and show the dialog.
-                AddTranslationDialog newFragment = AddTranslationDialog.newInstance(translationToAdd);
-                //AddTranslationDialog newFragment = AddTranslationDialog.newInstance(stringToTranslate, "en", translatedString, "fr");
+                AddPhraseDialog newFragment = AddPhraseDialog.newInstance(translationToAdd);
+                //AddPhraseDialog newFragment = AddPhraseDialog.newInstance(stringToTranslate, "en", translatedString, "fr");
                 //newFragment.setArguments(INPUT_TEXT_ID, stringToTranslate);
 
                 newFragment.show(fm, "dialog");

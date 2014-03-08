@@ -9,15 +9,13 @@ import android.view.*;
 import android.widget.*;
 import com.harjup_kdhyne.TravelApp.R;
 
-import java.sql.SQLException;
-import java.util.Iterator;
 import java.util.List;
 
 /**
  * Created by Paul on 2/23/14.
  * TODO: Write short summary of class
  */
-public class AddTranslationDialog extends DialogFragment
+public class AddPhraseDialog extends DialogFragment
 {
     TranslationDataSource myDataSource;
     Translation myTranslation = new Translation();
@@ -26,35 +24,35 @@ public class AddTranslationDialog extends DialogFragment
     String targetPhrase = "";
     String targetLanguage;
 
-    public static AddTranslationDialog newInstance(String homePhrase, String homeLanguage, String targetPhrase, String targetLanguage)
+    public static AddPhraseDialog newInstance(String homePhrase, String homeLanguage, String targetPhrase, String targetLanguage)
     {
-        AddTranslationDialog addTranslationDialog = new AddTranslationDialog();
+        AddPhraseDialog addPhraseDialog = new AddPhraseDialog();
         //Set any arguments for the dialog here
         Bundle args = new Bundle();
         args.putString("homePhrase", homePhrase);
         args.putString("homeLanguage", homeLanguage);
         args.putString("targetPhrase", targetPhrase);
         args.putString("targetLanguage", targetLanguage);
-        addTranslationDialog.setArguments(args);
+        addPhraseDialog.setArguments(args);
 
 
-        return addTranslationDialog;
+        return addPhraseDialog;
     }
 
-    public static AddTranslationDialog newInstance(Translation translation)
+    public static AddPhraseDialog newInstance(Translation translation)
     {
-        AddTranslationDialog addTranslationDialog = new AddTranslationDialog();
+        AddPhraseDialog addPhraseDialog = new AddPhraseDialog();
         //Set any arguments for the dialog here
         Bundle args = new Bundle();
         args.putSerializable("translation", translation);
-        addTranslationDialog.setArguments(args);
+        addPhraseDialog.setArguments(args);
 
 
-        return addTranslationDialog;
+        return addPhraseDialog;
     }
 
 
-    public AddTranslationDialog() {
+    public AddPhraseDialog() {
 //        super();
     }
 
@@ -106,7 +104,7 @@ public class AddTranslationDialog extends DialogFragment
                 ft.addToBackStack(null);
 
                 // Create and show the dialog.
-                NewCategoryDialog newFragment = new NewCategoryDialog();
+                EditCategoryDialog newFragment = new EditCategoryDialog();
                 newFragment.show(fm, "newCategory");*/
 
                 //Package up and save/update the current translation object with all its categories and phrases

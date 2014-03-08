@@ -11,7 +11,7 @@ import com.harjup_kdhyne.TravelApp.R;
  * Created by Paul on 2/23/14.
  * TODO: Write short summary of class
  */
-public class NewCategoryDialog extends DialogFragment
+public class EditCategoryDialog extends DialogFragment
 {
 
     @Override
@@ -20,7 +20,7 @@ public class NewCategoryDialog extends DialogFragment
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         builder.setTitle("fuff");
 
-        View myView = getActivity().getLayoutInflater().inflate(R.layout.translation_new_category, null);
+        View myView = getActivity().getLayoutInflater().inflate(R.layout.translation_edit_category_dialog, null);
         builder.setView(myView);
         return builder.create();
     }
