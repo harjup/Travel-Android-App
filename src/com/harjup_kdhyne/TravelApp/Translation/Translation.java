@@ -58,7 +58,7 @@ public class Translation implements Serializable
         return phrases;
     }
 
-    public String getPhrase(String _language){
+    public String getPhraseContent(String _language){
         //return phraseHashMap.get(_language);
 
         Iterator<Phrase> it = phrases.iterator();

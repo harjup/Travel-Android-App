@@ -67,7 +67,7 @@ public class TranslationListItemAdapter extends ArrayAdapter<Translation>
 
             if (targetLanguagePhraseView != null)
             {
-                targetLanguagePhraseView.setText(translation.getPhrase("fr"));
+                targetLanguagePhraseView.setText(translation.getPhraseContent("fr"));
             }
 
             if (targetLanguageView != null)
