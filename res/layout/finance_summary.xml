@@ -8,53 +8,83 @@
     <!--<TableLayout>-->
         <TableRow
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content" >
+                android:layout_height="wrap_content"
+                android:paddingLeft="10dp"
+                android:paddingRight="10dp">
 
             <TextView
-                    android:id="@+id/elapsedTravelLabelTextView"
+                    android:id="@+id/travelTimeLabelTextView"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:text="@string/elapsed_travel_time_label"
                     android:layout_weight="1"
-                    android:textSize="18sp"
-                    android:layout_marginBottom="@dimen/component_bottom_margin"/>
+                    android:textSize="18sp"/>
+
+            <TextView
+                    android:id="@+id/travelTimeProgressTextView"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:text=""
+                    android:layout_weight="1"
+                    android:textSize="16sp"
+                    android:gravity="center"/>
+
+        </TableRow>
+
+        <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingLeft="10dp"
+                android:paddingRight="10dp"
+                android:paddingBottom="10dp">
 
             <ProgressBar
                     android:id="@+id/travelTimeProgressBar"
                     style="?android:attr/progressBarStyleHorizontal"
                     android:layout_weight="1"
                     android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="@dimen/component_bottom_margin"
-                    android:paddingRight="10dp"
-                    android:paddingBottom="5dp"
-                    android:paddingTop="5dp"/>
+                    android:layout_height="wrap_content"/>
 
         </TableRow>
 
         <TableRow
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content" >
+                android:layout_height="wrap_content"
+                android:paddingLeft="10dp"
+                android:paddingRight="10dp">
 
             <TextView
                     android:id="@+id/budgetSpentLabelTextView"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:textSize="18sp"
                     android:text="@string/budget_spent_label"
-                    android:layout_marginBottom="@dimen/component_bottom_margin"/>
+                    android:layout_weight="1"
+                    android:textSize="18sp"/>
+
+            <TextView
+                    android:id="@+id/budgetSpentProgressTextView"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:text=""
+                    android:layout_weight="1"
+                    android:textSize="16sp"
+                    android:gravity="center"/>
+
+        </TableRow>
+
+        <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingLeft="10dp"
+                android:paddingRight="10dp"
+                android:paddingBottom="10dp">
 
             <ProgressBar
                     android:id="@+id/budgetSpentProgressBar"
                     style="?android:attr/progressBarStyleHorizontal"
                     android:layout_weight="1"
                     android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="@dimen/component_bottom_margin"
-                    android:paddingRight="10dp"
-                    android:paddingBottom="5dp"
-                    android:paddingTop="5dp"/>
+                    android:layout_height="wrap_content"/>
 
         </TableRow>
 

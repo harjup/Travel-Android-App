@@ -8,6 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 import com.harjup_kdhyne.TravelApp.R;
 import org.joda.time.DateTime;
 import org.joda.time.Days;
@@ -25,7 +26,6 @@ public class SummaryFragment extends Fragment
 
     private List<TripSettings> tripSettingsList;
     private TripSettings currentTrip;
-    private FinanceDataSource dataSource;
 
     @Override
     public void onCreate(Bundle savedInstanceState)
@@ -62,18 +62,31 @@ public class SummaryFragment extends Fragment
 
         if (myView != null)
         {
+            TextView travelTimeProgressTextView = (TextView) myView.findViewById(R.id.travelTimeProgressTextView);
+            TextView budgetSpentProgressTextView = (TextView) myView.findViewById(R.id.budgetSpentProgressTextView);
+
             ProgressBar travelTimeProgressBar = (ProgressBar) myView.findViewById(R.id.travelTimeProgressBar);
             ProgressBar budgetSpentProgressBar = (ProgressBar) myView.findViewById(R.id.budgetSpentProgressBar);
 
+            //Fill the travelProgress views with data
             if (currentTrip != null)
-                travelTimeProgressBar.setProgress(getTripProgress(currentTrip.getStartDate(), currentTrip.getEndDate()));
-
-            if (purchaseListFragment != null)
             {
-                double expenses = purchaseListFragment.calculateTotalExpenses();
+                int totalDays = Days.daysBetween(currentTrip.getStartDate(), currentTrip.getEndDate()).getDays();
+                int daysTraveled = Days.daysBetween(currentTrip.getStartDate(), new DateTime()).getDays();
+                int progress = (int) Math.ceil(((double) daysTraveled / (double) totalDays) * 100);
 
+                travelTimeProgressTextView.setText(daysTraveled + " / " + totalDays + " Days");
+                travelTimeProgressBar.setProgress(progress);
+            }
+
+            //Fill the budgetSpentProgress views with data
+            if (purchaseListFragment != null && currentTrip != null)
+            {
+                double totalBudget = currentTrip.getTotalBudget();
+                double expenses = purchaseListFragment.calculateTotalExpenses();
                 Log.d("Expenses calculated", String.valueOf(expenses));
 
+                budgetSpentProgressTextView.setText(expenses + " / " + totalBudget);
                 budgetSpentProgressBar.setProgress(getBudgetProgress(expenses));
             }
             else
@@ -87,10 +100,6 @@ public class SummaryFragment extends Fragment
                 @Override
                 public void onClick(View v)
                 {
-                    //This is for debug. Gets the first entry in the Trip settings table
-                    //Create a new entry if it doesn't exist
-                    //TripSettings first = tripSettingsList.get(0);
-
                     try {viewTripSettings(currentTrip);}
                     catch (Exception e) {Log.e("Exception", "Can't get trip");}
                 }
@@ -108,23 +117,12 @@ public class SummaryFragment extends Fragment
         super.onSaveInstanceState(outState);
     }
 
-    @Override
-    public void onDestroyView()
-    {
-        try { dataSource.close(); }
-        catch (Exception e) { e.printStackTrace(); }
-        super.onDestroyView();
-    }
-
     //Open a connection to the purchasesDatabase and use it to fill the tripSettingsList
     private void fillTripSettingsList()
     {
-        dataSource = new FinanceDataSource(getActivity());
+        FinanceDataSource financeDataSource = FinanceDataSource.openDbConnection(getActivity());
 
-        try {dataSource.open();}
-        catch (SQLException e) {e.printStackTrace();}
-
-        tripSettingsList = dataSource.getAllTripSettings();
+        tripSettingsList = financeDataSource.getAllTripSettings();
     }
 
     public void viewTripSettings (TripSettings tripSettings)
@@ -144,18 +142,10 @@ public class SummaryFragment extends Fragment
     }
 
     /**
-     * Returns the progression between start and end date as an int between 0 and 100
-     * @param startDate date the trip started
-     * @param endDate date the trip will end
+     * Returns the budget spent out of total budget as an int between 0 and 100
+     * @param sumTotal sum price of all purchases
      * @return progress as an int between 0 and 100
      */
-    public int getTripProgress(DateTime startDate, DateTime endDate)
-    {
-        int daysBetween = Days.daysBetween(startDate, endDate).getDays();
-        int daysTraveled = Days.daysBetween(startDate, new DateTime()).getDays();
-        return (int) Math.ceil(((double) daysTraveled / (double) daysBetween) * 100);
-    }
-
     public  int getBudgetProgress(double sumTotal)
     {
         return (int) Math.ceil((sumTotal / currentTrip.getTotalBudget()) * 100);

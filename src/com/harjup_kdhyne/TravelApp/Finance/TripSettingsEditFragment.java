@@ -28,7 +28,7 @@ import java.util.Date;
  */
 public class TripSettingsEditFragment extends Fragment
 {
-    private FinanceDataSource dataSource;
+    private FinanceDataSource financeDataSource;
     private TripSettings currentTrip;
 
     //Keys for ID and start/end date
@@ -48,6 +48,8 @@ public class TripSettingsEditFragment extends Fragment
     @Override
     public void onCreate(Bundle savedInstanceState)
     {
+        financeDataSource = FinanceDataSource.openDbConnection(getActivity());
+
         Bundle bundle = getArguments();
         if (bundle != null)
         {
@@ -57,25 +59,9 @@ public class TripSettingsEditFragment extends Fragment
         super.onCreate(savedInstanceState);
     }
 
-    void openDbConnection()
-    {
-        dataSource = new FinanceDataSource(getActivity());
-
-        try
-        {
-            dataSource.open();
-        }
-        catch (SQLException e)
-        {
-            e.printStackTrace();
-        }
-    }
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
     {
-        openDbConnection();
-
         View myView = inflater.inflate(R.layout.finance_trip_settings_edit, container, false);
 
         if (myView != null)
@@ -105,6 +91,8 @@ public class TripSettingsEditFragment extends Fragment
                 //Get current exchange rate if timeStamp of last exchange is outdated
                 if (isExchangeOutdated(currentTrip.getExchangeRateTimeStamp()))
                 {
+                    Log.d("Exchange is outdated","Updating current exchange");
+
                     new AsyncGetExchangeRate(currentTrip.getTargetCurrency())
                     {
                         @Override
@@ -147,9 +135,9 @@ public class TripSettingsEditFragment extends Fragment
                             //Check to see if the ID hasn't been set yet (isn't in the list)
                             //Else update the changes
                             if (currentTrip.getTripID() == -1)
-                                dataSource.createTripSettings(currentTrip);
+                                financeDataSource.createTripSettings(currentTrip);
                             else
-                                dataSource.updateTripSettings(currentTrip);
+                                financeDataSource.updateTripSettings(currentTrip);
 
                             //Return to financeSummary after saving
                             returnToSummary();
@@ -267,15 +255,6 @@ public class TripSettingsEditFragment extends Fragment
     {
         outState.putSerializable(TRIP_SERIALIZABLE_ID, currentTrip);
         super.onSaveInstanceState(outState);
-    }
-
-    @Override
-    public void onDestroyView()
-    {
-        try { dataSource.close();}
-        catch (Exception e) { e.printStackTrace(); }
-
-        super.onDestroyView();
     }
 
     private  TextWatcher getTextWatcher()

@@ -1,5 +1,6 @@
 package com.harjup_kdhyne.TravelApp.Finance;
 
+import android.app.Activity;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
@@ -12,7 +13,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static com.harjup_kdhyne.TravelApp.Finance.TripSettings.FrequencySettings;
-import static com.harjup_kdhyne.TravelApp.Finance.TripSettings.FrequencySettings.valueOf;
 
 /**
  * Created by Kyle 2.1 on 2/9/14
@@ -20,6 +20,40 @@ import static com.harjup_kdhyne.TravelApp.Finance.TripSettings.FrequencySettings
  */
 public class FinanceDataSource
 {
+    private static FinanceDataSource instance = null;
+    public static FinanceDataSource getInstance(Context context)
+    {
+        if (instance == null)
+            instance = new FinanceDataSource(context.getApplicationContext());
+        return instance;
+    }
+
+    protected FinanceDataSource(Context context)
+    {
+        dbHelper = new MySQLiteHelper(context);
+        try { open(); }
+        catch (SQLException e) { e.printStackTrace(); }
+    }
+
+    public static FinanceDataSource openDbConnection(Activity currentActivity)
+    {
+        FinanceDataSource dataSource = getInstance(currentActivity);
+        try { dataSource.open(); }
+        catch (SQLException e) { e.printStackTrace(); }
+
+        return dataSource;
+    }
+
+    public void open() throws SQLException
+    {
+        database = dbHelper.getWritableDatabase();
+    }
+
+    public void close()
+    {
+        dbHelper.close();
+    }
+
     private SQLiteDatabase database;
     private MySQLiteHelper dbHelper;
 
@@ -47,18 +81,6 @@ public class FinanceDataSource
             MySQLiteHelper.PURCHASES_COLUMN_EXCHANGE_RATE,
             MySQLiteHelper.PURCHASES_COLUMN_NOTES
     };
-
-    public FinanceDataSource(Context context) {
-        dbHelper = new MySQLiteHelper(context);
-    }
-
-    public void open() throws SQLException {
-        database = dbHelper.getWritableDatabase();
-    }
-
-    public void close() {
-        dbHelper.close();
-    }
 
     public Purchase createPurchase(Purchase purchase) {
         ContentValues values = new ContentValues();

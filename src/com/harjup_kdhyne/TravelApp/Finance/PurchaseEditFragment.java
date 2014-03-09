@@ -45,6 +45,9 @@ public class PurchaseEditFragment extends Fragment
     @Override
     public void onCreate(Bundle savedInstanceState)
     {
+        //Open a connection to the database where purchase info is stored
+        financeDataSource = FinanceDataSource.openDbConnection(getActivity());
+
         Bundle bundle = getArguments();
         if (bundle != null)
         {
@@ -54,28 +57,11 @@ public class PurchaseEditFragment extends Fragment
         super.onCreate(savedInstanceState);
     }
 
-    void openDbConnection()
-    {
-        financeDataSource = new FinanceDataSource(getActivity());
-
-        try
-        {
-            financeDataSource.open();
-        }
-        catch (SQLException e)
-        {
-            e.printStackTrace();
-        }
-    }
-
     //Show the fragment on the screen
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
     {
         View myView = inflater.inflate(R.layout.finance_purchase_edit, container, false);
-
-        //Open a connection to the database where purchase info is stored
-        openDbConnection();
 
         //If the view isn't null, grab all of the textBox, button, and spinner objects
         if(myView != null) {
@@ -292,22 +278,6 @@ public class PurchaseEditFragment extends Fragment
         }
         //Inflate the view
         return myView;
-    }
-
-    //Close the db connection whenever you navigate off of the this page
-    @Override
-    public void onDestroyView()
-    {
-        try
-        {
-            financeDataSource.close();
-        }
-        catch (Exception e)
-        {
-            e.printStackTrace();
-        }
-
-        super.onDestroyView();
     }
 
     @Override

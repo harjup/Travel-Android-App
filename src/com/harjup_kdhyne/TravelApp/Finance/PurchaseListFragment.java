@@ -11,7 +11,6 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ListView;
 import com.harjup_kdhyne.TravelApp.R;
-import org.openexchangerates.oerjava.Currency;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -45,7 +44,6 @@ public class PurchaseListFragment extends ListFragment
     public void onCreate(Bundle savedInstanceState)
     {
         fillPurchasesList();
-
         super.onCreate(savedInstanceState);
     }
 
@@ -53,10 +51,7 @@ public class PurchaseListFragment extends ListFragment
     //then insert the purchasesList into the purchaseAdapter so the view can use it
     private void fillPurchasesList()
     {
-        financeDataSource = new FinanceDataSource(getActivity());
-
-        try { financeDataSource.open();}
-        catch (SQLException e) { e.printStackTrace(); }
+        financeDataSource = FinanceDataSource.openDbConnection(getActivity());
 
         purchasesList = financeDataSource.getAllPurchases();
 
@@ -130,17 +125,6 @@ public class PurchaseListFragment extends ListFragment
     public void onSaveInstanceState(Bundle outState)
     {
         super.onSaveInstanceState(outState);
-    }
-
-    //When the user navigates to a different fragment,
-    //close the purchasesList database connection
-    @Override
-    public void onDestroyView()
-    {
-        try { financeDataSource.close();}
-        catch (Exception e) { e.printStackTrace(); }
-
-        super.onDestroyView();
     }
 
     /**
