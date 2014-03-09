@@ -168,15 +168,11 @@ public class TranslationHomeFragment extends Fragment
             }
         });
 
-       // outputField.setText(translatedString);
-
         return myView;
     }
 
     private void viewCategoryList(){
         CategoryListFragment myCategoryList = new CategoryListFragment();
-
-        //myNoteDetails.setNote(note);
 
         FragmentTransaction ft = getFragmentManager().beginTransaction();
         ft.replace(R.id.translationActivityContainer, myCategoryList);

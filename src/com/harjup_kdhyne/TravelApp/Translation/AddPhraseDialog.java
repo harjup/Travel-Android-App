@@ -3,8 +3,12 @@ package com.harjup_kdhyne.TravelApp.Translation;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.view.*;
 import android.widget.*;
 import com.harjup_kdhyne.TravelApp.R;
@@ -24,20 +28,9 @@ public class AddPhraseDialog extends DialogFragment
     String targetPhrase = "";
     String targetLanguage;
 
-    public static AddPhraseDialog newInstance(String homePhrase, String homeLanguage, String targetPhrase, String targetLanguage)
-    {
-        AddPhraseDialog addPhraseDialog = new AddPhraseDialog();
-        //Set any arguments for the dialog here
-        Bundle args = new Bundle();
-        args.putString("homePhrase", homePhrase);
-        args.putString("homeLanguage", homeLanguage);
-        args.putString("targetPhrase", targetPhrase);
-        args.putString("targetLanguage", targetLanguage);
-        addPhraseDialog.setArguments(args);
-
-
-        return addPhraseDialog;
-    }
+    List<Category> categoryList;
+    ArrayAdapter<Category> adapter;
+    ListView myListView;
 
     public static AddPhraseDialog newInstance(Translation translation)
     {
@@ -66,6 +59,7 @@ public class AddPhraseDialog extends DialogFragment
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         //super.onCreateDialog(savedInstanceState);
+        categoryList = myDataSource.getAllCategories();
 
         myTranslation = (Translation)getArguments().getSerializable("translation");
         homeLanguage = myTranslation.getHomeLanguage();
@@ -83,8 +77,8 @@ public class AddPhraseDialog extends DialogFragment
                 new Category(-1, "Common")
         };*/
 
-        List<Category> categories = myDataSource.getAllCategories();
-        final Category[] categoryList = categories.toArray(new Category[categories.size()]);
+
+        //final Category[] categoryList = categories.toArray(new Category[categories.size()]);
 
 
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
@@ -94,19 +88,6 @@ public class AddPhraseDialog extends DialogFragment
         builder.setPositiveButton("Pon", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
-
-                /*FragmentManager fm = getFragmentManager();
-                FragmentTransaction ft = fm.beginTransaction();
-                Fragment prev = getFragmentManager().findFragmentByTag("newCategory");
-                if (prev != null) {
-                    ft.remove(prev);
-                }
-                ft.addToBackStack(null);
-
-                // Create and show the dialog.
-                EditCategoryDialog newFragment = new EditCategoryDialog();
-                newFragment.show(fm, "newCategory");*/
-
                 //Package up and save/update the current translation object with all its categories and phrases
                 myTranslation.setPhrase(targetLanguage, targetPhrase);
                 myDataSource.saveTranslation(myTranslation);
@@ -114,17 +95,17 @@ public class AddPhraseDialog extends DialogFragment
             }
         });
 
-
+        //Get View
         View myView = getActivity().getLayoutInflater().inflate(R.layout.translation_add_phrase_dialog, null);
         assert myView != null;
-        final TextView myTextView = (TextView) myView.findViewById(R.id.translationAddText);
 
+        //Set text for phrase to be added
+        final TextView myTextView = (TextView) myView.findViewById(R.id.translationAddText);
         myTextView.setText(homePhrase + " - " + targetPhrase);
 
-
-
-        final ListView myListView = (ListView) myView.findViewById(R.id.setCategoryListView);
-        final ArrayAdapter<Category> adapter = new ArrayAdapter<Category>(
+        //Display list of categories that can be added to the list
+        myListView = (ListView) myView.findViewById(R.id.setCategoryListView);
+        adapter = new ArrayAdapter<Category>(
                 getActivity(),
                 android.R.layout.simple_list_item_multiple_choice,
                 categoryList);
@@ -137,11 +118,11 @@ public class AddPhraseDialog extends DialogFragment
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 if(myListView.isItemChecked(i))
                 {
-                    myTranslation.addCategory(categoryList[i]);
+                    myTranslation.addCategory(categoryList.get(i));
                 }
                 else
                 {
-                    myTranslation.removeCategory(categoryList[i]);
+                    myTranslation.removeCategory(categoryList.get(i));
                 }
             }
         });
@@ -150,22 +131,71 @@ public class AddPhraseDialog extends DialogFragment
         //final Category[] translationCategories = translationCats.toArray(new Category[translationCats.size()]);
 
 
+        checkListItemsInTranslation();
+
+
+        final Fragment thisFragment = this;
+        //Let the user create a new catagory if they hit the newCategory button
+        Button newCategoryButton = (Button) myView.findViewById(R.id.newCategoryButton);
+        newCategoryButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view)
+            {
+                FragmentManager fm = getFragmentManager();
+                FragmentTransaction ft = fm.beginTransaction();
+                Fragment prev = getFragmentManager().findFragmentByTag("newCategory");
+                if (prev != null) {
+                    ft.remove(prev);
+                }
+                ft.addToBackStack(null);
+
+                // Create and show the dialog.
+                EditCategoryDialog newFragment = EditCategoryDialog.newInstance(null);
+                newFragment.setTargetFragment(thisFragment, 1);
+
+                newFragment.show(fm, "newCategory");
+            }
+        });
+
+
+
+        builder.setView(myView);
+        return builder.create();
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        Category newCategory = (Category)data.getSerializableExtra("category");
+
+        //Add the created Category to the current translation
+        myTranslation.addCategory(newCategory);
+
+        //Add the category to the top of the list, refresh the dataAdapter, and set it as checked
+        categoryList.add(0, (Category)data.getSerializableExtra("category"));
+        adapter.notifyDataSetChanged();
+        //myListView.setItemChecked(0, true);
+        checkListItemsInTranslation();
+
+        super.onActivityResult(requestCode, resultCode, data);
+    }
+
+    void checkListItemsInTranslation()
+    {
+        List<Category> translationCategories = myTranslation.getCategories();
+        //final Category[] translationCategories = translationCats.toArray(new Category[translationCats.size()]);
+
+
         for (int i = 0; i < translationCategories.size(); i++)
         {
-            for (int j = 0; j < categoryList.length; j++)
+            for (int j = 0; j < categoryList.size(); j++)
             {
-                if (translationCategories.get(i).getName().equals(categoryList[j].getName()))
+                if (translationCategories.get(i).getName().equals(categoryList.get(j).getName()))
                 {
                     myListView.setItemChecked(j, true);
                 }
 
             }
         }
-
-
-
-        builder.setView(myView);
-        return builder.create();
     }
 
 
@@ -177,5 +207,4 @@ public class AddPhraseDialog extends DialogFragment
         //Get a list of categories and populate them in the list box
         //If the translation has any categories, check all the corresponding category boxes
     }
-
 }

@@ -168,5 +168,8 @@ public class Translation implements Serializable
     }
 
 
+    public String toString(){
+        return homePhrase;
+    }
 
 }

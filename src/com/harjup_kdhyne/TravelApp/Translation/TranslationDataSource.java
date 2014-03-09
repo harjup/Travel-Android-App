@@ -240,9 +240,6 @@ public class TranslationDataSource
     {
         final String myTable =  MySQLiteHelper.TRANSLATION_TO_CATEGORY_TABLE;
 
-
-
-
         Boolean entryExists = database.query(myTable,
                 translationCategoryMapColumns,
                 "(" + translationCategoryMapColumns[1] + " = " + translationId + ") AND ("
@@ -261,7 +258,31 @@ public class TranslationDataSource
         }
     }
 
+    public void editTranslationCategoryMap(List<Long> translationIdList, Long categoryId){
+        final String myTable =  MySQLiteHelper.TRANSLATION_TO_CATEGORY_TABLE;
 
+        database.delete(
+                MySQLiteHelper.TRANSLATION_TO_CATEGORY_TABLE,
+                translationCategoryMapColumns[2] + " =?",
+                new String[]{String.valueOf(categoryId)}
+        );
+
+
+        Iterator<Long> iterator = translationIdList.iterator();
+
+        while(iterator.hasNext())
+        {
+            Long id = iterator.next();
+
+            ContentValues values = new ContentValues();
+
+            values.put(MySQLiteHelper.TRANSLATIONS_TO_CATEGORY_COLUMN_TRANSLATION_ID, id);
+            values.put(MySQLiteHelper.TRANSLATIONS_TO_CATEGORY_COLUMN_CATEGORY_ID, categoryId);
+            database.insert(myTable, null, values);
+        }
+
+
+    }
 
     //TODO: Refactor and shove in the save methods
     Boolean checkIfExists(String tableName, String[] tableColumns, String key, String value){
@@ -272,6 +293,25 @@ public class TranslationDataSource
                 null, null, null, null).moveToFirst();
     }
 
+    public Translation[] getAllTranslations(){
+        //Get all the translations to display by ID
+        List<Translation> translationList = new ArrayList<Translation>();
+        Cursor cursor = database.query(MySQLiteHelper.TRANSLATIONS_TABLE,
+                translationColumns,
+                null,
+                null, null, null, null);
+
+        if (cursor.moveToFirst())
+        {
+            while (!cursor.isAfterLast())
+            {
+                translationList.add(cursorToTranslation(cursor));
+                cursor.moveToNext();
+            }
+        }
+
+        return translationList.toArray(new Translation[translationList.size()]);
+    }
 
     public Translation getTranslationByHomePhrase(String homePhrase)
     {
