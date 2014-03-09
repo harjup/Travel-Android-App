@@ -19,7 +19,6 @@ import org.joda.time.Period;
 import org.openexchangerates.oerjava.Currency;
 
 import java.math.BigDecimal;
-import java.sql.SQLException;
 import java.util.Date;
 
 /**
@@ -100,6 +99,7 @@ public class TripSettingsEditFragment extends Fragment
                         {
                             currentExchangeTextView.setText("1 USD = " + result.toString() + " " + currentTrip.getTargetCurrency());
                             currentTrip.setCurrentExchangeRate(Double.parseDouble(result.toString()));
+                            currentTrip.setExchangeRateTimeStamp(new DateTime());
                         }
                     }.execute();
                 }
@@ -296,21 +296,21 @@ public class TripSettingsEditFragment extends Fragment
      */
     public boolean isExchangeOutdated(DateTime lastTimeStamp)
     {
-        Period refreshPeriod = new Period();
+        Period refreshPeriod;
         TripSettings.FrequencySettings updateFrequency = currentTrip.getRefreshFrequency();
         switch (updateFrequency)
         {
             case THREE_DAYS:
-                refreshPeriod.withDays(3);
+                refreshPeriod = new Period(0,0,0,3,0,0,0,0);
                 break;
             case EVERY_OTHER:
-                refreshPeriod.withDays(2);
+                refreshPeriod = new Period(0,0,0,3,0,0,0,0);
                 break;
             case DAILY:
-                refreshPeriod.withDays(1);
+                refreshPeriod = new Period(0,0,0,3,0,0,0,0);
                 break;
             case HOURLY:
-                refreshPeriod.withHours(1);
+                refreshPeriod = new Period(0,0,0,0,1,0,0,0);
                 break;
             default:
                 return false;
