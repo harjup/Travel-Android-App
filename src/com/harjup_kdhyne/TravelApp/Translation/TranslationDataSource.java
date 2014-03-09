@@ -420,13 +420,17 @@ public class TranslationDataSource
 
         Cursor cursor = database.query(MySQLiteHelper.CATEGORY_TABLE,
                 categoryColumns,
-                MySQLiteHelper.CATEGORY_COLUMN_ID + " = " + idQuery,
+                MySQLiteHelper.CATEGORY_COLUMN_ID + " IN " + idQuery,
                 null, null, null, null);
 
         List<Category> myCategoryList = new ArrayList<Category>();
         if (cursor.moveToFirst())
         {
-           myCategoryList.add(cursorToCategory(cursor));
+            while (!cursor.isAfterLast())
+            {
+                myCategoryList.add(cursorToCategory(cursor));
+                cursor.moveToNext();
+            }
         }
 
         return myCategoryList;
@@ -442,7 +446,11 @@ public class TranslationDataSource
         List<Long> categoryIdList = new ArrayList<Long>();
         if (cursor.moveToFirst())
         {
-            categoryIdList.add(cursor.getLong(cursor.getColumnIndex(translationCategoryMapColumns[2])));
+            while (!cursor.isAfterLast())
+            {
+                categoryIdList.add(cursor.getLong(cursor.getColumnIndex(translationCategoryMapColumns[2])));
+                cursor.moveToNext();
+            }
         }
 
         return categoryIdList;
