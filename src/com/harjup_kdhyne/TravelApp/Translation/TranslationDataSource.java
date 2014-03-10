@@ -259,13 +259,16 @@ public class TranslationDataSource
     }
 
     public void editTranslationCategoryMap(List<Long> translationIdList, Long categoryId){
-        final String myTable =  MySQLiteHelper.TRANSLATION_TO_CATEGORY_TABLE;
+        /*final String myTable =  MySQLiteHelper.TRANSLATION_TO_CATEGORY_TABLE;
 
         database.delete(
                 MySQLiteHelper.TRANSLATION_TO_CATEGORY_TABLE,
                 translationCategoryMapColumns[2] + " =?",
                 new String[]{String.valueOf(categoryId)}
-        );
+        );*/
+        final String myTable =  MySQLiteHelper.TRANSLATION_TO_CATEGORY_TABLE;
+
+        DropAllTCMapsByCategoryId(categoryId);
 
 
         Iterator<Long> iterator = translationIdList.iterator();
@@ -502,6 +505,35 @@ public class TranslationDataSource
     }
 
 
+
+    public void deleteCategory(Category category) {
+          //Drop all TCMapsByCategory
+        DropAllTCMapsByCategoryId(category.getId());
+
+        final String myTable =  MySQLiteHelper.CATEGORY_TABLE;
+
+        database.delete(
+                myTable,
+                categoryColumns[0] + " =?",
+                new String[]{String.valueOf(category.getId())}
+        );
+    }
+
+    public void DropAllTCMapsByCategoryId(Long categoryId)
+    {
+        final String myTable =  MySQLiteHelper.TRANSLATION_TO_CATEGORY_TABLE;
+
+        database.delete(
+                myTable,
+                translationCategoryMapColumns[2] + " =?",
+                new String[]{String.valueOf(categoryId)}
+        );
+    }
+
+
+    /**
+     * HELPER METHODS
+    **/
     private String idListToQueryString(List<Long> idList){
         //Turn the set of ids into a comma separated string
         StringBuilder ids = new StringBuilder();
@@ -516,7 +548,6 @@ public class TranslationDataSource
         ids.append(")");
         return ids.toString();
     }
-
 
     private Translation cursorToTranslation(Cursor cursor)
     {
@@ -603,4 +634,6 @@ public class TranslationDataSource
         Log.d("database", "Finished checking db contents...");
 
     }
+
+
 }

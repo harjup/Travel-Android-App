@@ -176,7 +176,7 @@ public class TranslationHomeFragment extends Fragment
 
         FragmentTransaction ft = getFragmentManager().beginTransaction();
         ft.replace(R.id.translationActivityContainer, myCategoryList);
-        ft.addToBackStack(null);
+        //ft.addToBackStack(null);
         ft.commit();
     }
 
