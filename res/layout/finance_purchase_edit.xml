@@ -127,6 +127,19 @@
 
             </TableRow>
 
+            <TableRow
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                <com.harjup_kdhyne.TravelApp.CustomWidgets.PhotoButton
+                        android:id="@+id/purchasePhotoButton"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/photo_button_test"/>
+
+
+            </TableRow>
+
             <!--<ImageView
                     android:id="@+id/purchaseImageView"
                     android:src=""

@@ -62,9 +62,11 @@ public class DatePickerDialogFragment extends DialogFragment
         return new AlertDialog.Builder(getActivity())
                 .setView(myView)
                 .setTitle("Pick a date")
-                .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                .setPositiveButton("OK", new DialogInterface.OnClickListener()
+                {
                     @Override
-                    public void onClick(DialogInterface dialog, int which) {
+                    public void onClick(DialogInterface dialog, int which)
+                    {
                         sendResult(Activity.RESULT_OK);
                     }
                 })
@@ -97,8 +99,7 @@ public class DatePickerDialogFragment extends DialogFragment
         theIntent.putExtra(DATE, date);
 
         // Get the target and have it receive the data
-        getTargetFragment()
-                .onActivityResult(getTargetRequestCode(), resultCode, theIntent);
+        getTargetFragment().onActivityResult(getTargetRequestCode(), resultCode, theIntent);
 
     }
 }
