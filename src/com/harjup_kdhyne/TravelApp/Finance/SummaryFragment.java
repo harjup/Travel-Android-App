@@ -13,7 +13,6 @@ import com.harjup_kdhyne.TravelApp.R;
 import org.joda.time.DateTime;
 import org.joda.time.Days;
 
-import java.sql.SQLException;
 import java.util.List;
 
 /**

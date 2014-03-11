@@ -16,7 +16,6 @@ import com.harjup_kdhyne.TravelApp.CustomWidgets.PhotoButton;
 import com.harjup_kdhyne.TravelApp.R;
 import org.openexchangerates.oerjava.Currency;
 
-import java.sql.SQLException;
 import java.util.Date;
 
 import static android.view.View.OnClickListener;
@@ -281,7 +280,7 @@ public class PurchaseEditFragment extends Fragment
                 }
             });
 
-            //TODO: Set exchange rate for purchase based on currentTrip exchangeRate. Hardcode to EUR for now
+            //TODO: Set exchange rate for purchase based on currentTrip exchangeRate. Hard code to EUR for now
             currentPurchase.setPurchaseExchangeRate(.728);
 
         }

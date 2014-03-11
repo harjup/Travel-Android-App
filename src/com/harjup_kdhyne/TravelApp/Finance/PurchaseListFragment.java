@@ -12,7 +12,6 @@ import android.widget.Button;
 import android.widget.ListView;
 import com.harjup_kdhyne.TravelApp.R;
 
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 

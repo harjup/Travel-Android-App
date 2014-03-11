@@ -21,6 +21,8 @@ import org.openexchangerates.oerjava.Currency;
 import java.math.BigDecimal;
 import java.util.Date;
 
+import static com.harjup_kdhyne.TravelApp.Finance.TripSettings.FrequencySettings;
+
 /**
  * Created by Kyle 2.1 on 2/16/14.
  * Controls the trip settings fragment, where a user can change the travel dates and maximum budget
@@ -221,6 +223,38 @@ public class TripSettingsEditFragment extends Fragment
                     }
                 });
             }
+
+            //Spinner to select update frequency
+            Spinner updateFrequencySpinner = (Spinner)myView.findViewById(R.id.updateFrequencySpinner);
+
+            if (updateFrequencySpinner != null)
+            {
+                ArrayAdapter<FrequencySettings> adapter = new ArrayAdapter<FrequencySettings>(this.getActivity(), android.R.layout.simple_spinner_item, FrequencySettings.values());
+
+                //Populate the spinner with the Currency enum
+                updateFrequencySpinner.setAdapter(adapter);
+
+                updateFrequencySpinner.setSelection(adapter.getPosition(currentTrip.getRefreshFrequency()));
+
+                updateFrequencySpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener()
+                {
+                    @Override
+                    public void onItemSelected(AdapterView<?> parent, View view, int position, long id)
+                    {
+                        FrequencySettings frequencySetting = (FrequencySettings) parent.getItemAtPosition(position);
+                        if (frequencySetting != null)
+                        {
+                            Log.d("RefreshFrequency", frequencySetting.toString());
+                        }
+                        currentTrip.setRefreshFrequency(frequencySetting);
+                    }
+
+                    @Override
+                    public void onNothingSelected(AdapterView<?> parent) {
+
+                    }
+                });
+            }
         }
 
         return myView;
@@ -297,7 +331,7 @@ public class TripSettingsEditFragment extends Fragment
     public boolean isExchangeOutdated(DateTime lastTimeStamp)
     {
         Period refreshPeriod;
-        TripSettings.FrequencySettings updateFrequency = currentTrip.getRefreshFrequency();
+        FrequencySettings updateFrequency = currentTrip.getRefreshFrequency();
         switch (updateFrequency)
         {
             case THREE_DAYS:
