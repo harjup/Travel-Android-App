@@ -28,8 +28,8 @@ public class PhotoButton extends ImageButton
 
     private String ImageURIString;
 
-    public PhotoButton(Context context, AttributeSet attrs, int defStyle) {
-        super(context, attrs, defStyle);
+    public PhotoButton(Context context, AttributeSet attrs) {
+        super(context, attrs);
     }
 
     public String getImageURIString() {
@@ -39,8 +39,6 @@ public class PhotoButton extends ImageButton
     public void setImageURIString(String imageURIString) {
         ImageURIString = imageURIString;
     }
-
-
 
     @Override
     public void setOnClickListener(final OnClickListener listener)
@@ -52,7 +50,7 @@ public class PhotoButton extends ImageButton
             {
                 //Create a new intent to ask for camera
                 imageActivity.invokeCameraIntent();
-                // TODO: set the image of the button to the image from the camera intent
+                Log.d("PhotoButton", "Call to invokeCameraIntent has fired");
                 setImageBitmap(imageActivity.getPhoto());
                 setImageURIString(imageActivity.getTempUri().toString());
 
@@ -103,6 +101,10 @@ class ImageActivity extends Activity
 
             // Save the image in local storage
             storeImage(photo);
+        }
+        else
+        {
+            Log.d("PhotoButton", "result not processed");
         }
     }
 

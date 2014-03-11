@@ -12,6 +12,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.*;
+import com.harjup_kdhyne.TravelApp.CustomWidgets.PhotoButton;
 import com.harjup_kdhyne.TravelApp.R;
 import org.openexchangerates.oerjava.Currency;
 
@@ -194,6 +195,7 @@ public class PurchaseEditFragment extends Fragment
             Button cameraButton = (Button) myView.findViewById(R.id.cameraButton);
             Button albumButton = (Button) myView.findViewById(R.id.albumButton);
             Button saveButton = (Button) myView.findViewById(R.id.saveButton);
+            PhotoButton photoButton = (PhotoButton) myView.findViewById(R.id.purchasePhotoButton);
             //TODO: Add buttons for working with the camera and existing pictures on the device
             //TODO: come back to these when we know how to deal with them
 
@@ -247,6 +249,13 @@ public class PurchaseEditFragment extends Fragment
 
                     //return to list view
                     returnToPurchasesList();
+                }
+            });
+
+            photoButton.setOnClickListener(new OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Log.d("PhotoButton","Second listener from purchase page");
                 }
             });
 
