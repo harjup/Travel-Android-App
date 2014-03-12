@@ -22,9 +22,6 @@ import java.util.GregorianCalendar;
 public class DatePickerDialogFragment extends DialogFragment
 {
     public static final String DATE = "com.harjup_kdhyne.TravelApp.date";
-    public static final String OTHER_DATE = "com.harjup_kdhyne.TravelApp.other_date";
-
-    private Date otherDate;
 
     private Date date;
 
@@ -32,7 +29,6 @@ public class DatePickerDialogFragment extends DialogFragment
     public Dialog onCreateDialog(Bundle savedInstanceState)
     {
         date = (Date) getArguments().getSerializable(DATE);
-        date = (Date) getArguments().getSerializable(OTHER_DATE);
 
         Calendar calendar = Calendar.getInstance();
 
@@ -56,12 +52,10 @@ public class DatePickerDialogFragment extends DialogFragment
                 @Override
                 public void onDateChanged(DatePicker theView, int year, int month, int day)
                 {
-
                     date = new GregorianCalendar(year, month, day).getTime();
 
                     // Put the new value in the Bundle for passing
                     // to other activities
-
                     getArguments().putSerializable(DATE, date);
                 }
             });

@@ -162,7 +162,7 @@ public class TripSettingsEditFragment extends Fragment
                         @Override
                         protected void onPostExecute(BigDecimal result)
                         {
-                            currentExchangeTextView.setText("1 USD = " + result.toString() + " " + currentTrip.getTargetCurrency());
+                            currentExchangeTextView.setText(String.format("1 USD = %s %s", result.toString(), currentTrip.getTargetCurrency()));
                             currentTrip.setCurrentExchangeRate(Double.parseDouble(result.toString()));
                         }
                     }.execute();
@@ -202,9 +202,8 @@ public class TripSettingsEditFragment extends Fragment
             {
                 ArrayAdapter<Currency> adapter = new ArrayAdapter<Currency>(this.getActivity(), android.R.layout.simple_spinner_item, Currency.values());
 
-                //Populate the spinner with the Currency enum
+                //Populate the spinner with the Currency enum and select currentTrip currency
                 purchaseCurrencySpinner.setAdapter(adapter);
-
                 purchaseCurrencySpinner.setSelection(adapter.getPosition(currentTrip.getTargetCurrency()));
 
                 purchaseCurrencySpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
@@ -214,6 +213,7 @@ public class TripSettingsEditFragment extends Fragment
                         if (paidCurrency != null) {
                             Log.d("Currency", paidCurrency.toString());
                         }
+
                         currentTrip.setTargetCurrency(paidCurrency);
                     }
 

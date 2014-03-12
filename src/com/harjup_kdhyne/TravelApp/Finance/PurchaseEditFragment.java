@@ -12,6 +12,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.*;
+import com.harjup_kdhyne.TravelApp.CustomWidgets.ImageActivity;
 import com.harjup_kdhyne.TravelApp.CustomWidgets.PhotoButton;
 import com.harjup_kdhyne.TravelApp.R;
 import org.openexchangerates.oerjava.Currency;
@@ -254,6 +255,9 @@ public class PurchaseEditFragment extends Fragment
             photoButton.setOnClickListener(new OnClickListener() {
                 @Override
                 public void onClick(View v) {
+
+                    ImageActivity imageActivity = new ImageActivity(getActivity());
+                    imageActivity.invokeCameraIntent();
                     Log.d("PhotoButton","Second listener from purchase page");
                 }
             });
