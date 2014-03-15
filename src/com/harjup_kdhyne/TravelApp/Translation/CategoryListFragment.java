@@ -37,14 +37,7 @@ public class CategoryListFragment extends ListFragment
 
     InteractionMode interactionMode = InteractionMode.DefaultMode;
 
-    Boolean deleteMode = false;
-
-    private List<Category> categoryList = new ArrayList<Category>() {{
-        add(new Category(1,"Common"));
-        add(new Category(2,"Food"));
-        add(new Category(3,"Money"));
-        add(new Category(4,"Transportation"));
-    }};
+    private List<Category> categoryList;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -64,9 +57,6 @@ public class CategoryListFragment extends ListFragment
         View myView = inflater.inflate(R.layout.translation_category_list, container, false);
 
         assert myView != null;
-
-
-
 
 
         Button backButton = (Button) myView.findViewById(R.id.categoryListBackButton);
@@ -101,6 +91,13 @@ public class CategoryListFragment extends ListFragment
             }
         });
 
+
+        newButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                viewEditCategoryDialog(null);
+            }
+        });
 
         deleteButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -195,11 +192,17 @@ public class CategoryListFragment extends ListFragment
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        Category newCategory = (Category)data.getSerializableExtra("category");
+        Category resultingCategory = (Category)data.getSerializableExtra("category");
 
         //Add the category to the top of the list
-        categoryList.set(editCategoryIndex, (Category) data.getSerializableExtra("category"));
-        //categoryList.set();
+        if (interactionMode == InteractionMode.EditMode)
+        {
+            categoryList.set(editCategoryIndex, resultingCategory);
+        }
+        else
+        {
+            categoryList.add(resultingCategory);
+        }
         categoryListItemAdapter.notifyDataSetChanged();
 
         super.onActivityResult(requestCode, resultCode, data);
