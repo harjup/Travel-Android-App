@@ -1,11 +1,14 @@
 package com.harjup_kdhyne.TravelApp.Translation;
 
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.app.ListFragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ListView;
 import com.harjup_kdhyne.TravelApp.MySQLiteHelper;
 import com.harjup_kdhyne.TravelApp.R;
@@ -55,6 +58,16 @@ public class TranslationListFragment extends ListFragment
         View myView = inflater.inflate(R.layout.translation_phrase_list, container, false);
 
 
+        Button backButton = (Button) myView.findViewById(R.id.phraseListBackButton);
+
+        backButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                viewCatagoryList();
+            }
+        });
+
+
         return myView;
     }
 
@@ -62,13 +75,21 @@ public class TranslationListFragment extends ListFragment
     @Override
     public void onListItemClick(ListView l, View v, int position, long id)
     {
-       /* viewTranslation(translationList.get(position));*/
+        viewTranslation(translationList.get(position));
 
         super.onListItemClick(l, v, position, id);
     }
 
-    private void viewTranslation(Translation translation) {
+    private void viewTranslation(Translation selectedTranslation) {
+        //Launch translation view pane or something
+    }
 
+    private void viewCatagoryList(){
+        CategoryListFragment categoryListFragment = new CategoryListFragment();
 
+        FragmentTransaction ft = getFragmentManager().beginTransaction();
+        ft.replace(R.id.translationActivityContainer, categoryListFragment);
+        //ft.addToBackStack(null);
+        ft.commit();
     }
 }
