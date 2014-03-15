@@ -16,6 +16,23 @@ import java.util.List;
  */
 public class NotesDataSource
 {
+    private static NotesDataSource instance = null;
+    public static NotesDataSource getInstance(Context context){
+        if (instance == null){
+            instance = new NotesDataSource(context.getApplicationContext());
+        }
+        return instance;
+    }
+
+    protected NotesDataSource(Context context){
+        dbHelper = new MySQLiteHelper(context);
+        try {
+            open();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
     private SQLiteDatabase database;
     private MySQLiteHelper dbHelper;
     private String[] allColumns = {
@@ -25,9 +42,9 @@ public class NotesDataSource
             MySQLiteHelper.NOTES_COLUMN_TIMESTAMP
     };
 
-    public NotesDataSource(Context context){
+    /*public NotesDataSource(Context context){
         dbHelper = new MySQLiteHelper(context);
-    }
+    }*/
 
     public void open() throws SQLException
     {

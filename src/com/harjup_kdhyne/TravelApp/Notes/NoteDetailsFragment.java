@@ -13,9 +13,6 @@ import android.widget.EditText;
 import android.widget.TextView;
 import com.harjup_kdhyne.TravelApp.R;
 
-import java.sql.SQLException;
-import java.util.Date;
-
 /**
  * Created by Paul on 1/28/14.
  * Display the contents of a note along with title and timestamp.
@@ -47,11 +44,7 @@ public class NoteDetailsFragment extends Fragment
     }
 
     void openDbConnection(){
-        notesDataSource = new NotesDataSource(getActivity());
-
-        try { notesDataSource.open();}
-        catch (SQLException e) { e.printStackTrace(); }
-
+        notesDataSource = NotesDataSource.getInstance(getActivity());
     }
 
     @Override
@@ -61,6 +54,8 @@ public class NoteDetailsFragment extends Fragment
 
         //Instantiate the view
         View myView = inflater.inflate(R.layout.note_details, container, false);
+
+
 
         final EditText titleText = (EditText) myView.findViewById(R.id.notes_detail_title);
         final EditText contentText = (EditText) myView.findViewById(R.id.notes_detail_content);
@@ -81,13 +76,19 @@ public class NoteDetailsFragment extends Fragment
             timeText.addTextChangedListener(getTextWatcher(textBoxes.time));
         }
 
+        final Button backButton = (Button) myView.findViewById(R.id.noteDetailsBackButton);
+        backButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                viewNoteList();
+            }
+        });
+
 
         Button saveButton = (Button) myView.findViewById(R.id.notesSaveNote);
         saveButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
-
                 if (currentNote.getId() == -1)
                 {
                     notesDataSource.createNote(currentNote);
@@ -97,7 +98,7 @@ public class NoteDetailsFragment extends Fragment
                     notesDataSource.updateNote(currentNote);
                 }
 
-                ViewNoteList();
+                viewNoteList();
             }
         });
 
@@ -117,15 +118,7 @@ public class NoteDetailsFragment extends Fragment
         super.onSaveInstanceState(outState);
     }
 
-    @Override
-    public void onDestroyView() {
-        try { notesDataSource.close();}
-        catch (Exception e) { e.printStackTrace(); }
-
-        super.onDestroyView();
-    }
-
-    private void ViewNoteList(){
+    private void viewNoteList(){
         NotesListFragment notesListFragment = new NotesListFragment();
 
         FragmentTransaction ft = getFragmentManager().beginTransaction();

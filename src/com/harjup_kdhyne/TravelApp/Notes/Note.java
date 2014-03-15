@@ -21,6 +21,8 @@ public class Note implements Serializable {
 
     public Note()
     {
+        title = "";
+        content = "";
         this.timeStamp = new Date();
     }
 
