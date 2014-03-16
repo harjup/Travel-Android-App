@@ -11,6 +11,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ListView;
 import com.harjup_kdhyne.TravelApp.R;
+import org.openexchangerates.oerjava.Currency;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -25,7 +26,10 @@ import java.util.List;
  */
 public class PurchaseListFragment extends ListFragment
 {
+    public static final String TRIP_SERIALIZABLE_ID = "com.harjup_kdhyne.TravelApp.TripSettings.TRIP";
     public static final String PURCHASE_SERIALIZABLE_ID = "com.harjup_kdhyne.TravelApp.Purchases.PURCHASE";
+
+    private TripSettings currentTrip;
 
     // Stores the list of Contacts
     private FinanceDataSource financeDataSource;
@@ -42,6 +46,12 @@ public class PurchaseListFragment extends ListFragment
     @Override
     public void onCreate(Bundle savedInstanceState)
     {
+        Bundle bundle = getArguments();
+        if (bundle != null)
+        {
+            currentTrip = (TripSettings) bundle.getSerializable(TRIP_SERIALIZABLE_ID);
+        }
+
         fillPurchasesList();
         super.onCreate(savedInstanceState);
     }
@@ -76,7 +86,7 @@ public class PurchaseListFragment extends ListFragment
             public void onClick(View v)
             {
                 //Go to the purchase details page and create a new purchase
-                viewPurchaseDetails(new Purchase());
+                viewPurchaseDetails(new Purchase(), currentTrip);
             }
         });
 
@@ -114,7 +124,7 @@ public class PurchaseListFragment extends ListFragment
         }
         else
         {
-            viewPurchaseDetails(purchasesList.get(position));
+            viewPurchaseDetails(purchasesList.get(position), currentTrip);
         }
     }
 
@@ -123,6 +133,8 @@ public class PurchaseListFragment extends ListFragment
     @Override
     public void onSaveInstanceState(Bundle outState)
     {
+        //Bundle for LCM
+        outState.putSerializable(TRIP_SERIALIZABLE_ID, currentTrip);
         super.onSaveInstanceState(outState);
     }
 
@@ -137,34 +149,35 @@ public class PurchaseListFragment extends ListFragment
         for (Purchase purchase : purchasesList)
         {
             //TODO: Fix conversions
-            //Currency paidCurrency = purchase.getPaidCurrency();
+            Currency paidCurrency = purchase.getPaidCurrency();
             double purchasePrice = Double.parseDouble(purchase.getPurchasePrice());
-            //double purchaseExchange = purchase.getPurchaseExchangeRate();
+            double purchaseExchange = purchase.getPurchaseExchangeRate();
 
             double convertedPrice;
 
             //If currency paid is not in target Currency, convert using purchase exchange
-//            if (paidCurrency != Currency.EUR)
-//            {
-//                convertedPrice = purchasePrice * purchaseExchange;
-//            }
-//            else
-//            {
+            if (paidCurrency != currentTrip.getTargetCurrency())
+            {
+                convertedPrice = purchasePrice * purchaseExchange;
+            }
+            else
+            {
                 convertedPrice = purchasePrice;
-//            }
+            }
 
             sumTotal += convertedPrice;
         }
         return sumTotal;
     }
 
-    public void viewPurchaseDetails (Purchase currentPurchase)
+    public void viewPurchaseDetails (Purchase currentPurchase, TripSettings currentTrip)
     {
         PurchaseEditFragment editPurchaseFragment = new PurchaseEditFragment();
         Fragment summaryFragment = getFragmentManager().findFragmentById(R.id.financeSummaryContainer);
 
         Bundle args = new Bundle();
         args.putSerializable(PURCHASE_SERIALIZABLE_ID, currentPurchase);
+        args.putSerializable(TRIP_SERIALIZABLE_ID, currentTrip);
         editPurchaseFragment.setArguments(args);
 
         FragmentTransaction transaction = getFragmentManager().beginTransaction();

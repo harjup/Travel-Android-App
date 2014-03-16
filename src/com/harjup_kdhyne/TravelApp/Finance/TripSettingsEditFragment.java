@@ -149,7 +149,6 @@ public class TripSettingsEditFragment extends Fragment
                         }
                         else
                         {
-                            //TODO:Make message box to inform user of date error
                             FragmentManager fragManager = getFragmentManager();
                             ErrorMessageDialog errorMessageDialog = ErrorMessageDialog.newInstance("Start Date and End Date conflict.");
                             errorMessageDialog.setTargetFragment(TripSettingsEditFragment.this, REQUEST_ERROR_DIALOG);
@@ -203,28 +202,26 @@ public class TripSettingsEditFragment extends Fragment
             });
 
             //Spinner to select currency used to purchase the item
-            Spinner purchaseCurrencySpinner = (Spinner)myView.findViewById(R.id.targetCurrencySpinner);
+            Spinner targetCurrencySpinner = (Spinner)myView.findViewById(R.id.targetCurrencySpinner);
 
-            if (purchaseCurrencySpinner != null)
+            if (targetCurrencySpinner != null)
             {
                 ArrayAdapter<Currency> adapter = new ArrayAdapter<Currency>(this.getActivity(), android.R.layout.simple_spinner_item, Currency.values());
 
                 //Populate the spinner with the Currency enum and select currentTrip currency
-                purchaseCurrencySpinner.setAdapter(adapter);
-                purchaseCurrencySpinner.setSelection(adapter.getPosition(currentTrip.getTargetCurrency()));
+                targetCurrencySpinner.setAdapter(adapter);
+                targetCurrencySpinner.setSelection(adapter.getPosition(currentTrip.getTargetCurrency()));
 
-                purchaseCurrencySpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener()
+                targetCurrencySpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener()
                 {
                     @Override
                     public void onItemSelected(AdapterView<?> parent, View view, int position, long id)
                     {
-                        Currency paidCurrency = (Currency) parent.getItemAtPosition(position);
-                        if (paidCurrency != null)
-                        {
-                            Log.d("Currency", paidCurrency.toString());
+                        Currency targetCurrency = (Currency) parent.getItemAtPosition(position);
+                        if (targetCurrency != null) {
+                            Log.d("Target Currency", targetCurrency.toString());
+                            currentTrip.setTargetCurrency(targetCurrency);
                         }
-
-                        currentTrip.setTargetCurrency(paidCurrency);
                     }
 
                     @Override
@@ -254,8 +251,8 @@ public class TripSettingsEditFragment extends Fragment
                         if (frequencySetting != null)
                         {
                             Log.d("RefreshFrequency", frequencySetting.toString());
+                            currentTrip.setRefreshFrequency(frequencySetting);
                         }
-                        currentTrip.setRefreshFrequency(frequencySetting);
                     }
 
                     @Override

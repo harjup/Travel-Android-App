@@ -17,7 +17,9 @@ import com.harjup_kdhyne.TravelApp.CustomWidgets.PhotoButton;
 import com.harjup_kdhyne.TravelApp.R;
 import org.openexchangerates.oerjava.Currency;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 import static android.view.View.OnClickListener;
 import static android.widget.AdapterView.OnItemSelectedListener;
@@ -28,12 +30,14 @@ import static android.widget.AdapterView.OnItemSelectedListener;
  */
 public class PurchaseEditFragment extends Fragment
 {
-    private FinanceDataSource financeDataSource;
-    private Purchase currentPurchase;
-
     //Keys for ID and date
+    public static final String TRIP_SERIALIZABLE_ID = "com.harjup_kdhyne.TravelApp.TripSettings.TRIP";
     public static final String PURCHASE_SERIALIZABLE_ID = "com.harjup_kdhyne.TravelApp.Purchases.PURCHASE";
     public static final String PURCHASE_DATE = "com.harjup_kdhyne.TravelApp.Finance.purchase_date";
+
+    private FinanceDataSource financeDataSource;
+    private TripSettings currentTrip;
+    private Purchase currentPurchase;
 
     //Used to track when we are performing an action on purchase date
     public static final int REQUEST_PURCHASE_DATE = 0;
@@ -53,6 +57,7 @@ public class PurchaseEditFragment extends Fragment
         if (bundle != null)
         {
             currentPurchase = (Purchase) bundle.getSerializable(PURCHASE_SERIALIZABLE_ID);
+            currentTrip = (TripSettings) bundle.getSerializable(TRIP_SERIALIZABLE_ID);
         }
 
         super.onCreate(savedInstanceState);
@@ -161,13 +166,13 @@ public class PurchaseEditFragment extends Fragment
                 @Override
                 public void afterTextChanged(Editable s)
                 {
-                    // TODO Auto-generated method stub
+                    //Auto-generated method stub
                 }
 
                 @Override
                 public void beforeTextChanged(CharSequence s, int start, int count, int after)
                 {
-                    // TODO Auto-generated method stub
+                    //Auto-generated method stub
                 }
             };
 
@@ -265,32 +270,43 @@ public class PurchaseEditFragment extends Fragment
 
             //Spinner to select currency used to purchase the item
             Spinner purchaseCurrencySpinner = (Spinner) myView.findViewById(R.id.purchaseCurrencySpinner);
-            //Populate the spinner with the Currency enum
-            purchaseCurrencySpinner.setAdapter(new ArrayAdapter<Currency>(this.getActivity(), android.R.layout.simple_spinner_item, Currency.values()));
 
-            purchaseCurrencySpinner.setOnItemSelectedListener(new OnItemSelectedListener()
+            if (purchaseCurrencySpinner != null)
             {
-                @Override
-                public void onItemSelected(AdapterView<?> parent, View view, int position, long id)
-                {
-                    Currency paidCurrency = (Currency) parent.getItemAtPosition(position);
-                    //Log.d("Currency", paidCurrency.toString());
-                    currentPurchase.setPaidCurrency(paidCurrency);
-                }
+                ArrayAdapter<Currency> adapter = new ArrayAdapter<Currency>(this.getActivity(), android.R.layout.simple_spinner_item, gatherCurrencies());
+                //Populate the spinner with the Currency enum
+                purchaseCurrencySpinner.setAdapter(adapter);
+                purchaseCurrencySpinner.setSelection(adapter.getPosition(currentPurchase.getPaidCurrency()));
 
-                @Override
-                public void onNothingSelected(AdapterView<?> parent)
-                {
-                    //Auto-Generated Method Stub
-                }
-            });
+                purchaseCurrencySpinner.setOnItemSelectedListener(new OnItemSelectedListener() {
+                    @Override
+                    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                        Currency paidCurrency = (Currency) parent.getItemAtPosition(position);
+                        //Log.d("Currency", paidCurrency.toString());
+                        currentPurchase.setPaidCurrency(paidCurrency);
+                    }
 
-            //TODO: Set exchange rate for purchase based on currentTrip exchangeRate. Hard code to EUR for now
-            currentPurchase.setPurchaseExchangeRate(.728);
+                    @Override
+                    public void onNothingSelected(AdapterView<?> parent) {
+                        //Auto-Generated Method Stub
+                    }
+                });
+            }
 
+            currentPurchase.setPurchaseExchangeRate(currentTrip.getCurrentExchangeRate());
         }
         //Inflate the view
         return myView;
+    }
+
+    private List<Currency> gatherCurrencies()
+    {
+        List<Currency> currencyList = new ArrayList<Currency>();
+
+        currencyList.add(Currency.USD);
+        currencyList.add(currentTrip.getTargetCurrency());
+
+        return currencyList;
     }
 
     @Override
@@ -306,11 +322,17 @@ public class PurchaseEditFragment extends Fragment
         SummaryFragment summaryFragment = new SummaryFragment();
         PurchaseListFragment purchaseListFragment = new PurchaseListFragment();
 
+        Bundle args = new Bundle();
+        args.putSerializable(PURCHASE_SERIALIZABLE_ID, currentPurchase);
+        args.putSerializable(TRIP_SERIALIZABLE_ID, currentTrip);
+        summaryFragment.setArguments(args);
+        purchaseListFragment.setArguments(args);
+
         FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
         fragmentTransaction.remove(this);
         fragmentTransaction.add(R.id.financePurchaseListContainer, purchaseListFragment);
         fragmentTransaction.add(R.id.financeSummaryContainer, summaryFragment);
-        fragmentTransaction.addToBackStack(null);
+        //fragmentTransaction.addToBackStack(null);
         fragmentTransaction.commit();
     }
 

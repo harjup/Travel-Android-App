@@ -29,7 +29,7 @@ public class Purchase implements Serializable {
         purchaseDate = new Date();
         purchasePrice = "";
         paidCurrency = Currency.USD;
-        purchaseExchangeRate = 0.00;
+        purchaseExchangeRate = 1.00;
         purchaseNotes = "";
     }
 
