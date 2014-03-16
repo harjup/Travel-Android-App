@@ -13,8 +13,6 @@ import com.harjup_kdhyne.TravelApp.R;
 import org.joda.time.DateTime;
 import org.joda.time.Days;
 
-import java.util.List;
-
 /**
  * Created by Kyle 2.1 on 1/29/14.
  * Displays a summary of days traveled and money spent
@@ -23,29 +21,15 @@ public class SummaryFragment extends Fragment
 {
     public static final String TRIP_SERIALIZABLE_ID = "com.harjup_kdhyne.TravelApp.TripSettings.TRIP";
 
-    private List<TripSettings> tripSettingsList;
     private TripSettings currentTrip;
 
     @Override
     public void onCreate(Bundle savedInstanceState)
     {
-        fillTripSettingsList();
-
         Bundle bundle = getArguments();
         if (bundle != null)
         {
             currentTrip = (TripSettings) bundle.getSerializable(TRIP_SERIALIZABLE_ID);
-            Log.d("Got Bundle","Bleep bloop");
-        }
-        else if (tripSettingsList.size() != 0)
-        {
-            currentTrip = tripSettingsList.get(0);
-            Log.d("Got current Trip", currentTrip.getStartDateAsString());
-        }
-        else
-        {
-            currentTrip = new TripSettings();
-            Log.d("Making new Trip", currentTrip.getStartDateAsString());
         }
 
         super.onCreate(savedInstanceState);
@@ -116,14 +100,6 @@ public class SummaryFragment extends Fragment
         super.onSaveInstanceState(outState);
     }
 
-    //Open a connection to the purchasesDatabase and use it to fill the tripSettingsList
-    private void fillTripSettingsList()
-    {
-        FinanceDataSource financeDataSource = FinanceDataSource.openDbConnection(getActivity());
-
-        tripSettingsList = financeDataSource.getAllTripSettings();
-    }
-
     public void viewTripSettings (TripSettings tripSettings)
     {
         //Replace the Summary with the trip settings edit fragment
@@ -136,7 +112,6 @@ public class SummaryFragment extends Fragment
 
         FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
         fragmentTransaction.replace(R.id.financeSummaryContainer, settingsEditFragment);
-        fragmentTransaction.addToBackStack(null);
         fragmentTransaction.commit();
     }
 

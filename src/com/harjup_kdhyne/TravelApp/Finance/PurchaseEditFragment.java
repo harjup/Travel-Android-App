@@ -183,7 +183,7 @@ public class PurchaseEditFragment extends Fragment
                 public void onClick(View v)
                 {
                     FragmentManager fragManager = getFragmentManager();
-                    DatePickerDialogFragment dateDialog = DatePickerDialogFragment.newInstance(currentPurchase.getPurchaseDate());
+                    DatePickerDialog dateDialog = DatePickerDialog.newInstance(currentPurchase.getPurchaseDate());
                     dateDialog.setTargetFragment(PurchaseEditFragment.this, REQUEST_PURCHASE_DATE);
                     dateDialog.show(fragManager, PURCHASE_DATE);
                 }
@@ -256,6 +256,7 @@ public class PurchaseEditFragment extends Fragment
                 @Override
                 public void onClick(View v) {
 
+                    //TODO: Fix the camera call
                     ImageActivity imageActivity = new ImageActivity(getActivity());
                     imageActivity.invokeCameraIntent();
                     Log.d("PhotoButton","Second listener from purchase page");
@@ -323,7 +324,7 @@ public class PurchaseEditFragment extends Fragment
 
         if(requestCode == REQUEST_PURCHASE_DATE)
         {
-            Date date = (Date) data.getSerializableExtra(DatePickerDialogFragment.DATE);
+            Date date = (Date) data.getSerializableExtra(DatePickerDialog.DATE);
             currentPurchase.setPurchaseDate(date);
             purchaseDateEditText.setText(currentPurchase.getDateString());
         }

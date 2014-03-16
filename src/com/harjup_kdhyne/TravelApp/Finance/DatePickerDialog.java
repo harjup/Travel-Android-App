@@ -19,7 +19,7 @@ import java.util.GregorianCalendar;
  * Created by Kyle 2.1 on 2/12/14
  * Creates a dialog box that prompts user for a single date in MM/dd/yyyy format
  */
-public class DatePickerDialogFragment extends DialogFragment
+public class DatePickerDialog extends DialogFragment
 {
     public static final String DATE = "com.harjup_kdhyne.TravelApp.date";
 
@@ -75,7 +75,7 @@ public class DatePickerDialogFragment extends DialogFragment
                 .create();
     }
 
-    public static DatePickerDialogFragment newInstance(Date date)
+    public static DatePickerDialog newInstance(Date date)
     {
         // Bundle holds the value for birth date
         Bundle dataPassed = new Bundle();
@@ -84,7 +84,7 @@ public class DatePickerDialogFragment extends DialogFragment
         dataPassed.putSerializable(DATE, date);
 
         // Create the DateDialogFragment and attach the birth date
-        DatePickerDialogFragment dateFragment = new DatePickerDialogFragment();
+        DatePickerDialog dateFragment = new DatePickerDialog();
         dateFragment.setArguments(dataPassed);
         return dateFragment;
     }

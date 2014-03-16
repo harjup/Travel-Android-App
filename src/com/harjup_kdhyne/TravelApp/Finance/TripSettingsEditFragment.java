@@ -13,6 +13,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.*;
+import com.harjup_kdhyne.TravelApp.ErrorMessageDialog;
 import com.harjup_kdhyne.TravelApp.R;
 import org.joda.time.DateTime;
 import org.joda.time.Period;
@@ -34,12 +35,14 @@ public class TripSettingsEditFragment extends Fragment
 
     //Keys for ID and start/end date
     public static final String TRIP_SERIALIZABLE_ID = "com.harjup_kdhyne.TravelApp.TripSettings.TRIP";
+    public static final String ERROR_MESSAGE = "com.harjup_kdhyne.TravelApp.error_message";
     public static final String START_DATE = "com.harjup_kdhyne.TravelApp.Finance.start_date";
     public static final String END_DATE = "com.harjup_kdhyne.TravelApp.Finance.end_date";
 
     //Used to track when we are performing an action on start/end date
-    public static final int REQUEST_START_DATE = 0;
-    public static final int REQUEST_END_DATE = 1;
+    public static final int REQUEST_ERROR_DIALOG = 0;
+    public static final int REQUEST_START_DATE = 1;
+    public static final int REQUEST_END_DATE = 2;
 
     private EditText startDateEditText;
     private EditText endDateEditText;
@@ -144,10 +147,14 @@ public class TripSettingsEditFragment extends Fragment
                             //Return to financeSummary after saving
                             returnToSummary();
                         }
-                        //else
-                        //{
+                        else
+                        {
                             //TODO:Make message box to inform user of date error
-                        //}
+                            FragmentManager fragManager = getFragmentManager();
+                            ErrorMessageDialog errorMessageDialog = ErrorMessageDialog.newInstance("Start Date and End Date conflict.");
+                            errorMessageDialog.setTargetFragment(TripSettingsEditFragment.this, REQUEST_ERROR_DIALOG);
+                            errorMessageDialog.show(fragManager, ERROR_MESSAGE);
+                        }
                     }
                 }
             });
@@ -176,7 +183,7 @@ public class TripSettingsEditFragment extends Fragment
                 public void onClick(View v)
                 {
                     FragmentManager fragManager = getFragmentManager();
-                    DatePickerDialogFragment dateDialog = DatePickerDialogFragment.newInstance(currentTrip.getStartDate().toDate());
+                    DatePickerDialog dateDialog = DatePickerDialog.newInstance(currentTrip.getStartDate().toDate());
                     dateDialog.setTargetFragment(TripSettingsEditFragment.this, REQUEST_START_DATE);
                     dateDialog.show(fragManager, START_DATE);
                 }
@@ -189,7 +196,7 @@ public class TripSettingsEditFragment extends Fragment
                 public void onClick(View v)
                 {
                     FragmentManager fragManager = getFragmentManager();
-                    DatePickerDialogFragment dateDialog = DatePickerDialogFragment.newInstance(currentTrip.getEndDate().toDate());
+                    DatePickerDialog dateDialog = DatePickerDialog.newInstance(currentTrip.getEndDate().toDate());
                     dateDialog.setTargetFragment(TripSettingsEditFragment.this, REQUEST_END_DATE);
                     dateDialog.show(fragManager, END_DATE);
                 }
@@ -206,11 +213,14 @@ public class TripSettingsEditFragment extends Fragment
                 purchaseCurrencySpinner.setAdapter(adapter);
                 purchaseCurrencySpinner.setSelection(adapter.getPosition(currentTrip.getTargetCurrency()));
 
-                purchaseCurrencySpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                purchaseCurrencySpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener()
+                {
                     @Override
-                    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                    public void onItemSelected(AdapterView<?> parent, View view, int position, long id)
+                    {
                         Currency paidCurrency = (Currency) parent.getItemAtPosition(position);
-                        if (paidCurrency != null) {
+                        if (paidCurrency != null)
+                        {
                             Log.d("Currency", paidCurrency.toString());
                         }
 
@@ -231,9 +241,8 @@ public class TripSettingsEditFragment extends Fragment
             {
                 ArrayAdapter<FrequencySettings> adapter = new ArrayAdapter<FrequencySettings>(this.getActivity(), android.R.layout.simple_spinner_item, FrequencySettings.values());
 
-                //Populate the spinner with the Currency enum
+                //Populate the spinner with the Refresh Frequency enum and select currentTrip frequency
                 updateFrequencySpinner.setAdapter(adapter);
-
                 updateFrequencySpinner.setSelection(adapter.getPosition(currentTrip.getRefreshFrequency()));
 
                 updateFrequencySpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener()
@@ -272,13 +281,13 @@ public class TripSettingsEditFragment extends Fragment
 
         if(requestCode == REQUEST_START_DATE)
         {
-            Date date = (Date) data.getSerializableExtra(DatePickerDialogFragment.DATE);
+            Date date = (Date) data.getSerializableExtra(DatePickerDialog.DATE);
             currentTrip.setStartDate(new DateTime(date));
             startDateEditText.setText(currentTrip.getStartDateAsString());
         }
         else if(requestCode == REQUEST_END_DATE)
         {
-            Date date = (Date) data.getSerializableExtra(DatePickerDialogFragment.DATE);
+            Date date = (Date) data.getSerializableExtra(DatePickerDialog.DATE);
             currentTrip.setEndDate(new DateTime(date));
             endDateEditText.setText(currentTrip.getEndDateAsString());
         }
