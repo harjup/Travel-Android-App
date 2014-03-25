@@ -62,7 +62,9 @@ public class AddPhraseDialog extends DialogFragment
 
         myTranslation = (Translation)getArguments().getSerializable("translation");
         homePhrase = myTranslation.getHomePhrase();
-        targetPhrase = myTranslation.getPhraseContent("fr");
+
+        String langString = TranslationHomeFragment.getCurrentLanguage().toString();
+        targetPhrase = myTranslation.getPhraseContent(langString);
 
 
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());

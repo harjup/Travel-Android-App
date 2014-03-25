@@ -10,6 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ListView;
+import android.widget.TextView;
 import com.harjup_kdhyne.TravelApp.MySQLiteHelper;
 import com.harjup_kdhyne.TravelApp.R;
 
@@ -56,6 +57,14 @@ public class TranslationListFragment extends ListFragment
         setListAdapter(translationListItemAdapter);
 
         View myView = inflater.inflate(R.layout.translation_phrase_list, container, false);
+
+        TextView currentTranslationView = (TextView) myView.findViewById(R.id.currentLanguageTextView);
+        String translationName = TranslationHomeFragment.getCurrentLanguage().name();
+        translationName =
+                String.valueOf(translationName.charAt(0)).toUpperCase() +
+                        translationName.substring(1, translationName.length()).toLowerCase();
+
+        currentTranslationView.setText(translationName);
 
 
         Button backButton = (Button) myView.findViewById(R.id.phraseListBackButton);

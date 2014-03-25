@@ -11,12 +11,13 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.TextView;
+import android.widget.*;
 import com.harjup_kdhyne.TravelApp.R;
 import com.memetix.mst.language.Language;
 import com.memetix.mst.translate.Translate;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by Paul on 2/10/14.
@@ -28,12 +29,20 @@ public class TranslationHomeFragment extends Fragment
 {
     TranslationDataSource myDataSource;
 
+    static Language currentLanguage;
+    public static Language getCurrentLanguage(){
+        if (currentLanguage == null)
+        {
+            currentLanguage = Language.FRENCH;
+        }
+        return currentLanguage;
+    }
+
     final String INPUT_TEXT_ID = "STRING_TO_TRANSLATE";
     final String OUTPUT_TEXT_ID = "TRANSLATED_STRING";
 
 
-    final String clientId = "harjup_kdhyne_travelAppliction";
-    final String clientSecret = "rApbkdNvepN7+Lp1QAsve6b4xHx+/cXX4UJKksuivSE=";
+
     String stringToTranslate;
     String translatedString;
 
@@ -52,10 +61,58 @@ public class TranslationHomeFragment extends Fragment
         final EditText inputField = (EditText) myView.findViewById(R.id.tranlationInputEditText);
         final TextView outputField = (TextView) myView.findViewById(R.id.translationOutputTextView);
 
+        //final Spinner
+        //Spinner to select currency used to purchase the item
+        Spinner targetLanguageSpinner = (Spinner)myView.findViewById(R.id.targetLanguageSpinner);
+
+        if (targetLanguageSpinner != null)
+        {
+
+            Language[] languages = Language.values();
+            final List<String> langValues = new ArrayList<String>();
+            for (Language l : languages)
+            {
+                if (l.name().equals("AUTO_DETECT"))
+                    continue;
+
+                langValues.add(l.name());
+            }
+
+            ArrayAdapter<String> adapter = new ArrayAdapter<String>(this.getActivity(), android.R.layout.simple_spinner_item, langValues);
+
+
+            //Populate the spinner with the Currency enum and select currentTrip currency
+            targetLanguageSpinner.setAdapter(adapter);
+            //targetLanguageSpinner.setSelection(adapter.getPosition(currentTrip.getTargetCurrency()));
+
+            targetLanguageSpinner.setSelection(
+                    langValues.indexOf(getCurrentLanguage().name())
+            );
+
+            targetLanguageSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                @Override
+                public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                    String selectedLangString = langValues.get(position);
+                    Language selectedLang;
+                    for (Language l : Language.values())
+                    {
+                        if (l.name().equals(selectedLangString))
+                            currentLanguage = l;
+                    }
+                }
+
+                @Override
+                public void onNothingSelected(AdapterView<?> parent) {
+
+                }
+            });
+        }
+
+
+
         final Button translateButton = (Button) myView.findViewById(R.id.translateButton);
         final Button addToPhrasebookButton = (Button) myView.findViewById(R.id.addToPhrasebookButton);
         final Button phraseBookButton = (Button) myView.findViewById(R.id.phrasebookButton);
-
 
         if (savedInstanceState != null)
         {
@@ -117,7 +174,7 @@ public class TranslationHomeFragment extends Fragment
                     @Override
                     protected void onPostExecute(String result) {
                         //outputField.setText(translatedString);
-                        Log.d("Translation" ,"Translating " + inputField.getText().toString() + " to " + result);
+                        Log.d("Translation" , String.format("Translating %s to %s", inputField.getText().toString(), result));
                         outputField.setText(result);
                         if (result != null)
                             translatedString = result;
@@ -130,9 +187,6 @@ public class TranslationHomeFragment extends Fragment
         addToPhrasebookButton.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View view) {
-                //stringToTranslate
-                //translatedString
-
                 //Needs to open some kinda pop up that asks for categories it should be stuck under
                 FragmentManager fm = getFragmentManager();
                 FragmentTransaction ft = fm.beginTransaction();
@@ -148,7 +202,11 @@ public class TranslationHomeFragment extends Fragment
                 if (translationToAdd == null)
                 {
                     translationToAdd = new Translation(-1, stringToTranslate, translatedString);
-                    translationToAdd.setPhrase("fr", translatedString);
+                    translationToAdd.setPhrase(getCurrentLanguage().toString(), translatedString);
+                }
+                else if (!translationToAdd.getLanguages().contains(getCurrentLanguage().toString()))
+                {
+                    translationToAdd.setPhrase(new Phrase(getCurrentLanguage().toString(), translatedString));
                 }
 
                 // Create and show the dialog.
@@ -187,27 +245,6 @@ public class TranslationHomeFragment extends Fragment
         outState.putString(OUTPUT_TEXT_ID, translatedString);
         super.onSaveInstanceState(outState);
         Log.d("lifecycle", "instance state saved");
-    }
-
-
-
-    class AsyncTranslate extends AsyncTask<String, Integer, String> {
-
-        String stringToTranslate;
-        String translatedString;
-        @Override
-        protected String doInBackground(String... strings) {
-            stringToTranslate = strings[0];
-            Translate.setClientId(clientId);
-            Translate.setClientSecret(clientSecret);
-
-            try {
-                translatedString = Translate.execute(stringToTranslate, Language.ENGLISH, Language.FRENCH);
-            } catch (Exception e) {
-                translatedString = e.toString();
-            }
-            return translatedString;
-        }
     }
 
 }

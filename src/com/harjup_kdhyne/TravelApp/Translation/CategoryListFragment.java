@@ -12,6 +12,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ListView;
+import android.widget.TextView;
 import com.harjup_kdhyne.TravelApp.R;
 
 import java.util.*;
@@ -58,11 +59,20 @@ public class CategoryListFragment extends ListFragment
 
         assert myView != null;
 
+        TextView currentTranslationView = (TextView) myView.findViewById(R.id.currentLanguageTextView);
 
         Button backButton = (Button) myView.findViewById(R.id.categoryListBackButton);
         Button newButton = (Button) myView.findViewById(R.id.categoryListNewButton);
         final Button editButton = (Button) myView.findViewById(R.id.categoryListEditButton);
         final Button deleteButton = (Button) myView.findViewById(R.id.categoryListDeleteButton);
+
+
+        String translationName = TranslationHomeFragment.getCurrentLanguage().name();
+        translationName =
+                String.valueOf(translationName.charAt(0)).toUpperCase() +
+                translationName.substring(1, translationName.length()).toLowerCase();
+
+        currentTranslationView.setText(translationName);
 
         backButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -70,7 +80,6 @@ public class CategoryListFragment extends ListFragment
                 viewTranslationHome();
             }
         });
-
 
         editButton.setOnClickListener(new View.OnClickListener() {
             @Override

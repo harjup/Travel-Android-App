@@ -460,25 +460,33 @@ public class TranslationDataSource
     }
 
 
-    //TODO: Filter this by the whatever language the user wants to see, right now it's only grabbing the first entry in the DB
-    public Phrase getPhraseByTranslation(Translation translation)
+    //TODO: Determine if I should be returning everything in a list or just get the current translation
+    public List<Phrase> getPhraseByTranslation(Translation translation)
     {
         Phrase newPhrase = null;
+        List<Phrase> phraseList = new ArrayList<Phrase>();
+
 
         Cursor cursor = database.query(MySQLiteHelper.PHRASE_TABLE,
                 phraseColumns,
-                MySQLiteHelper.PHRASE_COLUMN_ID + " = " + translation.getId(),
+                MySQLiteHelper.PHRASE_COLUMN_TRANSLATION_ID + " = " + translation.getId(),
                 null, null, null, null);
 
         if (cursor.moveToFirst())
         {
-            newPhrase = new Phrase(
-                    cursor.getString(cursor.getColumnIndex(phraseColumns[2])),
-                    cursor.getString(cursor.getColumnIndex(phraseColumns[3]))
-            );
+            while (!cursor.isAfterLast())
+            {
+                newPhrase = new Phrase(
+                        cursor.getString(cursor.getColumnIndex(phraseColumns[2])),
+                        cursor.getString(cursor.getColumnIndex(phraseColumns[3]))
+                );
+                phraseList.add(newPhrase);
+                cursor.moveToNext();
+            }
         }
 
-        return newPhrase;
+        return phraseList;
+        //return newPhrase;
     }
 
     public List<Category> getAllCategories()
@@ -556,7 +564,11 @@ public class TranslationDataSource
         newTranslation.setHomePhrase(cursor.getString(cursor.getColumnIndex(translationColumns[1])));
         newTranslation.setHomeLanguage(cursor.getString(cursor.getColumnIndex(translationColumns[2])));
 
-        newTranslation.setPhrase(getPhraseByTranslation(newTranslation));
+        for (Phrase p : getPhraseByTranslation(newTranslation))
+        {
+            newTranslation.setPhrase(p);
+        }
+
         newTranslation.setCategories(getCategoriesByTranslation(newTranslation));
 
         return  newTranslation;
@@ -575,12 +587,10 @@ public class TranslationDataSource
         if (cursor .moveToFirst()) {
 
             while (!cursor.isAfterLast()) {
-
-                for (int i = 0; i < translationColumns.length; i++)
-                {
+                for (String translationColumn : translationColumns) {
                     String name = cursor.getString(cursor
-                            .getColumnIndex(translationColumns[i]));
-                    Log.d("database", "Translation column: " + translationColumns[i] + " -- "  + name);
+                            .getColumnIndex(translationColumn));
+                    Log.d("database", "Translation column: " + translationColumn + " -- " + name);
                 }
                 cursor.moveToNext();
             }

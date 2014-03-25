@@ -37,7 +37,7 @@ public class TranslationListItemAdapter extends ArrayAdapter<Translation>
             v = inflater.inflate(R.layout.translation_phrase_list_item, null);
         }
 
-        Translation translation = translationList.get(position);
+        final Translation translation = translationList.get(position);
 
         if (translation != null)
         {
@@ -46,7 +46,7 @@ public class TranslationListItemAdapter extends ArrayAdapter<Translation>
             // These TextViews are created in the XML files we defined.
 
             TextView homeLanguagePhraseView = (TextView) v.findViewById(R.id.homeLanguagePhraseTextView);
-            TextView targetLanguagePhraseView = (TextView) v.findViewById(R.id.targetLanguagePhraseTextView);
+            final TextView targetLanguagePhraseView = (TextView) v.findViewById(R.id.targetLanguagePhraseTextView);
 
             TextView homeLanguageView = (TextView) v.findViewById(R.id.homeLanguageTextView);
             TextView targetLanguageView = (TextView) v.findViewById(R.id.targetLanguageTextView);
@@ -67,12 +67,33 @@ public class TranslationListItemAdapter extends ArrayAdapter<Translation>
 
             if (targetLanguagePhraseView != null)
             {
-                targetLanguagePhraseView.setText(translation.getPhraseContent("fr"));
+                final String langString = TranslationHomeFragment.getCurrentLanguage().toString();
+
+
+
+                if (translation.getPhraseContent(langString) == null)
+                {
+                    //getting translation...
+                    new AsyncTranslate(){
+                        @Override
+                        protected void onPostExecute(String result) {
+                            translation.setPhrase(new Phrase(langString, result));
+                            targetLanguagePhraseView.setText(result);
+
+                            TranslationDataSource.getInstance(getContext()).saveTranslation(translation);
+                        }
+                    }.execute(translation.getHomePhrase());
+
+                    targetLanguagePhraseView.setText("Translating...");
+                }
+                else
+                {
+                    targetLanguagePhraseView.setText(translation.getPhraseContent(langString));
+                }
             }
 
             if (targetLanguageView != null)
             {
-               // targetLanguageView.setText("fr");
                  targetLanguageView.setText("");
             }
 

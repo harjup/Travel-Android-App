@@ -1,5 +1,7 @@
 package com.harjup_kdhyne.TravelApp.Translation;
 
+import com.memetix.mst.language.Language;
+
 import java.io.Serializable;
 import java.util.*;
 
@@ -58,18 +60,25 @@ public class Translation implements Serializable
         return phrases;
     }
 
+    public List<String> getLanguages()
+    {
+        List<String> retval = new ArrayList<String>();
+        for(Phrase p : phrases)
+        {
+            retval.add(p.getLanguage());
+        }
+        return retval;
+    }
+
     public String getPhraseContent(String _language){
         //return phraseHashMap.get(_language);
 
-        Iterator<Phrase> it = phrases.iterator();
-        while(it.hasNext())
-        {
-            Phrase p = it.next();
-            if(p.getLanguage().equals(_language))
-            {
+        for (Phrase p : phrases) {
+            if (p.getLanguage().equals(_language)) {
                 return p.getContent();
             }
         }
+
         return null;
     }
 
@@ -82,12 +91,8 @@ public class Translation implements Serializable
             return;
         }
 
-        Iterator<Phrase> it = phrases.iterator();
-        while(it.hasNext())
-        {
-            Phrase p = it.next();
-            if(p.getLanguage().equals(_phrase.getLanguage()))
-            {
+        for (Phrase p : phrases) {
+            if (p.getLanguage().equals(_phrase.getLanguage())) {
                 p.setContents(_phrase.getLanguage());
                 return;
             }
@@ -103,12 +108,8 @@ public class Translation implements Serializable
             return;
         }
 
-        ListIterator<Phrase> it = phrases.listIterator();
-        while(it.hasNext())
-        {
-            Phrase p = it.next();
-            if(p.getLanguage().equals(_language))
-            {
+        for (Phrase p : phrases) {
+            if (p.getLanguage().equals(_language)) {
                 p.setContents(_phrase);
                 return;
             }

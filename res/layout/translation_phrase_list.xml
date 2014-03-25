@@ -22,14 +22,15 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textAppearance="?android:attr/textAppearanceLarge"
-                    android:text="              "
-                    android:id="@+id/ignoreMe"/>
+                    android:text="Phrase List"
+                    android:id="@+id/phraseListPageTitleText"/>
             <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textAppearance="?android:attr/textAppearanceLarge"
-                    android:text="Phrase List"
-                    android:id="@+id/phraseListPageTitleText"/>
+                    android:textAppearance="?android:attr/textAppearanceMedium"
+                    android:text="wuh"
+                    android:id="@+id/currentLanguageTextView"
+                    android:textColor="@android:color/darker_gray"/>
         </TableRow>
         <ListView
                 android:layout_width="wrap_content"
