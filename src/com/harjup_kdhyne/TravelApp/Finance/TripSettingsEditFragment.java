@@ -84,7 +84,7 @@ public class TripSettingsEditFragment extends Fragment
 
             if (totalBudgetEditText != null)
             {
-                totalBudgetEditText.setText(String.valueOf(currentTrip.getTotalBudget()));
+                totalBudgetEditText.setText(String.format("%.2f",currentTrip.getTotalBudget()));
                 totalBudgetEditText.addTextChangedListener(getTextWatcher());
             }
 

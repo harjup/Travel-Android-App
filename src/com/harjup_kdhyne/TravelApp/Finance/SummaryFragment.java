@@ -69,7 +69,7 @@ public class SummaryFragment extends Fragment
                 double expenses = purchaseListFragment.calculateTotalExpenses();
                 Log.d("Expenses calculated", String.valueOf(expenses));
 
-                budgetSpentProgressTextView.setText(expenses + " / " + totalBudget);
+                budgetSpentProgressTextView.setText(String.format("%.2f",expenses) + " / " + String.format("%.2f",totalBudget));
                 budgetSpentProgressBar.setProgress(getBudgetProgress(expenses));
             }
             else
