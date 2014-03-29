@@ -1,44 +1,79 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              android:id="@+id/myNoteDetailsTestId"
               android:orientation="vertical"
               android:layout_width="match_parent"
               android:layout_height="match_parent">
 
 
-    <Button
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Back"
-            android:id="@+id/noteDetailsBackButton"/>
-    <EditText
-            android:id="@+id/notes_detail_title"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@android:color/darker_gray"
-            android:layout_weight=".3"/>
-    <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/imageView"
-            android:layout_gravity="center_horizontal"
-            android:layout_weight="1"/>
-    <EditText
-            android:id="@+id/notes_detail_content"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:background="@android:color/holo_purple"
-            android:layout_weight="1"/>
-    <EditText
-            android:id="@+id/notes_detail_time"
-            android:layout_width="185dp"
-            android:layout_height="wrap_content"
-            android:inputType="date"
-            android:ems="10"
-            android:background="@android:color/holo_red_light"
-            android:layout_weight=".3"/>
+    <TableLayout
+            android:layout_width="fill_parent"
+            android:layout_height="0dp" android:layout_weight="1">
+        <TableRow
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent">
+            <Button
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Back"
+                    android:id="@+id/noteDetailsBackButton"/>
+            <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textAppearance="?android:attr/textAppearanceLarge"
+                    android:id="@+id/textView4" android:text="Note Details"
+                    android:layout_weight="1" android:gravity="center_horizontal"/>
+        </TableRow>
+        <TableRow
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent">
+            <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textAppearance="?android:attr/textAppearanceMedium"
+                    android:text="Title:"
+                    android:id="@+id/textView"/>
+            <EditText
+                    android:id="@+id/notes_detail_title"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"/>
+        </TableRow>
+        <TableRow
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent" android:layout_marginBottom="@dimen/listItemPadding"
+                android:layout_marginTop="@dimen/listItemPadding">
+            <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textAppearance="?android:attr/textAppearanceMedium"
+                    android:text="Content:"
+                    android:id="@+id/textView2"/>
+            <EditText
+                    android:id="@+id/notes_detail_content"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    />
+        </TableRow>
+        <TableRow
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent">
+            <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textAppearance="?android:attr/textAppearanceSmall"
+                    android:text="Date:"
+                    android:id="@+id/textView3"/>
+            <EditText
+                    android:id="@+id/notes_detail_time"
+                    android:layout_width="185dp"
+                    android:layout_height="wrap_content"
+                    android:inputType="date"
+                    android:ems="10"
+                    />
+        </TableRow>
+    </TableLayout>
     <Button
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
