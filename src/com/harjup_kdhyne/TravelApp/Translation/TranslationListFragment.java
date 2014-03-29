@@ -1,5 +1,6 @@
 package com.harjup_kdhyne.TravelApp.Translation;
 
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -11,11 +12,9 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
-import com.harjup_kdhyne.TravelApp.MySQLiteHelper;
 import com.harjup_kdhyne.TravelApp.R;
 
 import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -28,6 +27,8 @@ public class TranslationListFragment extends ListFragment
     Category currentCategory;
     private List<Translation> translationList;
     private TranslationDataSource myDataSource;
+
+    Boolean deleteMode = false;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -72,10 +73,25 @@ public class TranslationListFragment extends ListFragment
         backButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                viewCatagoryList();
+                viewCategoryList();
             }
         });
 
+        final Button deleteButton = (Button) myView.findViewById(R.id.phraseListDeleteButton);
+
+        deleteButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                deleteMode = !deleteMode;
+
+                if (deleteMode)
+                {
+                    deleteButton.setBackgroundColor(Color.RED);
+                    return;
+                }
+                deleteButton.setBackgroundColor(Color.DKGRAY);
+            }
+        });
 
         return myView;
     }
@@ -84,7 +100,16 @@ public class TranslationListFragment extends ListFragment
     @Override
     public void onListItemClick(ListView l, View v, int position, long id)
     {
-        viewTranslation(translationList.get(position));
+        if (!deleteMode)
+        {
+            viewTranslation(translationList.get(position));
+        }
+        else
+        {
+            myDataSource.deleteTranslation(translationList.get(position));
+            translationList.remove(position);
+            translationListItemAdapter.notifyDataSetChanged();
+        }
 
         super.onListItemClick(l, v, position, id);
     }
@@ -106,12 +131,11 @@ public class TranslationListFragment extends ListFragment
 
     }
 
-    private void viewCatagoryList(){
+    private void viewCategoryList(){
         CategoryListFragment categoryListFragment = new CategoryListFragment();
 
         FragmentTransaction ft = getFragmentManager().beginTransaction();
         ft.replace(R.id.translationActivityContainer, categoryListFragment);
-        //ft.addToBackStack(null);
         ft.commit();
     }
 }

@@ -460,7 +460,7 @@ public class TranslationDataSource
     }
 
 
-    //TODO: Determine if I should be returning everything in a list or just get the current translation
+    //TODO: Determine if I should be returning everything in a list or just get the current language
     public List<Phrase> getPhraseByTranslation(Translation translation)
     {
         Phrase newPhrase = null;
@@ -512,7 +512,26 @@ public class TranslationDataSource
         return categoryList;
     }
 
+    public void deleteTranslation(Translation translation)
+    {
+        //Delete all phrases with translation id
+        deletePhrasesByTranslationId(translation.getId());
+        //Delete all tc mappings for the translation
+        DropAllTCMapsByTranslationId(translation.getId());
 
+        //Delete translation object
+        database.delete(MySQLiteHelper.TRANSLATIONS_TABLE,
+                MySQLiteHelper.TRANSLATIONS_COLUMN_ID + " =?",
+                new String[]{String.valueOf(translation.getId())}
+        );
+    }
+
+    public void deletePhrasesByTranslationId(long translationId){
+        database.delete(MySQLiteHelper.PHRASE_TABLE,
+                MySQLiteHelper.PHRASE_COLUMN_TRANSLATION_ID + " =?",
+                new String[]{String.valueOf(translationId)}
+        );
+    }
 
     public void deleteCategory(Category category) {
           //Drop all TCMapsByCategory
@@ -524,6 +543,17 @@ public class TranslationDataSource
                 myTable,
                 categoryColumns[0] + " =?",
                 new String[]{String.valueOf(category.getId())}
+        );
+    }
+
+    public void DropAllTCMapsByTranslationId(Long translationId)
+    {
+        final String myTable =  MySQLiteHelper.TRANSLATION_TO_CATEGORY_TABLE;
+
+        database.delete(
+                myTable,
+                translationCategoryMapColumns[1] + " =?",
+                new String[]{String.valueOf(translationId)}
         );
     }
 
