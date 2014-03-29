@@ -12,6 +12,7 @@ import android.support.v4.app.FragmentTransaction;
 import android.view.*;
 import android.widget.*;
 import com.harjup_kdhyne.TravelApp.R;
+import org.w3c.dom.Text;
 
 import java.util.List;
 
@@ -32,7 +33,9 @@ public class AddPhraseDialog extends DialogFragment
     ArrayAdapter<Category> adapter;
     ListView myListView;
 
-    public static AddPhraseDialog newInstance(Translation translation)
+    static Boolean viewOnly = false;
+
+    public static AddPhraseDialog newInstance(Translation translation, Boolean canEdit)
     {
         AddPhraseDialog addPhraseDialog = new AddPhraseDialog();
 
@@ -40,6 +43,8 @@ public class AddPhraseDialog extends DialogFragment
         Bundle args = new Bundle();
         args.putSerializable("translation", translation);
         addPhraseDialog.setArguments(args);
+
+        viewOnly = !canEdit;
 
         return addPhraseDialog;
     }
@@ -58,7 +63,10 @@ public class AddPhraseDialog extends DialogFragment
 
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
-        categoryList = myDataSource.getAllCategories();
+        //Get View
+        View myView = getActivity().getLayoutInflater().inflate(R.layout.translation_add_phrase_dialog, null);
+        assert myView != null;
+
 
         myTranslation = (Translation)getArguments().getSerializable("translation");
         homePhrase = myTranslation.getHomePhrase();
@@ -67,56 +75,44 @@ public class AddPhraseDialog extends DialogFragment
         targetPhrase = myTranslation.getPhraseContent(langString);
 
 
+
+
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-        builder.setTitle("Add Phrase");
-        builder.setNegativeButton("Cancel", null);
 
         builder.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
                 //Package up and save/update the current translation object with all its categories and phrases
-                //myTranslation.setPhrase(targetLanguage, targetPhrase);
-                myDataSource.saveTranslation(myTranslation);
+                if (!viewOnly)
+                {
+                    myDataSource.saveTranslation(myTranslation);
+                }
                 dialogInterface.dismiss();
             }
         });
 
-        //Get View
-        View myView = getActivity().getLayoutInflater().inflate(R.layout.translation_add_phrase_dialog, null);
-        assert myView != null;
+        if (!viewOnly)
+        {
+            builder.setTitle("Add Phrase");
+            builder.setNegativeButton("Cancel", null);
+
+            categoryList = myDataSource.getAllCategories();
+            setupCategoryList(myView);
+        }
+        else
+        {
+            builder.setTitle("View Phrase");
+
+            TextView categoriesTextView = (TextView) myView.findViewById(R.id.categoriesTextView);
+            categoriesTextView.setText("");
+        }
+
 
         //Set text for phrase to be added
         final TextView myTextView = (TextView) myView.findViewById(R.id.translationAddText);
         myTextView.setText(homePhrase + " - " + targetPhrase);
 
-        //Display list of categories that can be added to the list
-        myListView = (ListView) myView.findViewById(R.id.setCategoryListView);
-        adapter = new ArrayAdapter<Category>(
-                getActivity(),
-                android.R.layout.simple_list_item_multiple_choice,
-                categoryList);
-        myListView.setAdapter(adapter);
-        myListView.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
-
-
-        myListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                if(myListView.isItemChecked(i))
-                {
-                    myTranslation.addCategory(categoryList.get(i));
-                }
-                else
-                {
-                    myTranslation.removeCategory(categoryList.get(i));
-                }
-            }
-        });
-
-        List<Category> translationCategories = myTranslation.getCategories();
-
-
-        refreshCheckedCategories();
+        //If editable, get and display all the categories for this phrase
 
 
         final Fragment thisFragment = this;
@@ -142,6 +138,12 @@ public class AddPhraseDialog extends DialogFragment
             }
         });
 
+        if (viewOnly)
+        {
+            if (newCategoryButton.getParent() != null) {
+                ((ViewManager)newCategoryButton.getParent()).removeView(newCategoryButton);
+            }
+        }
 
 
         builder.setView(myView);
@@ -162,6 +164,35 @@ public class AddPhraseDialog extends DialogFragment
         refreshCheckedCategories();
 
         super.onActivityResult(requestCode, resultCode, data);
+    }
+
+
+    void setupCategoryList(View myView){
+        //Display list of categories that can be added to the list
+        myListView = (ListView) myView.findViewById(R.id.setCategoryListView);
+        adapter = new ArrayAdapter<Category>(
+                getActivity(),
+                android.R.layout.simple_list_item_multiple_choice,
+                categoryList);
+        myListView.setAdapter(adapter);
+        myListView.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
+
+
+        myListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                if(myListView.isItemChecked(i))
+                {
+                    myTranslation.addCategory(categoryList.get(i));
+                }
+                else
+                {
+                    myTranslation.removeCategory(categoryList.get(i));
+                }
+            }
+        });
+
+        refreshCheckedCategories();
     }
 
     void refreshCheckedCategories()

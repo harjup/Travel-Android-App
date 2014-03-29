@@ -210,7 +210,7 @@ public class TranslationHomeFragment extends Fragment
                 }
 
                 // Create and show the dialog.
-                AddPhraseDialog newFragment = AddPhraseDialog.newInstance(translationToAdd);
+                AddPhraseDialog newFragment = AddPhraseDialog.newInstance(translationToAdd, true);
                 //AddPhraseDialog newFragment = AddPhraseDialog.newInstance(stringToTranslate, "en", translatedString, "fr");
                 //newFragment.setArguments(INPUT_TEXT_ID, stringToTranslate);
 

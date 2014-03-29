@@ -91,6 +91,19 @@ public class TranslationListFragment extends ListFragment
 
     private void viewTranslation(Translation selectedTranslation) {
         //Launch translation view pane or something
+        //Needs to open some kinda pop up that asks for categories it should be stuck under
+        FragmentManager fm = getFragmentManager();
+        FragmentTransaction ft = fm.beginTransaction();
+        Fragment prev = getFragmentManager().findFragmentByTag("dialog");
+        if (prev != null) {
+            ft.remove(prev);
+        }
+        ft.addToBackStack(null);
+
+        // Create and show the dialog.
+        AddPhraseDialog newFragment = AddPhraseDialog.newInstance(selectedTranslation, false);
+        newFragment.show(fm, "dialog");
+
     }
 
     private void viewCatagoryList(){
