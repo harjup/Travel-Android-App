@@ -128,8 +128,6 @@ public class PurchaseListFragment extends ListFragment
         }
     }
 
-    //TODO: Add LCM
-
     @Override
     public void onSaveInstanceState(Bundle outState)
     {

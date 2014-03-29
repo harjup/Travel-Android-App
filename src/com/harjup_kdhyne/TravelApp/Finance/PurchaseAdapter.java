@@ -11,24 +11,16 @@ import com.harjup_kdhyne.TravelApp.R;
 import java.util.ArrayList;
 
 /**
- * Created by Kyle 2.1 on 2/2/14.
+ * Created by Kyle 2.1 on 2/2/14
+ * A purchase adapter for the items in the purchases list
  */
 public class PurchaseAdapter extends ArrayAdapter<Purchase>
 {
-    private ArrayList<Purchase> purchasesList;
-
-    private TextView purchaseNameTextView;
-    private TextView purchaseDateTextView;
-    private TextView purchasePriceTextView;
-
     public PurchaseAdapter(Context context, int resource, ArrayList<Purchase> objects)
     {
-        super(context, android.R.layout.simple_list_item_1, objects);
-        purchasesList = objects;
-
+        super(context, resource, objects);
     }
 
-    //TODO: This doesn't quite match up with what noteAdapter is doing. Might want to look into this
     @Override
     public View getView(int position, View convertView, ViewGroup parent)
     {
@@ -44,9 +36,10 @@ public class PurchaseAdapter extends ArrayAdapter<Purchase>
         //Put the item's data into the correct components
         if(convertView!= null)
         {
-            purchaseNameTextView = (TextView)convertView.findViewById(R.id.purchaseNameTextView);
-            purchaseDateTextView = (TextView)convertView.findViewById(R.id.purchaseDateTextView);
-            purchasePriceTextView = (TextView)convertView.findViewById(R.id.purchasePriceTextView);
+            TextView purchaseNameTextView = (TextView)convertView.findViewById(R.id.purchaseNameTextView);
+            TextView purchaseDateTextView = (TextView)convertView.findViewById(R.id.purchaseDateTextView);
+            TextView purchasePriceTextView = (TextView)convertView.findViewById(R.id.purchasePriceTextView);
+            TextView purchaseCurrencyTextView = (TextView)convertView.findViewById(R.id.purchaseCurrencyTextView);
 
             if (purchaseNameTextView != null)
                 purchaseNameTextView.setText(purchase.getPurchaseName());
@@ -56,6 +49,9 @@ public class PurchaseAdapter extends ArrayAdapter<Purchase>
 
             if (purchasePriceTextView != null)
                 purchasePriceTextView.setText(purchase.getPurchasePrice());
+
+            if (purchaseCurrencyTextView != null)
+                purchaseCurrencyTextView.setText(purchase.getPaidCurrency().toString());
         }
 
         return convertView;
