@@ -1,5 +1,11 @@
 package com.harjup_kdhyne.TravelApp.Finance;
 
+import android.content.Context;
+import android.database.Cursor;
+import android.graphics.Bitmap;
+import android.net.Uri;
+import android.os.Environment;
+import android.provider.MediaStore;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.app.Fragment;
@@ -12,11 +18,12 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.*;
-import com.harjup_kdhyne.TravelApp.CustomWidgets.ImageActivity;
-import com.harjup_kdhyne.TravelApp.CustomWidgets.PhotoButton;
+import com.harjup_kdhyne.TravelApp.ImageActivity;
 import com.harjup_kdhyne.TravelApp.R;
 import org.openexchangerates.oerjava.Currency;
 
+import java.io.*;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -41,6 +48,10 @@ public class PurchaseEditFragment extends Fragment
 
     //Used to track when we are performing an action on purchase date
     public static final int REQUEST_PURCHASE_DATE = 0;
+
+    //TODO: MOVE THESE TO NOTES
+    static final int CAMERA_REQUEST = 1;
+    private Bitmap photo;
 
     private EditText purchaseNameEditText;
     private EditText purchaseDateEditText;
@@ -200,9 +211,6 @@ public class PurchaseEditFragment extends Fragment
             Button cameraButton = (Button) myView.findViewById(R.id.cameraButton);
             Button albumButton = (Button) myView.findViewById(R.id.albumButton);
             Button saveButton = (Button) myView.findViewById(R.id.saveButton);
-            PhotoButton photoButton = (PhotoButton) myView.findViewById(R.id.purchasePhotoButton);
-            //TODO: Add buttons for working with the camera and existing pictures on the device
-            //TODO: come back to these when we know how to deal with them
 
             backButton.setOnClickListener(new OnClickListener() {
                 @Override
@@ -257,17 +265,6 @@ public class PurchaseEditFragment extends Fragment
                 }
             });
 
-            photoButton.setOnClickListener(new OnClickListener() {
-                @Override
-                public void onClick(View v) {
-
-                    //TODO: Fix the camera call
-                    ImageActivity imageActivity = new ImageActivity(getActivity());
-                    imageActivity.invokeCameraIntent();
-                    Log.d("PhotoButton","Second listener from purchase page");
-                }
-            });
-
             //Spinner to select currency used to purchase the item
             Spinner purchaseCurrencySpinner = (Spinner) myView.findViewById(R.id.purchaseCurrencySpinner);
 
@@ -297,6 +294,25 @@ public class PurchaseEditFragment extends Fragment
         }
         //Inflate the view
         return myView;
+    }
+
+    //TODO: MOVE TO NOTES
+    @Override
+    public void onActivityCreated(Bundle savedInstanceState)
+    {
+        super.onActivityCreated(savedInstanceState);
+
+        Button photoButton = (Button) getActivity().findViewById(R.id.purchasePhotoButton);
+
+        photoButton.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //ImageActivity imageActivity = new ImageActivity(getActivity());
+                //imageActivity.invokeCameraIntent();
+                invokeCameraIntent();
+            }
+        });
+
     }
 
     private List<Currency> gatherCurrencies()
@@ -340,16 +356,101 @@ public class PurchaseEditFragment extends Fragment
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data)
     {
-        // If this wasn't called by the date dialog exit
-//        if(resultCode != Activity.RESULT_OK)
-//            return;
-
         if(requestCode == REQUEST_PURCHASE_DATE)
         {
             Date date = (Date) data.getSerializableExtra(DatePickerDialog.DATE);
             currentPurchase.setPurchaseDate(date);
             purchaseDateEditText.setText(currentPurchase.getDateString());
         }
+
+        //TODO:MOVE TO NOTES
+        if (requestCode == CAMERA_REQUEST )
+        {
+            photo = (Bitmap) data.getExtras().get("data");
+
+            // CALL THIS METHOD TO GET THE URI FROM THE BITMAP
+            //tempUri = getImageUri(getApplicationContext(), photo);
+
+            // CALL THIS METHOD TO GET THE ACTUAL PATH
+            //finalFile = new File(getRealPathFromURI(tempUri));
+
+            // Save the image in local storage
+            //storeImage(photo);
+        }
+    }
+
+    //TODO:MOVE ALL BELOW TO NOTES
+    public void invokeCameraIntent()
+    {
+        Intent cameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+
+        if (cameraIntent.resolveActivity(getActivity().getPackageManager()) != null)
+        {
+            startActivityForResult(cameraIntent, CAMERA_REQUEST);
+        }
+    }
+
+    public Uri getImageUri(Context inContext, Bitmap inImage) {
+        ByteArrayOutputStream bytes = new ByteArrayOutputStream();
+        inImage.compress(Bitmap.CompressFormat.JPEG, 100, bytes);
+        String path = MediaStore.Images.Media.insertImage(inContext.getContentResolver(), inImage, "Title", null);
+        return Uri.parse(path);
+    }
+
+    public String getRealPathFromURI(Uri uri) {
+        Cursor cursor = getActivity().getContentResolver().query(uri, null, null, null, null);
+        cursor.moveToFirst();
+        int idx = cursor.getColumnIndex(MediaStore.Images.ImageColumns.DATA);
+        return cursor.getString(idx);
+    }
+
+    /**
+     * Save an image within local storage with a timestamped image path
+     * @param image the image to store
+     */
+    private void storeImage(Bitmap image)
+    {
+        File pictureFile = getOutputMediaFile();
+
+        if (pictureFile == null)
+        {
+            Log.d("PhotoButton", "Error creating media file, check storage permissions: ");
+            return;
+        }
+
+        try
+        {
+            FileOutputStream fos = new FileOutputStream(pictureFile);
+            image.compress(Bitmap.CompressFormat.PNG, 90, fos);
+            fos.close();
+        }
+        catch (FileNotFoundException e) { Log.d("PhotoButton", "File not found: " + e.getMessage()); }
+        catch (IOException e) { Log.d("PhotoButton", "Error accessing file: " + e.getMessage()); }
+    }
+
+    /** Create a File for saving an image or video */
+    private  File getOutputMediaFile()
+    {
+        // To be safe, you should check that the SDCard is mounted
+        // using Environment.getExternalStorageState() before doing this.
+        File mediaStorageDir = new File(String.format("%s/Android/data/%s/Files", Environment.getExternalStorageDirectory(), getActivity().getApplicationContext().getPackageName()));
+
+        // This location works best if you want the created images to be shared
+        // between applications and persist after your app has been uninstalled.
+
+        // Create the storage directory if it does not exist
+        if (! mediaStorageDir.exists())
+        {
+            if (! mediaStorageDir.mkdirs())
+                return null;
+        }
+
+        // Create a media file name
+        String timeStamp = new SimpleDateFormat("dd/MM/yyyy_HH:mm:ss").format(new Date());
+        File mediaFile;
+        String mImageName="MI_"+ timeStamp +".jpg";
+        mediaFile = new File(mediaStorageDir.getPath() + File.separator + mImageName);
+        return mediaFile;
     }
 }
 

@@ -11,9 +11,8 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 
-public class MainActivity extends FragmentActivity implements ActionBar.TabListener {
-
-
+public class MainActivity extends FragmentActivity implements ActionBar.TabListener
+{
     /**
     * The {@link android.support.v4.view.PagerAdapter} that will provide fragments for each of the
     * three primary sections of the app. We use a {@link android.support.v4.app.FragmentPagerAdapter}

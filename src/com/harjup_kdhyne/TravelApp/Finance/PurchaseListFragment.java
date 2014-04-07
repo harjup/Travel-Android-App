@@ -56,18 +56,6 @@ public class PurchaseListFragment extends ListFragment
         super.onCreate(savedInstanceState);
     }
 
-    //Open a connection to the purchasesDatabase and use it to fill the purchasesList,
-    //then insert the purchasesList into the purchaseAdapter so the view can use it
-    private void fillPurchasesList()
-    {
-        financeDataSource = FinanceDataSource.openDbConnection(getActivity());
-
-        purchasesList = financeDataSource.getAllPurchases();
-
-        purchaseAdapter = new PurchaseAdapter(getActivity(), R.layout.finance_purchase_item, (ArrayList<Purchase>) purchasesList);
-        setListAdapter(purchaseAdapter);
-    }
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
     {
@@ -137,6 +125,20 @@ public class PurchaseListFragment extends ListFragment
     }
 
     /**
+     * Open a connection to the purchasesDatabase and use it to fill the purchasesList,
+     * then insert the purchasesList into the purchaseAdapter so the view can use it
+     */
+    private void fillPurchasesList()
+    {
+        financeDataSource = FinanceDataSource.openDbConnection(getActivity());
+
+        purchasesList = financeDataSource.getAllPurchases();
+
+        purchaseAdapter = new PurchaseAdapter(getActivity(), R.layout.finance_purchase_item, (ArrayList<Purchase>) purchasesList);
+        setListAdapter(purchaseAdapter);
+    }
+
+    /**
      * Calculate the total expense of all purchases converted to native currency and return as a double
      * @return sum total of all expenses
      */
@@ -168,6 +170,11 @@ public class PurchaseListFragment extends ListFragment
         return sumTotal;
     }
 
+    /**
+     * Navigate to the edit purchase screen and view the details of the given purchase
+     * @param currentPurchase the purchase whose details to view
+     * @param currentTrip the current trip settings
+     */
     public void viewPurchaseDetails (Purchase currentPurchase, TripSettings currentTrip)
     {
         PurchaseEditFragment editPurchaseFragment = new PurchaseEditFragment();

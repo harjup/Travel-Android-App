@@ -131,22 +131,16 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content">
 
-                <com.harjup_kdhyne.TravelApp.CustomWidgets.PhotoButton
+                <Button
                         android:id="@+id/purchasePhotoButton"
-                        android:layout_width="match_parent"
+                        android:layout_width="0dp"
+                        android:layout_weight="1"
+                        android:text="TEST"
                         android:layout_height="wrap_content"
                         android:src="@drawable/photo_button_test"/>
 
 
             </TableRow>
-
-            <!--<ImageView
-                    android:id="@+id/purchaseImageView"
-                    android:src=""
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"/>-->
-
-
         </TableLayout>
     </ScrollView>
 

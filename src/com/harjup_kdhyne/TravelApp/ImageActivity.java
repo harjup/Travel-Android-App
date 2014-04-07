@@ -1,13 +1,15 @@
-package com.harjup_kdhyne.TravelApp.CustomWidgets;
+package com.harjup_kdhyne.TravelApp;
 
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Environment;
 import android.provider.MediaStore;
+import android.support.v4.app.FragmentActivity;
 import android.util.Log;
 
 import java.io.*;
@@ -17,13 +19,13 @@ import java.util.Date;
 
 public class ImageActivity extends Activity
 {
-    private final int CAMERA_REQUEST = 0;
+    static final int CAMERA_REQUEST = 1;
 
+    private FragmentActivity fragmentActivity;
     private Bitmap photo;
     private Uri tempUri;
     private File finalFile;
 
-    private Context context;
 
     public Bitmap getPhoto() {
         return photo;
@@ -37,38 +39,34 @@ public class ImageActivity extends Activity
         return finalFile;
     }
 
-    public ImageActivity(Context context)
+    public ImageActivity(FragmentActivity fragmentActivity)
     {
-        this.context = context;
+        this.fragmentActivity = fragmentActivity;
     }
 
     public void invokeCameraIntent()
     {
-
         Intent cameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-        if (cameraIntent.resolveActivity(context.getPackageManager()) != null)
-        {
+
+        if (cameraIntent.resolveActivity(fragmentActivity.getPackageManager()) != null)
             startActivityForResult(cameraIntent, CAMERA_REQUEST);
-        }
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data)
     {
-        super.onActivityResult(requestCode, resultCode, data);
-
         if (requestCode == CAMERA_REQUEST && resultCode == RESULT_OK)
         {
             photo = (Bitmap) data.getExtras().get("data");
 
             // CALL THIS METHOD TO GET THE URI FROM THE BITMAP
-            tempUri = getImageUri(getApplicationContext(), photo);
+            //tempUri = getImageUri(getApplicationContext(), photo);
 
             // CALL THIS METHOD TO GET THE ACTUAL PATH
-            finalFile = new File(getRealPathFromURI(tempUri));
+            //finalFile = new File(getRealPathFromURI(tempUri));
 
             // Save the image in local storage
-            storeImage(photo);
+            //storeImage(photo);
         }
         else
         {
