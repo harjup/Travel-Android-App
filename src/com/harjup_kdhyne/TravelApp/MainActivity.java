@@ -2,14 +2,11 @@ package com.harjup_kdhyne.TravelApp;
 
 import android.app.ActionBar;
 import android.app.FragmentTransaction;
-import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.view.ViewPager;
 import android.util.Log;
-import android.view.Window;
 import android.view.WindowManager;
-import android.view.inputmethod.InputMethodManager;
 
 public class MainActivity extends FragmentActivity implements ActionBar.TabListener
 {
@@ -46,6 +43,7 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
 
 
         // Specify that we will be displaying tabs in the action bar.
+        assert actionBar != null;
         actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
 
         //By disabling all the information in the actionbar, it should no longer be drawn

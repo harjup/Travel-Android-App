@@ -21,7 +21,7 @@
                         android:id="@+id/backButton"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:layout_weight=".5"
+                        android:layout_weight="1"
                         android:text="@string/back_button"/>
 
                 <Button
@@ -104,42 +104,11 @@
                     android:layout_height="wrap_content">
 
                 <Button
-                        android:id="@+id/cameraButton"
-                        android:layout_width="0dp"
-                        android:layout_weight="1.5"
-                        android:layout_height="wrap_content"
-                        android:text="@string/camera_button"/>
-
-                <Button
-                    android:id="@+id/albumButton"
-                    android:layout_width="0dp"
-                    android:layout_weight="1.25"
-                    android:layout_height="wrap_content"
-                    android:text="@string/album_button"/>
-
-                <Button
                         android:id="@+id/saveButton"
                         android:layout_width="0dp"
                         android:layout_weight="2"
                         android:layout_height="wrap_content"
                         android:text="@string/save_button"/>
-
-
-            </TableRow>
-
-            <TableRow
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
-
-                <Button
-                        android:id="@+id/purchasePhotoButton"
-                        android:layout_width="0dp"
-                        android:layout_weight="1"
-                        android:text="TEST"
-                        android:layout_height="wrap_content"
-                        android:src="@drawable/photo_button_test"/>
-
-
             </TableRow>
         </TableLayout>
     </ScrollView>

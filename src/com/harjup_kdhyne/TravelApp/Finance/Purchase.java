@@ -20,7 +20,6 @@ public class Purchase implements Serializable {
     private Currency paidCurrency;            //Currency used to pay for purchase
     private Double purchaseExchangeRate;    //Exchange rate at time of purchase
     private String purchaseNotes;           //Notes to describe purchase
-    private String imageId;     //TODO: Determine how to store picture(s), probably pointing to them somehow
 
     public Purchase()
     {
@@ -87,14 +86,6 @@ public class Purchase implements Serializable {
 
     public void setPurchaseNotes(String purchaseNotes) {
         this.purchaseNotes = purchaseNotes;
-    }
-
-    public String getImageId() {
-        return imageId;
-    }
-
-    public void setImageId(String imageId) {
-        this.imageId = imageId;
     }
 
     // Used to return date in the format mm/dd/yyyy

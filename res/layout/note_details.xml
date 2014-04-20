@@ -15,14 +15,16 @@
             <Button
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Back"
+                    android:text="@string/notes_back_button"
                     android:id="@+id/noteDetailsBackButton"/>
             <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textAppearance="?android:attr/textAppearanceLarge"
-                    android:id="@+id/textView4" android:text="Note Details"
-                    android:layout_weight="1" android:gravity="center_horizontal"/>
+                    android:id="@+id/textView4"
+                    android:text="@string/notes_details_textView"
+                    android:layout_weight="1"
+                    android:gravity="center_horizontal"/>
         </TableRow>
         <TableRow
                 android:layout_width="fill_parent"
@@ -31,9 +33,10 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textAppearance="?android:attr/textAppearanceMedium"
-                    android:text="Title:"
+                    android:text="@string/notes_title_textView"
                     android:id="@+id/textView"/>
             <EditText
+                    android:hint="@string/notes_title_hint"
                     android:id="@+id/notes_detail_title"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -47,9 +50,10 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textAppearance="?android:attr/textAppearanceMedium"
-                    android:text="Content:"
+                    android:text="@string/notes_content_textView"
                     android:id="@+id/textView2"/>
             <EditText
+                    android:hint="@string/notes_content_hint"
                     android:id="@+id/notes_detail_content"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -63,7 +67,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textAppearance="?android:attr/textAppearanceSmall"
-                    android:text="Date:"
+                    android:text="@string/notes_date_textView"
                     android:id="@+id/textView3"/>
             <EditText
                     android:id="@+id/notes_detail_time"
@@ -73,11 +77,36 @@
                     android:ems="10"
                     />
         </TableRow>
+        <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+            <Button
+                    android:id="@+id/notePhotoButton"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:text="@string/notes_photo_button"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/photo_button_test"/>
+
+
+        </TableRow>
+        <TableRow
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent">
+
+            <ImageView
+                    android:id="@+id/noteImageView"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="wrap_content"/>
+
+        </TableRow>
     </TableLayout>
     <Button
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Save"
+            android:text="@string/notes_save_button"
             android:id="@+id/notesSaveNote"/>
     <TextView
             android:layout_width="wrap_content"

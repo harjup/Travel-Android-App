@@ -1,7 +1,8 @@
 package com.harjup_kdhyne.TravelApp.Notes;
 
+import android.net.Uri;
+
 import java.io.Serializable;
-import java.security.Timestamp;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -16,8 +17,7 @@ public class Note implements Serializable {
     private String title;       //Title/short description the note contains
     private String content;     //Text content of the note
     private Date timeStamp;     //Time when the note was made
-
-    private String imageId;     //TODO: Determine how to store picture(s), probably pointing to them somehow
+    private transient Uri imageUri;
 
     public Note()
     {
@@ -26,11 +26,19 @@ public class Note implements Serializable {
         this.timeStamp = new Date();
     }
 
-    public Note(String title, String content)
+    /*public Note(String title, String content)
     {
         this.title = title;
         this.content = content;
         this.timeStamp = new Date();
+    }*/
+
+    public long getId() {
+        return id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
     }
 
     public String getTitle() {
@@ -49,44 +57,26 @@ public class Note implements Serializable {
         this.content = content;
     }
 
-    public Date getTimeStamp() {
-        return timeStamp;
-    }
-
-    public void setTimeStamp(Date timeStamp) {
-        this.timeStamp = timeStamp;
-    }
-
     public String getTimeStampAsString()
     {
-
         DateFormat dateFormat = new SimpleDateFormat("MM/dd/yyyy");
-        //formattedDate += timeStamp.getMonth().ToString();
-        String date = dateFormat.format(timeStamp);
 
-        return date;
+        return dateFormat.format(timeStamp);
     }
 
     public void setTimeStampFromString(String time)
     {
-
         DateFormat dateFormat = new SimpleDateFormat("MM/dd/yyyy");
-        try {
-            this.timeStamp = dateFormat.parse(time);
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
-        //Timestamp date = Timestamp.
 
-
+        try { this.timeStamp = dateFormat.parse(time); }
+        catch (ParseException e) { e.printStackTrace(); }
     }
 
-
-    public long getId() {
-        return id;
+    public Uri getImageUri() {
+        return imageUri;
     }
 
-    public void setId(long id) {
-        this.id = id;
+    public void setImageUri(Uri imageUri) {
+        this.imageUri = imageUri;
     }
 }

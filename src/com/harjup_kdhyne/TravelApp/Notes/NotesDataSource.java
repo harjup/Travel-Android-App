@@ -4,6 +4,7 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.net.Uri;
 import com.harjup_kdhyne.TravelApp.MySQLiteHelper;
 
 import java.sql.SQLException;
@@ -39,7 +40,8 @@ public class NotesDataSource
             MySQLiteHelper.NOTES_COLUMN_ID,
             MySQLiteHelper.NOTES_COLUMN_TITLE,
             MySQLiteHelper.NOTES_COLUMN_CONTENT,
-            MySQLiteHelper.NOTES_COLUMN_TIMESTAMP
+            MySQLiteHelper.NOTES_COLUMN_TIMESTAMP,
+            MySQLiteHelper.NOTES_COLUMN_IMAGEURI
     };
 
     /*public NotesDataSource(Context context){
@@ -63,6 +65,11 @@ public class NotesDataSource
         values.put(MySQLiteHelper.NOTES_COLUMN_CONTENT, note.getContent());
         values.put(MySQLiteHelper.NOTES_COLUMN_TIMESTAMP, note.getTimeStampAsString());
 
+        if (note.getImageUri() == null)
+            values.put(MySQLiteHelper.NOTES_COLUMN_IMAGEURI, "");
+        else
+            values.put(MySQLiteHelper.NOTES_COLUMN_IMAGEURI, note.getImageUri().toString());
+
         long insertID = database.insert(MySQLiteHelper.NOTES_TABLE, null, values);
 
         Cursor cursor = database.query(MySQLiteHelper.NOTES_TABLE,
@@ -83,14 +90,17 @@ public class NotesDataSource
         values.put(MySQLiteHelper.NOTES_COLUMN_CONTENT, note.getContent());
         values.put(MySQLiteHelper.NOTES_COLUMN_TIMESTAMP, note.getTimeStampAsString());
 
+        if (note.getImageUri() == null)
+            values.put(MySQLiteHelper.NOTES_COLUMN_IMAGEURI, "");
+        else
+            values.put(MySQLiteHelper.NOTES_COLUMN_IMAGEURI, note.getImageUri().toString());
+
         database.update(MySQLiteHelper.NOTES_TABLE,
                 values,
                 MySQLiteHelper.NOTES_COLUMN_ID + "=" + note.getId(),
                 null);
 
     }
-
-
 
     public List<Note> getAllNotes() {
         List<Note> comments = new ArrayList<Note>();
@@ -123,9 +133,7 @@ public class NotesDataSource
         note.setTitle(cursor.getString(1));
         note.setContent(cursor.getString(2));
         note.setTimeStampFromString(cursor.getString(3));
-        //TODO: Set image url
+        note.setImageUri(Uri.parse(cursor.getString(4)));
         return note;
     }
-
-
 }
