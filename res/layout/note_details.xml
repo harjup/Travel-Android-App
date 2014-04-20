@@ -92,14 +92,16 @@
 
         </TableRow>
         <TableRow
-                android:layout_width="fill_parent"
+                android:layout_width="match_parent"
                 android:layout_height="fill_parent">
 
             <ImageView
                     android:id="@+id/noteImageView"
-                    android:layout_width="0dp"
+                    android:layout_width="150dp"
+                    android:layout_height="150dp"
                     android:layout_weight="1"
-                    android:layout_height="wrap_content"/>
+                    android:scaleType="fitXY"
+                    android:layout_column="1"/>
 
         </TableRow>
     </TableLayout>
