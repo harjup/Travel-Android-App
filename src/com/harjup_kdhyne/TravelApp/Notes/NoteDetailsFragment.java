@@ -1,10 +1,12 @@
 package com.harjup_kdhyne.TravelApp.Notes;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
@@ -17,10 +19,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.ImageView;
-import android.widget.TextView;
+import android.widget.*;
 import com.harjup_kdhyne.TravelApp.R;
 
 import java.io.*;
@@ -39,7 +38,9 @@ public class NoteDetailsFragment extends Fragment
 
     private NotesDataSource notesDataSource;
     Note currentNote;
+    private String photoPath;
     private File photoFile;
+    private Uri tempImageUri;
 
     enum textBoxes
     {
@@ -134,7 +135,17 @@ public class NoteDetailsFragment extends Fragment
         photoButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                invokeCameraIntent();
+                String state = Environment.getExternalStorageState();
+
+                if (Environment.MEDIA_MOUNTED.equals(state))
+                {
+                    invokeCameraIntent();
+                }
+                else
+                {
+                    Toast.makeText(getActivity().getApplicationContext(), "Sorry there is a problem accessing your SDCard, " +
+                            "please select a picture from your gallery instead.", Toast.LENGTH_LONG).show();
+                }
             }
         });
     }
@@ -149,26 +160,42 @@ public class NoteDetailsFragment extends Fragment
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data)
     {
-        if (requestCode == CAMERA_REQUEST)
+        Bundle bundle = this.getArguments();
+
+        // If this wasn't called by the date dialog exit
+        if(resultCode == Activity.RESULT_CANCELED)
         {
-            Bitmap photoBitmap = (Bitmap) data.getExtras().get("data");
-
-            // CALL THIS METHOD TO GET THE URI FROM THE BITMAP
-            Uri photoUri = getImageUri(getActivity().getApplicationContext(), photoBitmap);
-
-            // CALL THIS METHOD TO GET THE ACTUAL PATH
-            photoFile = new File(getRealPathFromURI(photoUri));
-
-            // Save the image in local storage
-            storeImage(photoBitmap);
-
-            if (photoUri != null)
+            Toast toast = Toast.makeText(this.getActivity().getApplicationContext(),"Canceled, no photo was taken.",
+                    Toast.LENGTH_LONG);
+            toast.show();
+        }
+        if (resultCode == Activity.RESULT_OK && requestCode == CAMERA_REQUEST)
+        {
+            try
             {
-                currentNote.setImageUri(photoUri);
-                ImageView noteImage = (ImageView) getView().findViewById(R.id.noteImageView);
-                noteImage.setImageURI(photoUri);
-            }
+                Bitmap photoBitmap = (Bitmap) data.getExtras().get("data");
 
+                // CALL THIS METHOD TO GET THE URI FROM THE BITMAP
+                Uri photoUri = getImageUri(getActivity().getApplicationContext(), photoBitmap);
+
+                // CALL THIS METHOD TO GET THE ACTUAL PATH
+                photoFile = new File(getRealPathFromURI(photoUri));
+
+                // Save the image in local storage
+                storeImage(photoBitmap);
+
+                if (photoUri != null && getView() != null)
+                {
+                    currentNote.setImageUri(photoUri);
+                    ImageView noteImage = (ImageView) getView().findViewById(R.id.noteImageView);
+                    noteImage.setImageURI(photoUri);
+                }
+            }
+            catch (Exception e)
+            {
+                Toast.makeText(this.getActivity().getApplicationContext(), "Internal error", Toast.LENGTH_LONG).show();
+                Log.e(e.getClass().getName(), e.getMessage(), e);
+            }
         }
     }
 
@@ -213,11 +240,20 @@ public class NoteDetailsFragment extends Fragment
 
     public void invokeCameraIntent()
     {
-        Intent cameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-        PackageManager currentPM = getActivity().getPackageManager();
+        try
+        {
+            Intent cameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+            PackageManager currentPM = getActivity().getPackageManager();
 
-        if (currentPM != null && cameraIntent.resolveActivity(currentPM) != null)
-            startActivityForResult(cameraIntent, CAMERA_REQUEST);
+            if (currentPM != null && cameraIntent.resolveActivity(currentPM) != null)
+                startActivityForResult(cameraIntent, CAMERA_REQUEST);
+        }
+        catch (Exception e)
+        {
+            Toast.makeText(this.getActivity().getApplicationContext(), "There was an error accessing your camera",
+                    Toast.LENGTH_LONG).show();
+            //Log.e(e.getClass().getName(), e.getMessage(), e);
+        }
     }
 
     public Uri getImageUri(Context inContext, Bitmap inImage) {
@@ -227,7 +263,8 @@ public class NoteDetailsFragment extends Fragment
         return Uri.parse(path);
     }
 
-    public String getRealPathFromURI(Uri uri) {
+    public String getRealPathFromURI(Uri uri)
+    {
         Cursor cursor = getActivity().getContentResolver().query(uri, null, null, null, null);
         cursor.moveToFirst();
         int idx = cursor.getColumnIndex(MediaStore.Images.ImageColumns.DATA);
@@ -251,7 +288,7 @@ public class NoteDetailsFragment extends Fragment
         try
         {
             FileOutputStream fos = new FileOutputStream(pictureFile);
-            image.compress(Bitmap.CompressFormat.PNG, 90, fos);
+            image.compress(Bitmap.CompressFormat.PNG, 100, fos);
             fos.close();
         }
         catch (FileNotFoundException e) { Log.d("PhotoButton", "File not found: " + e.getMessage()); }
@@ -261,18 +298,13 @@ public class NoteDetailsFragment extends Fragment
     /** Create a File for saving an image or video */
     private  File getOutputMediaFile()
     {
-        // To be safe, you should check that the SDCard is mounted
-        // using Environment.getExternalStorageState() before doing this.
-
+        // To be safe, check that the SDCard is mounted
         if (!Environment.getExternalStorageState().equals("MEDIA_MOUNTED"))
         {
             return null;
         }
 
         File mediaStorageDir = new File(String.format("%s/Android/data/%s/Files", Environment.getExternalStorageDirectory(), getActivity().getPackageName()));
-
-        // This location works best if you want the created images to be shared
-        // between applications and persist after your app has been uninstalled.
 
         // Create the storage directory if it does not exist
         if (! mediaStorageDir.exists())
@@ -282,10 +314,8 @@ public class NoteDetailsFragment extends Fragment
         }
 
         // Create a media file name
-        String timeStamp = new SimpleDateFormat("dd/MM/yyyy_HH:mm:ss").format(new Date());
-        File mediaFile;
-        String mImageName="MI_"+ timeStamp +".jpg";
-        mediaFile = new File(mediaStorageDir.getPath() + File.separator + mImageName);
-        return mediaFile;
+        long captureTime = System.currentTimeMillis();
+        String mImageName = Environment.getExternalStorageDirectory() + "/TravelApp" + captureTime + ".jpg";
+        return new File(String.format("%s%s%s", mediaStorageDir.getPath(), File.separator, mImageName));
     }
 }
