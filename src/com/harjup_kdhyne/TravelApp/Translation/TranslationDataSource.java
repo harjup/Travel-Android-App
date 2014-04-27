@@ -348,7 +348,7 @@ public class TranslationDataSource
         {
             categoryId = cursor.getLong(cursor.getColumnIndex(categoryColumns[0]));
         }
-        else {return null;}
+        else {return new ArrayList<Translation>();}
 
         //Get all the translations to display by ID
         cursor = database.query(MySQLiteHelper.TRANSLATION_TO_CATEGORY_TABLE,
@@ -364,7 +364,7 @@ public class TranslationDataSource
                 translationIds.add(cursor.getLong(cursor.getColumnIndex(translationCategoryMapColumns[1])));
                 cursor.moveToNext();
             }
-        } else {return null;}
+        } else {return new ArrayList<Translation>();}
 
         //Turn the set of ids into a comma separated string
         StringBuilder ids = new StringBuilder();

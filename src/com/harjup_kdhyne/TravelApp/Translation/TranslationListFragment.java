@@ -12,6 +12,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 import com.harjup_kdhyne.TravelApp.R;
 
 import java.sql.SQLException;
@@ -46,6 +47,11 @@ public class TranslationListFragment extends ListFragment
         {
             currentCategory = (Category)bundle.getSerializable("com.harjup_kdhyne.TravelApp.Category");
             translationList = myDataSource.getTranslationsByCategory(currentCategory.getName());
+
+            if (translationList.size() == 0)
+            {
+                Toast.makeText(getActivity().getApplicationContext(), "No phrases have been added to this category.", Toast.LENGTH_LONG).show();
+            }
         }
 
         super.onCreate(savedInstanceState);
